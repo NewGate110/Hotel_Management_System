@@ -1,0 +1,107 @@
+@startuml HMS_Seq_MakeBooking
+' Author: Aslan
+' Sequence Diagram 1: Guest Makes a Booking
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 8
+skinparam sequenceParticipant underline
+skinparam sequence {
+  ParticipantBackgroundColor #EEF5FF
+  ParticipantBorderColor #336699
+  ActorBackgroundColor #FFF8E7
+  ActorBorderColor #CC8800
+  ArrowColor #336699
+  LifeLineBorderColor #336699
+}
+
+title Guest Makes a Room Booking
+
+actor Guest as G
+participant "Angular\nFrontend" as UI
+participant "Booking\nController" as BC
+participant "Room\nService" as RS
+participant "Booking\nService" as BS
+participant "Payment\nService" as PS
+database "PostgreSQL\nDatabase" as DB
+
+== Search & Availability Check ==
+
+G -> UI : Enter search criteria\n(location, dates, room type, capacity)
+activate UI
+
+UI -> BC : GET /api/rooms/search\n{hotelId, checkIn, checkOut, type, capacity}
+activate BC
+
+BC -> RS : GetAvailableRooms(criteria)
+activate RS
+RS -> DB : SELECT rooms WHERE status=Available\nAND not booked for date range
+activate DB
+DB --> RS : List<Room>
+deactivate DB
+RS --> BC : List<RoomDto>
+deactivate RS
+
+BC --> UI : 200 OK – List<RoomDto>
+deactivate BC
+
+UI --> G : Display available rooms\nwith details and prices
+
+== Select Room & Request Ancillary Services ==
+
+G -> UI : Select room + optional services\n(e.g. Airport Transfer, Spa)
+UI --> G : Show booking summary\nwith total cost breakdown
+
+== Submit Booking ==
+
+G -> UI : Confirm booking\n(guest details + payment info)
+UI -> BC : POST /api/bookings\n{roomIds, checkIn, checkOut, serviceIds, paymentDetails}
+activate BC
+
+BC -> BS : CreateBooking(bookingRequest)
+activate BS
+
+BS -> DB : BEGIN TRANSACTION
+activate DB
+BS -> DB : INSERT Booking (Pending)
+BS -> DB : INSERT BookingRooms
+BS -> DB : INSERT BookingServices
+DB --> BS : bookingId
+deactivate DB
+
+BS -> PS : AuthorisePayment(paymentDetails, amount)
+activate PS
+PS -> DB : INSERT Payment (Authorised)
+activate DB
+DB --> PS : paymentId
+deactivate DB
+PS --> BS : PaymentResult {success, transactionRef}
+deactivate PS
+
+alt Payment Authorised
+  BS -> DB : UPDATE Booking status = Confirmed
+  activate DB
+  BS -> DB : COMMIT TRANSACTION
+  DB --> BS : OK
+  deactivate DB
+  BS -> DB : INSERT AuditLog (BookingCreated)
+  activate DB
+  DB --> BS : OK
+  deactivate DB
+  BS --> BC : BookingConfirmationDto
+  BC --> UI : 201 Created – BookingConfirmationDto
+  UI --> G : Booking confirmed\nShow booking reference + summary
+else Payment Failed
+  BS -> DB : ROLLBACK TRANSACTION
+  activate DB
+  DB --> BS : OK
+  deactivate DB
+  BS --> BC : PaymentException
+  BC --> UI : 402 Payment Required
+  UI --> G : Payment failed – please\ncheck card details
+end
+
+deactivate BS
+deactivate BC
+deactivate UI
+
+@enduml

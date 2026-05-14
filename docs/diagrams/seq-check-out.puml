@@ -1,0 +1,116 @@
+@startuml HMS_Seq_CheckOut
+' Author: Aslan
+' Sequence Diagram 3: Front Desk Staff Processes Guest Check-out and Billing
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 8
+skinparam sequenceParticipant underline
+skinparam sequence {
+  ParticipantBackgroundColor #EEF5FF
+  ParticipantBorderColor #336699
+  ActorBackgroundColor #FFF8E7
+  ActorBorderColor #CC8800
+  ArrowColor #336699
+  LifeLineBorderColor #336699
+}
+
+title Front Desk Staff Processes Guest Check-out & Billing
+
+actor "Front Desk\nStaff" as S
+participant "Angular\nFrontend" as UI
+participant "Check-out\nController" as CC
+participant "Booking\nService" as BS
+participant "Billing\nService" as BLS
+participant "Payment\nService" as PS
+participant "Invoice\nService" as IS
+database "PostgreSQL\nDatabase" as DB
+
+== Retrieve Active Booking ==
+
+S -> UI : Search guest by name\nor room number
+activate UI
+
+UI -> CC : GET /api/checkin/active/{roomId}
+activate CC
+CC -> BS : GetActiveBookingForRoom(roomId)
+activate BS
+BS -> DB : SELECT Booking WHERE status=CheckedIn\nAND roomId = :roomId
+activate DB
+DB --> BS : BookingDetailDto
+deactivate DB
+BS --> CC : BookingDetailDto
+deactivate BS
+CC --> UI : 200 OK – BookingDetailDto
+deactivate CC
+
+UI --> S : Display booking:\nnights stayed, booked services
+
+== Calculate Final Bill ==
+
+UI -> CC : POST /api/checkout/calculate\n{bookingId}
+activate CC
+
+CC -> BLS : CalculateFinalBill(bookingId)
+activate BLS
+BLS -> DB : SELECT BookingRooms, BookingServices\nfor bookingId
+activate DB
+DB --> BLS : rooms + services
+deactivate DB
+BLS -> BLS : Sum room charges (priceAtBooking × nights)\n+ ancillary service fees
+BLS --> CC : FinalBillDto {lineItems, subtotal, tax, total}
+deactivate BLS
+
+CC --> UI : 200 OK – FinalBillDto
+UI --> S : Display itemised bill\n(rooms, services, taxes)
+
+== Process Final Payment ==
+
+S -> UI : Confirm bill and capture payment
+UI -> CC : POST /api/checkout/confirm\n{bookingId, captureExistingPreAuth: true}
+activate CC
+
+CC -> PS : CapturePayment(bookingId, finalAmount)
+activate PS
+PS -> DB : UPDATE Payment (Authorised → Captured)\nwith final amount
+activate DB
+DB --> PS : OK
+deactivate DB
+PS --> CC : CaptureResult {success, receiptRef}
+deactivate PS
+
+== Generate Invoice & Update State ==
+
+CC -> IS : GenerateInvoice(bookingId)
+activate IS
+IS -> DB : INSERT Invoice + InvoiceLineItems
+activate DB
+DB --> IS : invoiceId
+deactivate DB
+IS --> CC : InvoiceDto {invoiceNumber, pdfUrl}
+deactivate IS
+
+CC -> BS : UpdateBookingStatus(bookingId, CheckedOut)
+activate BS
+BS -> DB : UPDATE Booking status = CheckedOut
+activate DB
+DB --> BS : OK
+deactivate DB
+deactivate BS
+
+CC -> DB : UPDATE Room status = Cleaning
+activate DB
+DB --> CC : OK
+deactivate DB
+
+CC -> DB : INSERT AuditLog\n(CheckOutProcessed, staffId, bookingId)
+activate DB
+DB --> CC : OK
+deactivate DB
+
+CC --> UI : 200 OK – CheckOutConfirmationDto\n{invoiceNumber, pdfUrl}
+UI --> S : Check-out complete\nOffer invoice print/email to guest
+
+deactivate CC
+deactivate UI
+
+@enduml

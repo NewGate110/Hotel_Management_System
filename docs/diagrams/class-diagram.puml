@@ -1,0 +1,291 @@
+@startuml HMS_ClassDiagram
+' Author: Aslan
+
+skinparam classAttributeIconSize 0
+skinparam class {
+  BackgroundColor #EEF5FF
+  BorderColor #336699
+  ArrowColor #336699
+}
+skinparam enum {
+  BackgroundColor #FFF8E7
+  BorderColor #CC8800
+}
+skinparam linetype ortho
+hide empty methods
+
+' ═══════════════════════════════════════
+' ENUMERATIONS
+' ═══════════════════════════════════════
+
+enum RoomType {
+  StandardDouble
+  DeluxeKing
+  FamilySuite
+  Penthouse
+}
+
+enum RoomStatus {
+  Available
+  Occupied
+  Cleaning
+  OutOfService
+}
+
+enum BookingStatus {
+  Pending
+  Confirmed
+  CheckedIn
+  CheckedOut
+  Cancelled
+  NoShow
+}
+
+enum UserRole {
+  Guest
+  FrontDeskStaff
+  HotelManager
+  Admin
+}
+
+enum PaymentStatus {
+  Pending
+  Authorised
+  Captured
+  Refunded
+  Failed
+}
+
+enum PaymentMethod {
+  CreditCard
+  DebitCard
+  Cash
+  BankTransfer
+}
+
+' ═══════════════════════════════════════
+' USER HIERARCHY
+' ═══════════════════════════════════════
+
+abstract class User {
+  - id : int
+  - email : string
+  - passwordHash : string
+  - role : UserRole
+  - failedLoginAttempts : int
+  - isLocked : bool
+  - lockedUntil : DateTime?
+  - lastPasswordChange : DateTime
+  - createdAt : DateTime
+  --
+  + ValidatePassword(password : string) : bool
+  + IncrementFailedLogin() : void
+  + LockAccount() : void
+  + UnlockAccount() : void
+  + RequiresPasswordChange() : bool
+}
+
+class GuestUser {
+  - firstName : string
+  - lastName : string
+  - phone : string
+  - address : string
+  --
+  + GetFullName() : string
+  + GetBookings() : List<Booking>
+}
+
+class StaffUser {
+  - firstName : string
+  - lastName : string
+  - employeeId : string
+  - department : string
+  --
+  + GetFullName() : string
+}
+
+User <|-- GuestUser
+User <|-- StaffUser
+
+' ═══════════════════════════════════════
+' HOTEL & ROOM
+' ═══════════════════════════════════════
+
+class Hotel {
+  - id : int
+  - name : string
+  - city : string
+  - country : string
+  - address : string
+  - phone : string
+  - email : string
+  - isActive : bool
+  --
+  + GetAvailableRooms(checkIn : DateTime, checkOut : DateTime) : List<Room>
+  + GetRoomsByType(type : RoomType) : List<Room>
+}
+
+class Room {
+  - id : int
+  - hotelId : int
+  - roomNumber : string
+  - type : RoomType
+  - capacity : int
+  - priceOffPeak : decimal
+  - pricePeak : decimal
+  - status : RoomStatus
+  - description : string
+  - floorNumber : int
+  --
+  + IsAvailable(checkIn : DateTime, checkOut : DateTime) : bool
+  + GetPrice(checkIn : DateTime, checkOut : DateTime) : decimal
+  + UpdateStatus(status : RoomStatus) : void
+}
+
+Hotel "1" *-- "many" Room : contains
+
+' ═══════════════════════════════════════
+' BOOKING
+' ═══════════════════════════════════════
+
+class Booking {
+  - id : int
+  - guestId : int
+  - hotelId : int
+  - checkInDate : DateTime
+  - checkOutDate : DateTime
+  - status : BookingStatus
+  - totalAmount : decimal
+  - cancellationFee : decimal
+  - notes : string
+  - createdAt : DateTime
+  - createdByStaffId : int?
+  --
+  + GetNights() : int
+  + CalculateTotalAmount() : decimal
+  + CalculateCancellationFee() : decimal
+  + Cancel() : void
+  + Confirm() : void
+  + CheckIn() : void
+  + CheckOut() : void
+}
+
+class BookingRoom {
+  - bookingId : int
+  - roomId : int
+  - priceAtBooking : decimal
+  --
+  + GetSubtotal(nights : int) : decimal
+}
+
+class BookingService {
+  - id : int
+  - bookingId : int
+  - serviceId : int
+  - quantity : int
+  - serviceDate : DateTime
+  - totalFee : decimal
+  --
+  + CalculateFee() : decimal
+}
+
+GuestUser "1" -- "many" Booking : makes
+Hotel "1" -- "many" Booking : hosts
+Booking "1" *-- "many" BookingRoom : includes
+Booking "1" *-- "many" BookingService : includes
+
+' ═══════════════════════════════════════
+' ANCILLARY SERVICES
+' ═══════════════════════════════════════
+
+class AncillaryService {
+  - id : int
+  - name : string
+  - description : string
+  - fee : decimal
+  - unit : string
+  - isActive : bool
+  --
+  + GetFormattedFee() : string
+}
+
+Room "many" -- "many" Booking : reserved via BookingRoom
+AncillaryService "1" -- "many" BookingService : referenced by
+
+' ═══════════════════════════════════════
+' PAYMENT & INVOICE
+' ═══════════════════════════════════════
+
+class Payment {
+  - id : int
+  - bookingId : int
+  - amount : decimal
+  - method : PaymentMethod
+  - status : PaymentStatus
+  - transactionRef : string
+  - processedAt : DateTime
+  - processedByStaffId : int?
+  --
+  + Authorise() : bool
+  + Capture() : bool
+  + Refund(amount : decimal) : bool
+}
+
+class Invoice {
+  - id : int
+  - bookingId : int
+  - invoiceNumber : string
+  - issuedAt : DateTime
+  - subtotal : decimal
+  - taxAmount : decimal
+  - totalAmount : decimal
+  --
+  + Generate() : void
+  + GetLineItems() : List<InvoiceLineItem>
+  + ToPdf() : byte[]
+}
+
+class InvoiceLineItem {
+  - id : int
+  - invoiceId : int
+  - description : string
+  - quantity : int
+  - unitPrice : decimal
+  - lineTotal : decimal
+}
+
+Booking "1" *-- "many" Payment : paid via
+Booking "1" *-- "1" Invoice : produces
+Invoice "1" *-- "many" InvoiceLineItem : contains
+
+' ═══════════════════════════════════════
+' AUDIT LOG
+' ═══════════════════════════════════════
+
+class AuditLog {
+  - id : int
+  - userId : int?
+  - action : string
+  - entityType : string
+  - entityId : string
+  - details : string
+  - ipAddress : string
+  - timestamp : DateTime
+  --
+  + GetFormattedEntry() : string
+}
+
+User "1" -- "many" AuditLog : generates
+
+' ═══════════════════════════════════════
+' ENUMS USED BY CLASSES
+' ═══════════════════════════════════════
+
+Room ..> RoomType
+Room ..> RoomStatus
+Booking ..> BookingStatus
+User ..> UserRole
+Payment ..> PaymentStatus
+Payment ..> PaymentMethod
+
+@enduml

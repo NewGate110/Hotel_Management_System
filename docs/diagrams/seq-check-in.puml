@@ -1,0 +1,97 @@
+@startuml HMS_Seq_CheckIn
+' Author: Aslan
+' Sequence Diagram 2: Front Desk Staff Performs Guest Check-in
+
+skinparam sequenceArrowThickness 2
+skinparam roundcorner 8
+skinparam sequenceParticipant underline
+skinparam sequence {
+  ParticipantBackgroundColor #EEF5FF
+  ParticipantBorderColor #336699
+  ActorBackgroundColor #FFF8E7
+  ActorBorderColor #CC8800
+  ArrowColor #336699
+  LifeLineBorderColor #336699
+}
+
+title Front Desk Staff Performs Guest Check-in
+
+actor "Front Desk\nStaff" as S
+participant "Angular\nFrontend" as UI
+participant "Check-in\nController" as CC
+participant "Booking\nService" as BS
+participant "Room\nService" as RS
+participant "Payment\nService" as PS
+database "PostgreSQL\nDatabase" as DB
+
+== Retrieve Booking ==
+
+S -> UI : Search booking by reference\nor guest name
+activate UI
+
+UI -> CC : GET /api/bookings/{reference}
+activate CC
+CC -> BS : GetBookingByReference(reference)
+activate BS
+BS -> DB : SELECT Booking JOIN Guest JOIN Rooms
+activate DB
+DB --> BS : BookingDetailDto
+deactivate DB
+BS --> CC : BookingDetailDto
+deactivate BS
+CC --> UI : 200 OK – BookingDetailDto
+deactivate CC
+
+UI --> S : Display booking details\n(guest, rooms, services, amount due)
+
+== Verify Guest Identity ==
+
+S -> UI : Confirm guest identity\n(photo ID verified)
+
+== Pre-authorise Payment ==
+
+UI -> CC : POST /api/checkin/pre-authorise\n{bookingId, paymentMethod}
+activate CC
+CC -> PS : PreAuthoriseCard(bookingId, estimatedTotal)
+activate PS
+PS -> DB : INSERT Payment (status=Authorised, type=PreAuth)
+activate DB
+DB --> PS : paymentId
+deactivate DB
+PS --> CC : PreAuthResult {success, authCode}
+deactivate PS
+
+alt Pre-auth Successful
+  CC -> BS : UpdateBookingStatus(bookingId, CheckedIn)
+  activate BS
+  BS -> DB : UPDATE Booking status = CheckedIn
+  activate DB
+  DB --> BS : OK
+  deactivate DB
+  deactivate BS
+
+  CC -> RS : AssignRoomToGuest(roomId, guestId)
+  activate RS
+  RS -> DB : UPDATE Room status = Occupied
+  activate DB
+  DB --> RS : OK
+  deactivate DB
+  RS --> CC : OK
+  deactivate RS
+
+  CC -> DB : INSERT AuditLog\n(CheckInPerformed, staffId, bookingId)
+  activate DB
+  DB --> CC : OK
+  deactivate DB
+
+  CC --> UI : 200 OK – CheckInConfirmationDto
+  UI --> S : Check-in complete\nPrint key card / room number
+else Pre-auth Failed
+  CC --> UI : 402 Payment Required
+  UI --> S : Pre-auth failed –\nask guest for alternative payment
+end
+
+deactivate CC
+deactivate UI
+
+@enduml
