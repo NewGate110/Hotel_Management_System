@@ -15,7 +15,7 @@ namespace HMS.Infrastructure.Persistence.Migrations
                 table: "Users",
                 type: "boolean",
                 nullable: false,
-                defaultValue: false);
+                defaultValue: true);
         }
 
         /// <inheritdoc />

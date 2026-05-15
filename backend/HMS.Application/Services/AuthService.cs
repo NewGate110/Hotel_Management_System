@@ -108,7 +108,8 @@ public class AuthService : IAuthService
             user.Role is UserRole.Admin or UserRole.HotelManager &&
             (DateTime.UtcNow - user.LastPasswordChange).TotalDays >= PasswordExpiryDays;
 
-        var (token, expiresAt) = _jwt.GenerateToken(user.Id, user.Email, user.Role.ToString());
+        var canManageMedia = user is StaffUser su && su.CanManageMedia;
+        var (token, expiresAt) = _jwt.GenerateToken(user.Id, user.Email, user.Role.ToString(), canManageMedia);
 
         await WriteAuditAsync(user.Id, "Login", "User", user.Id.ToString(), "Successful login.", ipAddress);
 
@@ -121,6 +122,7 @@ public class AuthService : IAuthService
             FullName               = fullName,
             Email                  = user.Email,
             RequiresPasswordChange = requiresPasswordChange,
+            CanManageMedia         = canManageMedia,
         };
     }
 

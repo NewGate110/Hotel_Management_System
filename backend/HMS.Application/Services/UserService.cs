@@ -157,10 +157,11 @@ public class UserService : IUserService
             role is not (UserRole.FrontDeskStaff or UserRole.HotelManager))
             throw new InvalidOperationException("Role must be 'FrontDeskStaff' or 'HotelManager'.");
 
-        staff.FirstName  = dto.FirstName;
-        staff.LastName   = dto.LastName;
-        staff.Department = dto.Department;
-        staff.Role       = role;
+        staff.FirstName      = dto.FirstName;
+        staff.LastName       = dto.LastName;
+        staff.Department     = dto.Department;
+        staff.Role           = role;
+        staff.CanManageMedia = dto.CanManageMedia;
 
         await _users.UpdateAsync(staff);
         return _mapper.Map<StaffUserDto>(staff);

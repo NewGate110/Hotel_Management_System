@@ -152,6 +152,29 @@ public class AdminController : ControllerBase
         catch (InvalidOperationException ex) { return BadRequest(ex.Message); }
     }
 
+    /// <summary>Grants or revokes the CanManageMedia permission for a staff member.</summary>
+    [HttpPatch("staff/{id:int}/media-permission")]
+    [ProducesResponseType(typeof(StaffUserDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<StaffUserDto>> UpdateMediaPermission(
+        int id, [FromBody] UpdateMediaPermissionDto dto)
+    {
+        var staff = await _userService.GetStaffByIdAsync(id);
+        if (staff is null) return NotFound($"Staff {id} not found.");
+
+        var updateDto = new UpdateStaffDto
+        {
+            FirstName      = staff.FirstName,
+            LastName       = staff.LastName,
+            Department     = staff.Department,
+            Role           = staff.Role,
+            CanManageMedia = dto.CanManageMedia,
+        };
+
+        try   { return Ok(await _userService.UpdateStaffAsync(id, updateDto)); }
+        catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
+    }
+
     // ── Guest list ─────────────────────────────────────────────────────────────
 
     /// <summary>Returns all registered guests.</summary>

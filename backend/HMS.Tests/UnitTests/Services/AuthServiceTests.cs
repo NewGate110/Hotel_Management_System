@@ -13,19 +13,21 @@ public class AuthServiceTests
 {
     // ── Mocks ─────────────────────────────────────────────────────────────────
 
-    private readonly Mock<IUserRepository>     _userRepo  = new();
-    private readonly Mock<IAuditLogRepository> _auditRepo = new();
-    private readonly Mock<IPasswordHasher>     _hasher    = new();
-    private readonly Mock<IJwtTokenService>    _jwt       = new();
+    private readonly Mock<IUserRepository>              _userRepo    = new();
+    private readonly Mock<IAuditLogRepository>          _auditRepo   = new();
+    private readonly Mock<IPasswordHasher>              _hasher      = new();
+    private readonly Mock<IJwtTokenService>             _jwt         = new();
+    private readonly Mock<IPasswordResetTokenRepository> _resetTokens = new();
 
     private AuthService BuildSut() => new(
         _userRepo.Object,
         _auditRepo.Object,
         _hasher.Object,
-        _jwt.Object);
+        _jwt.Object,
+        _resetTokens.Object);
 
     private void SetupJwt() =>
-        _jwt.Setup(j => j.GenerateToken(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>()))
+        _jwt.Setup(j => j.GenerateToken(It.IsAny<int>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
             .Returns(("token_abc", DateTime.UtcNow.AddHours(1)));
 
     private void SetupAudit() =>

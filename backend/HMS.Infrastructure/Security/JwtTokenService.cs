@@ -24,19 +24,23 @@ public class JwtTokenService : IJwtTokenService
         _expiryMinutes = int.TryParse(section["ExpiryMinutes"], out var m) ? m : 60;
     }
 
-    public (string Token, DateTime ExpiresAt) GenerateToken(int userId, string email, string role)
+    public (string Token, DateTime ExpiresAt) GenerateToken(
+        int userId, string email, string role, bool canManageMedia = false)
     {
-        var expiresAt    = DateTime.UtcNow.AddMinutes(_expiryMinutes);
-        var signingKey   = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
-        var credentials  = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+        var expiresAt   = DateTime.UtcNow.AddMinutes(_expiryMinutes);
+        var signingKey  = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_key));
+        var credentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
 
-        var claims = new[]
+        var claims = new List<Claim>
         {
             new Claim(JwtRegisteredClaimNames.Sub,   userId.ToString()),
             new Claim(JwtRegisteredClaimNames.Email, email),
             new Claim("role",                        role),  // short name; MapInboundClaims=false
             new Claim(JwtRegisteredClaimNames.Jti,   Guid.NewGuid().ToString()),
         };
+
+        if (canManageMedia)
+            claims.Add(new Claim("canManageMedia", "true"));
 
         var token = new JwtSecurityToken(
             issuer:             _issuer,

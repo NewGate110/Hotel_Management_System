@@ -12,5 +12,6 @@ public class StaffUserDto
     public string Department { get; set; } = string.Empty;
     public bool   IsLocked   { get; set; }
     public bool   IsActive   { get; set; }
+    public bool   CanManageMedia { get; set; }
     public DateTime CreatedAt { get; set; }
 }

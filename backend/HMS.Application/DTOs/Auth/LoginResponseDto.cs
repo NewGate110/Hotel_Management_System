@@ -15,4 +15,5 @@ public class LoginResponseDto
     /// <summary>Returned in the body so the Angular client does not need to decode the JWT.</summary>
     public string Email { get; set; } = string.Empty;
     public bool RequiresPasswordChange { get; set; }
+    public bool CanManageMedia { get; set; }
 }

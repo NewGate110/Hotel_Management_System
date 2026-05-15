@@ -8,4 +8,5 @@ public class UpdateStaffDto
     public string Department { get; set; } = string.Empty;
     /// <summary>Must be "FrontDeskStaff" or "HotelManager".</summary>
     public string Role       { get; set; } = string.Empty;
+    public bool   CanManageMedia { get; set; } = false;
 }
