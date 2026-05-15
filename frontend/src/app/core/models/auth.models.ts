@@ -24,6 +24,7 @@ export interface LoginResponse {
   /** Returned in body so Angular does not need to decode the JWT. */
   email: string;
   requiresPasswordChange: boolean;
+  canManageMedia: boolean;
 }
 
 /**
@@ -37,4 +38,5 @@ export interface AuthSession {
   fullName: string;
   email: string;
   requiresPasswordChange: boolean;
+  canManageMedia: boolean;
 }

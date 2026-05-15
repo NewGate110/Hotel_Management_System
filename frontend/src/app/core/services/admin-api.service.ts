@@ -74,6 +74,28 @@ export class AdminApiService {
     return this.http.post<void>(`${this.base}/users/${id}/force-password-change`, {});
   }
 
+  // ── Media management ───────────────────────────────────────────────────────
+  updateMediaPermission(staffId: number, canManageMedia: boolean): Observable<StaffUserDto> {
+    return this.http.patch<StaffUserDto>(
+      `${this.base}/staff/${staffId}/media-permission`,
+      { canManageMedia },
+    );
+  }
+
+  updateRoomImage(roomId: number, imageUrl: string | null): Observable<RoomDto> {
+    return this.http.put<RoomDto>(
+      `${this.base}/rooms/${roomId}/image`,
+      { imageUrl },
+    );
+  }
+
+  updateHotelImage(hotelId: number, imageUrl: string | null): Observable<HotelDto> {
+    return this.http.put<HotelDto>(
+      `${this.base}/hotels/${hotelId}/image`,
+      { imageUrl },
+    );
+  }
+
   // ── Audit logs ─────────────────────────────────────────────────────────────
   getAuditLogs(count = 100): Observable<AuditLogDto[]> {
     return this.http.get<AuditLogDto[]>(`${this.base}/audit-logs`, { params: { count } });

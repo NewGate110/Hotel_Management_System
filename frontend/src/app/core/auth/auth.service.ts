@@ -21,6 +21,7 @@ export class AuthService {
   readonly fullName = computed(() => this.session()?.fullName ?? null);
   readonly email    = computed(() => this.session()?.email    ?? null);
   readonly requiresPasswordChange = computed(() => this.session()?.requiresPasswordChange ?? false);
+  readonly canManageMedia = computed(() => this.session()?.canManageMedia ?? false);
 
   /** True when session metadata is present and the token has not yet expired. */
   readonly isAuthenticated = computed(() => {
@@ -80,6 +81,7 @@ export class AuthService {
       fullName:              res.fullName,
       email:                 res.email,
       requiresPasswordChange: res.requiresPasswordChange,
+      canManageMedia:        res.canManageMedia ?? false,
     };
   }
 }

@@ -9,6 +9,7 @@ export interface RoomDto {
   pricePeak: number;
   status: string;
   description: string;
+  imageUrl?: string;
   floorNumber: number;
 }
 

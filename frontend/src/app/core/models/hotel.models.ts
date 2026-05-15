@@ -3,6 +3,7 @@ export interface HotelSummaryDto {
   name: string;
   city: string;
   country: string;
+  imageUrl?: string;
 }
 
 export interface HotelDto {
@@ -13,6 +14,7 @@ export interface HotelDto {
   address: string;
   phone: string;
   email: string;
+  imageUrl?: string;
   isActive: boolean;
 }
 
