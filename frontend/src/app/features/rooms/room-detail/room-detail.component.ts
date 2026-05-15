@@ -38,6 +38,21 @@ import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
+    <!-- Room hero image -->
+    @if (room()?.imageUrl) {
+      <div style="width: 100%; height: 320px; overflow: hidden; background: var(--sand-800); position: relative;">
+        <img
+          [src]="room()!.imageUrl"
+          [alt]="room()!.type + ' at ' + room()!.hotelName"
+          style="width: 100%; height: 100%; object-fit: cover; object-position: center;"
+        />
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(14,36,48,0.45) 100%);"></div>
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; padding: 0 24px 24px;">
+          <p style="font-family: var(--font-display); font-size: clamp(20px,3vw,32px); font-weight: 300; color: #FAF7F2; margin: 0; letter-spacing: var(--ls-tight);">{{ room()!.type }}</p>
+          <p style="font-size: var(--fs-sm); color: rgba(250,247,242,0.75); margin: 4px 0 0;">{{ room()!.hotelName }}</p>
+        </div>
+      </div>
+    }
     <div class="mx-auto max-w-6xl px-4 py-12 text-zinc-900">
       @if (loading()) {
         <app-loader />
