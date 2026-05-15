@@ -5,14 +5,12 @@ import {
   signal,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
 import { FormatTypePipe } from '../../shared/pipes/format-type.pipe';
-import { HotelsApiService } from '../../core/services/hotels-api.service';
 import { RoomsApiService } from '../../core/services/rooms-api.service';
 import type { RoomSearchResultItem } from '../../core/models/room.models';
 
@@ -466,7 +464,6 @@ function toYmd(d: Date): string {
 })
 export class LandingComponent {
   private readonly roomsApi = inject(RoomsApiService);
-  private readonly hotelsApi = inject(HotelsApiService);
   private readonly fb = inject(FormBuilder);
 
   readonly openFaq = signal<number | null>(null);
@@ -514,8 +511,6 @@ export class LandingComponent {
   toggleFaq(i: number): void { this.openFaq.update((v) => (v === i ? null : i)); }
   nextReview(): void { this.activeReview.update((v) => (v + 1) % this.reviews.length); }
   prevReview(): void { this.activeReview.update((v) => (v - 1 + this.reviews.length) % this.reviews.length); }
-
-  readonly destinations = toSignal(this.hotelsApi.getAll(), { initialValue: [] });
 
   readonly featuredSuites = [
     { name: 'The Driftwood', desc: 'A one-bedroom suite with a private terrace facing the Pacific.', price: 820, tag: 'Ocean view', img: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=700&q=80' },

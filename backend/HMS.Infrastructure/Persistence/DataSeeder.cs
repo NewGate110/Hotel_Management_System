@@ -451,7 +451,7 @@ public static class DataSeeder
             new BookingService
             {
                 BookingId   = bookingConfirmed.Id,
-                ServiceId   = services[0].Id,
+                ServiceId   = services[0].Id,  // Airport Transfer
                 Quantity    = 2,
                 ServiceDate = bookingConfirmed.CheckInDate,
                 TotalFee    = services[0].Fee * 2,
@@ -459,7 +459,7 @@ public static class DataSeeder
             new BookingService
             {
                 BookingId   = bookingConfirmed.Id,
-                ServiceId   = services[1].Id,
+                ServiceId   = services[1].Id,  // Breakfast Package
                 Quantity    = 2,
                 ServiceDate = bookingConfirmed.CheckInDate.AddDays(1),
                 TotalFee    = services[1].Fee * 2,
@@ -467,7 +467,7 @@ public static class DataSeeder
             new BookingService
             {
                 BookingId   = bookingCheckedIn.Id,
-                ServiceId   = services[0].Id,
+                ServiceId   = services[0].Id,  // Airport Transfer
                 Quantity    = 2,
                 ServiceDate = bookingCheckedIn.CheckInDate,
                 TotalFee    = services[0].Fee * 2,
@@ -475,7 +475,7 @@ public static class DataSeeder
             new BookingService
             {
                 BookingId   = bookingCompleted.Id,
-                ServiceId   = services[2].Id,
+                ServiceId   = services[2].Id,  // Spa & Wellness Treatment
                 Quantity    = 2,
                 ServiceDate = bookingCompleted.CheckInDate.AddDays(1),
                 TotalFee    = services[2].Fee * 2,
@@ -483,7 +483,7 @@ public static class DataSeeder
             new BookingService
             {
                 BookingId   = bookingCompleted.Id,
-                ServiceId   = services[4].Id,
+                ServiceId   = services[4].Id,  // Guided City Tour
                 Quantity    = 2,
                 ServiceDate = bookingCompleted.CheckInDate.AddDays(2),
                 TotalFee    = services[4].Fee * 2,
@@ -491,7 +491,7 @@ public static class DataSeeder
             new BookingService
             {
                 BookingId   = bookingCancelled.Id,
-                ServiceId   = services[1].Id,
+                ServiceId   = services[1].Id,  // Breakfast Package
                 Quantity    = 2,
                 ServiceDate = bookingCancelled.CheckInDate,
                 TotalFee    = services[1].Fee * 2,
