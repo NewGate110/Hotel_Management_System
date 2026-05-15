@@ -8,13 +8,15 @@ import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { HotelsApiService } from '../../core/services/hotels-api.service';
 import { AppLoaderComponent } from '../../shared/ui/app-loader/app-loader.component';
 import { AppEmptyStateComponent } from '../../shared/ui/app-empty-state/app-empty-state.component';
+import { RoomImageEditorComponent } from '../../features/admin/room-image-editor/room-image-editor.component';
+import { AuthService } from '../../core/auth/auth.service';
 import type { HotelDto } from '../../core/models/hotel.models';
 import type { RoomDto } from '../../core/models/room.models';
 
 @Component({
   selector: 'app-hotel-detail',
   standalone: true,
-  imports: [AppLoaderComponent, AppEmptyStateComponent, RouterLink],
+  imports: [AppLoaderComponent, AppEmptyStateComponent, RouterLink, RoomImageEditorComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (loading()) {
@@ -138,6 +140,13 @@ import type { RoomDto } from '../../core/models/room.models';
                   >
                     Book this room
                   </a>
+                  @if (auth.isAuthenticated() && (auth.role() === 'Admin' || auth.canManageMedia())) {
+                    <app-room-image-editor
+                      [roomId]="room.id"
+                      [currentImageUrl]="room.imageUrl"
+                      (imageSaved)="onRoomImageSaved(room, $event)"
+                    />
+                  }
                 </div>
               </article>
             }
@@ -151,6 +160,7 @@ export class HotelDetailComponent {
   private readonly route     = inject(ActivatedRoute);
   private readonly router    = inject(Router);
   private readonly hotelsApi = inject(HotelsApiService);
+  readonly auth              = inject(AuthService);
 
   readonly hotel        = signal<HotelDto | null>(null);
   readonly rooms        = signal<RoomDto[]>([]);
@@ -179,5 +189,11 @@ export class HotelDetailComponent {
       next: (r) => { this.rooms.set(r); this.loadingRooms.set(false); },
       error: () => this.loadingRooms.set(false),
     });
+  }
+
+  onRoomImageSaved(room: RoomDto, newUrl: string | null): void {
+    this.rooms.update(list =>
+      list.map(r => r.id === room.id ? { ...r, imageUrl: newUrl ?? undefined } : r)
+    );
   }
 }

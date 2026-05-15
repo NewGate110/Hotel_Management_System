@@ -19,6 +19,7 @@ import { AppLoaderComponent } from '../../../shared/ui/app-loader/app-loader.com
 import { AppBadgeComponent } from '../../../shared/ui/app-badge/app-badge.component';
 import { AppButtonComponent } from '../../../shared/ui/app-button/app-button.component';
 import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
+import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-image-editor.component';
 
 @Component({
   selector: 'app-room-detail',
@@ -35,6 +36,7 @@ import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
     AppBadgeComponent,
     AppButtonComponent,
     FormatTypePipe,
+    RoomImageEditorComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -51,6 +53,15 @@ import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
           <p style="font-family: var(--font-display); font-size: clamp(20px,3vw,32px); font-weight: 300; color: #FAF7F2; margin: 0; letter-spacing: var(--ls-tight);">{{ room()!.type }}</p>
           <p style="font-size: var(--fs-sm); color: rgba(250,247,242,0.75); margin: 4px 0 0;">{{ room()!.hotelName }}</p>
         </div>
+      </div>
+    }
+    @if (auth.isAuthenticated() && room() && (auth.role() === 'Admin' || auth.canManageMedia())) {
+      <div style="max-width: 560px; margin: 0 auto; padding: 0 24px;">
+        <app-room-image-editor
+          [roomId]="room()!.id"
+          [currentImageUrl]="room()?.imageUrl"
+          (imageSaved)="onRoomImageSaved($event)"
+        />
       </div>
     }
     <div class="mx-auto max-w-6xl px-4 py-12 text-zinc-900">
@@ -756,5 +767,9 @@ export class RoomDetailComponent {
     const m = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');
     return `${y}-${m}-${day}`;
+  }
+
+  onRoomImageSaved(newUrl: string | null): void {
+    this.room.update(r => r ? { ...r, imageUrl: newUrl ?? undefined } : r);
   }
 }
