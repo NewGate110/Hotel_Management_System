@@ -159,19 +159,7 @@ public class AdminController : ControllerBase
     public async Task<ActionResult<StaffUserDto>> UpdateMediaPermission(
         int id, [FromBody] UpdateMediaPermissionDto dto)
     {
-        var staff = await _userService.GetStaffByIdAsync(id);
-        if (staff is null) return NotFound($"Staff {id} not found.");
-
-        var updateDto = new UpdateStaffDto
-        {
-            FirstName      = staff.FirstName,
-            LastName       = staff.LastName,
-            Department     = staff.Department,
-            Role           = staff.Role,
-            CanManageMedia = dto.CanManageMedia,
-        };
-
-        try   { return Ok(await _userService.UpdateStaffAsync(id, updateDto)); }
+        try   { return Ok(await _userService.UpdateMediaPermissionAsync(id, dto.CanManageMedia)); }
         catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
     }
 

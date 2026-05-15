@@ -161,8 +161,16 @@ public class UserService : IUserService
         staff.LastName       = dto.LastName;
         staff.Department     = dto.Department;
         staff.Role           = role;
-        staff.CanManageMedia = dto.CanManageMedia;
 
+        await _users.UpdateAsync(staff);
+        return _mapper.Map<StaffUserDto>(staff);
+    }
+
+    public async Task<StaffUserDto> UpdateMediaPermissionAsync(int staffId, bool canManageMedia)
+    {
+        var staff = await _users.GetStaffByIdAsync(staffId)
+            ?? throw new KeyNotFoundException($"Staff {staffId} not found.");
+        staff.CanManageMedia = canManageMedia;
         await _users.UpdateAsync(staff);
         return _mapper.Map<StaffUserDto>(staff);
     }

@@ -14,7 +14,8 @@ namespace HMS.Infrastructure.Persistence.Migrations
                 name: "CanManageMedia",
                 table: "Users",
                 type: "boolean",
-                nullable: true);
+                nullable: true,
+                defaultValue: false);
 
             migrationBuilder.AddColumn<string>(
                 name: "ImageUrl",

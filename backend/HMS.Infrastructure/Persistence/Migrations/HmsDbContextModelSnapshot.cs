@@ -555,6 +555,7 @@ namespace HMS.Infrastructure.Persistence.Migrations
                     b.HasBaseType("HMS.Domain.Entities.User");
 
                     b.Property<bool>("CanManageMedia")
+                        .HasDefaultValue(false)
                         .HasColumnType("boolean");
 
                     b.Property<string>("Department")

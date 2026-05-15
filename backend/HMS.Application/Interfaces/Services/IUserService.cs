@@ -19,6 +19,7 @@ public interface IUserService
     Task<StaffUserDto?> GetStaffByIdAsync(int id);
     Task<StaffUserDto> CreateStaffAsync(CreateStaffDto dto);
     Task<StaffUserDto> UpdateStaffAsync(int id, UpdateStaffDto dto);
+    Task<StaffUserDto> UpdateMediaPermissionAsync(int staffId, bool canManageMedia);
 
     // ── Account management (Admin) ────────────────────────────────────────────
     Task DeactivateUserAsync(int id);
