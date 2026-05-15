@@ -57,6 +57,11 @@ export const routes: Routes = [
           import('./pages/hotel-info/hotel-info.component').then((m) => m.HotelInfoComponent),
       },
       {
+        path: 'hotel/:id',
+        loadComponent: () =>
+          import('./pages/hotel-detail/hotel-detail.component').then((m) => m.HotelDetailComponent),
+      },
+      {
         path: 'contact',
         loadComponent: () =>
           import('./pages/contact/contact.component').then((m) => m.ContactComponent),
