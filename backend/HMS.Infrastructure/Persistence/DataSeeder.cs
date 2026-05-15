@@ -27,48 +27,53 @@ public static class DataSeeder
         {
             new()
             {
-                Name    = "Grand Plaza Sunset Reef Hotel",
-                City    = "Maafushi",
-                Country = "Maldives",
-                Address = "Maafushi Island, Kaafu Atoll, Maldives",
-                Phone   = "+960 400 1002",
-                Email   = "sunsetreef@grandplaza.mv"
+                Name     = "Grand Plaza Sunset Reef Hotel",
+                City     = "Maafushi",
+                Country  = "Maldives",
+                Address  = "Maafushi Island, Kaafu Atoll, Maldives",
+                Phone    = "+960 400 1002",
+                Email    = "sunsetreef@grandplaza.mv",
+                ImageUrl = "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=1200&q=80&fit=crop"
             },
             new()
             {
-                Name    = "Grand Plaza Coconut Breeze Hotel",
-                City    = "Addu City",
-                Country = "Maldives",
-                Address = "Hithadhoo, Addu Atoll (Seenu), Maldives",
-                Phone   = "+960 400 1003",
-                Email   = "coconutbreeze@grandplaza.mv"
+                Name     = "Grand Plaza Coconut Breeze Hotel",
+                City     = "Addu City",
+                Country  = "Maldives",
+                Address  = "Hithadhoo, Addu Atoll (Seenu), Maldives",
+                Phone    = "+960 400 1003",
+                Email    = "coconutbreeze@grandplaza.mv",
+                ImageUrl = "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&q=80&fit=crop"
             },
             new()
             {
-                Name    = "Grand Plaza Pearl Sands Hotel",
-                City    = "Dhigurah",
-                Country = "Maldives",
-                Address = "Dhigurah Island, South Ari Atoll, Maldives",
-                Phone   = "+960 400 1004",
-                Email   = "pearlsands@grandplaza.mv"
+                Name     = "Grand Plaza Pearl Sands Hotel",
+                City     = "Dhigurah",
+                Country  = "Maldives",
+                Address  = "Dhigurah Island, South Ari Atoll, Maldives",
+                Phone    = "+960 400 1004",
+                Email    = "pearlsands@grandplaza.mv",
+                ImageUrl = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80&fit=crop"
             },
             new()
             {
-                Name    = "Grand Plaza Coral Tide Hotel",
-                City    = "Dhidhdhoo",
-                Country = "Maldives",
-                Address = "Dhidhdhoo Island, Haa Alif Atoll, Maldives",
-                Phone   = "+960 400 1005",
-                Email   = "coraltide@grandplaza.mv"
+                Name     = "Grand Plaza Coral Tide Hotel",
+                City     = "Dhidhdhoo",
+                Country  = "Maldives",
+                Address  = "Dhidhdhoo Island, Haa Alif Atoll, Maldives",
+                Phone    = "+960 400 1005",
+                Email    = "coraltide@grandplaza.mv",
+                ImageUrl = "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200&q=80&fit=crop"
             },
             new()
             {
-                Name    = "Grand Plaza Equator Sands Hotel",
-                City    = "Fuvahmulah",
-                Country = "Maldives",
-                Address = "Fuvahmulah Island, Gnaviyani Atoll, Maldives",
-                Phone   = "+960 400 1006",
-                Email   = "equatorsands@grandplaza.mv"
+                Name     = "Grand Plaza Equator Sands Hotel",
+                City     = "Fuvahmulah",
+                Country  = "Maldives",
+                Address  = "Fuvahmulah Island, Gnaviyani Atoll, Maldives",
+                Phone    = "+960 400 1006",
+                Email    = "equatorsands@grandplaza.mv",
+                ImageUrl = "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200&q=80&fit=crop"
             },
         };
 
@@ -77,21 +82,23 @@ public static class DataSeeder
         {
             new()
             {
-                Name    = "Grand Plaza Azure Lagoon Hotel",
-                City    = "Male",
-                Country = "Maldives",
-                Address = "North Malé Atoll (Kaafu), Maldives",
-                Phone   = "+960 400 1001",
-                Email   = "azurelagoon@grandplaza.mv"
+                Name     = "Grand Plaza Azure Lagoon Hotel",
+                City     = "Male",
+                Country  = "Maldives",
+                Address  = "North Malé Atoll (Kaafu), Maldives",
+                Phone    = "+960 400 1001",
+                Email    = "azurelagoon@grandplaza.mv",
+                ImageUrl = "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=1200&q=80&fit=crop"
             },
             new()
             {
-                Name    = "Grand Plaza Manta Bay Hotel",
-                City    = "Hanifaru Bay",
-                Country = "Maldives",
-                Address = "Baa Atoll, UNESCO Biosphere Reserve, Maldives",
-                Phone   = "+960 400 1007",
-                Email   = "mantabay@grandplaza.mv"
+                Name     = "Grand Plaza Manta Bay Hotel",
+                City     = "Hanifaru Bay",
+                Country  = "Maldives",
+                Address  = "Baa Atoll, UNESCO Biosphere Reserve, Maldives",
+                Phone    = "+960 400 1007",
+                Email    = "mantabay@grandplaza.mv",
+                ImageUrl = "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1200&q=80&fit=crop"
             },
         };
 
@@ -117,7 +124,8 @@ public static class DataSeeder
                     PricePeak    = 195,
                     FloorNumber  = 1,
                     Status       = RoomStatus.Available,
-                    Description  = "Comfortable standard room with ocean-inspired interior design and a private balcony."
+                    Description  = "Comfortable standard room with ocean-inspired interior design and a private balcony.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
@@ -129,7 +137,8 @@ public static class DataSeeder
                     PricePeak    = 225,
                     FloorNumber  = 1,
                     Status       = RoomStatus.Available,
-                    Description  = "Ocean-view standard room with king bed, rainfall shower, and in-room espresso machine."
+                    Description  = "Ocean-view standard room with king bed, rainfall shower, and in-room espresso machine.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
@@ -141,7 +150,8 @@ public static class DataSeeder
                     PricePeak    = 385,
                     FloorNumber  = 2,
                     Status       = RoomStatus.Available,
-                    Description  = "Spacious deluxe room with premium amenities, panoramic sea views, and a deep-soak bathtub."
+                    Description  = "Spacious deluxe room with premium amenities, panoramic sea views, and a deep-soak bathtub.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
@@ -153,7 +163,8 @@ public static class DataSeeder
                     PricePeak    = 430,
                     FloorNumber  = 2,
                     Status       = RoomStatus.Cleaning,
-                    Description  = "Deluxe sunset-facing room with lounge area, minibar, and a private soaking tub."
+                    Description  = "Deluxe sunset-facing room with lounge area, minibar, and a private soaking tub.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
@@ -165,7 +176,8 @@ public static class DataSeeder
                     PricePeak    = 665,
                     FloorNumber  = 3,
                     Status       = RoomStatus.Available,
-                    Description  = "Two-bedroom family suite with a private living area, kitchenette, and partial ocean view."
+                    Description  = "Two-bedroom family suite with a private living area, kitchenette, and partial ocean view.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1591088398332-8a7791972843?w=800&q=80&fit=crop"
                 },
             });
         }
@@ -185,7 +197,8 @@ public static class DataSeeder
                     PricePeak    = 910,
                     FloorNumber  = 1,
                     Status       = RoomStatus.Available,
-                    Description  = "Executive suite with private terrace, butler service, and a tropical garden view."
+                    Description  = "Executive suite with private terrace, butler service, and a tropical garden view.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
@@ -197,7 +210,8 @@ public static class DataSeeder
                     PricePeak    = 990,
                     FloorNumber  = 1,
                     Status       = RoomStatus.Available,
-                    Description  = "Luxury executive suite with private plunge pool, espresso bar, and direct lagoon access."
+                    Description  = "Luxury executive suite with private plunge pool, espresso bar, and direct lagoon access.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
@@ -209,7 +223,8 @@ public static class DataSeeder
                     PricePeak    = 1370,
                     FloorNumber  = 2,
                     Status       = RoomStatus.Available,
-                    Description  = "Penthouse suite with floor-to-ceiling windows, private sundeck, and panoramic horizon views."
+                    Description  = "Penthouse suite with floor-to-ceiling windows, private sundeck, and panoramic horizon views.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1631049552057-403cdb8f0658?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
@@ -221,7 +236,8 @@ public static class DataSeeder
                     PricePeak    = 1750,
                     FloorNumber  = 3,
                     Status       = RoomStatus.Available,
-                    Description  = "Grand suite with infinity pool terrace, premium sound system, and unobstructed horizon views."
+                    Description  = "Grand suite with infinity pool terrace, premium sound system, and unobstructed horizon views.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
@@ -233,7 +249,8 @@ public static class DataSeeder
                     PricePeak    = 2250,
                     FloorNumber  = 4,
                     Status       = RoomStatus.Available,
-                    Description  = "Junior suite with dedicated concierge, in-suite dining, and an outdoor soaking tub."
+                    Description  = "Junior suite with dedicated concierge, in-suite dining, and an outdoor soaking tub.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1560347876-aeef00ee58a1?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
@@ -245,7 +262,8 @@ public static class DataSeeder
                     PricePeak    = 5200,
                     FloorNumber  = 5,
                     Status       = RoomStatus.Available,
-                    Description  = "Presidential suite spanning the entire top floor, with private pool, personal chef, and 360° ocean panorama."
+                    Description  = "Presidential suite spanning the entire top floor, with private pool, personal chef, and 360° ocean panorama.",
+                    ImageUrl     = "https://images.unsplash.com/photo-1642125749606-19099bf48c0b?w=800&q=80&fit=crop"
                 },
             });
         }
