@@ -3,7 +3,6 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { MatIconModule } from '@angular/material/icon';
 import { AppCardComponent } from '../../shared/ui/app-card/app-card.component';
 import { AppButtonComponent } from '../../shared/ui/app-button/app-button.component';
 import { ContactApiService } from '../../core/services/contact-api.service';
@@ -16,71 +15,73 @@ import { ContactApiService } from '../../core/services/contact-api.service';
     MatFormFieldModule,
     MatInputModule,
     MatSelectModule,
-    MatIconModule,
     AppCardComponent,
     AppButtonComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="mx-auto max-w-2xl px-4 py-12 text-zinc-900">
+    <div style="max-width: 680px; margin: 0 auto; padding: 64px 24px;">
+
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-3xl font-semibold tracking-tight">Contact us</h1>
-        <p class="mt-2 text-sm text-zinc-500">
+      <div style="margin-bottom: 40px; padding-bottom: 28px; border-bottom: 1px solid var(--border);">
+        <p class="eyebrow">Grand Plaza Hotel</p>
+        <h1 style="font-family: var(--font-display); font-size: var(--fs-3xl); font-weight: 300; letter-spacing: var(--ls-tight); color: var(--fg); margin: 8px 0 12px;">Contact us</h1>
+        <p style="font-size: var(--fs-sm); color: var(--fg-2); line-height: var(--lh-relaxed);">
           For reservations, partnership enquiries, and group bookings — our concierge team typically responds within 24 hours.
         </p>
       </div>
 
       <!-- Info strip -->
-      <div class="mb-8 grid gap-4 sm:grid-cols-3">
-        <div class="flex items-start gap-3 rounded-xl border border-zinc-200 p-4">
-          <mat-icon class="mt-0.5 text-amber-500">phone</mat-icon>
-          <div>
-            <p class="text-xs font-medium text-zinc-500 uppercase tracking-wide">Phone</p>
-            <p class="text-sm font-semibold">+44 20 7946 0958</p>
+      <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 36px;" class="contact-info-grid">
+        <div style="display: flex; flex-direction: column; gap: 10px; border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--surface); padding: 16px 18px;">
+          <span class="material-icons-outlined" style="font-size: 20px; color: var(--brand); flex-shrink: 0;">phone</span>
+          <div style="min-width: 0;">
+            <p style="font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-3); margin: 0 0 4px;">Phone</p>
+            <p style="font-size: var(--fs-sm); font-weight: 500; color: var(--fg); margin: 0; word-break: break-word;">+44 20 7946 0958</p>
           </div>
         </div>
-        <div class="flex items-start gap-3 rounded-xl border border-zinc-200 p-4">
-          <mat-icon class="mt-0.5 text-amber-500">email</mat-icon>
-          <div>
-            <p class="text-xs font-medium text-zinc-500 uppercase tracking-wide">Email</p>
-            <p class="text-sm font-semibold">concierge&#64;grandplaza.com</p>
+        <div style="display: flex; flex-direction: column; gap: 10px; border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--surface); padding: 16px 18px;">
+          <span class="material-icons-outlined" style="font-size: 20px; color: var(--brand); flex-shrink: 0;">email</span>
+          <div style="min-width: 0;">
+            <p style="font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-3); margin: 0 0 4px;">Email</p>
+            <p style="font-size: var(--fs-sm); font-weight: 500; color: var(--fg); margin: 0; word-break: break-all;">concierge&#64;grandplaza.com</p>
           </div>
         </div>
-        <div class="flex items-start gap-3 rounded-xl border border-zinc-200 p-4">
-          <mat-icon class="mt-0.5 text-amber-500">schedule</mat-icon>
-          <div>
-            <p class="text-xs font-medium text-zinc-500 uppercase tracking-wide">Hours</p>
-            <p class="text-sm font-semibold">24 / 7</p>
+        <div style="display: flex; flex-direction: column; gap: 10px; border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--surface); padding: 16px 18px;">
+          <span class="material-icons-outlined" style="font-size: 20px; color: var(--brand); flex-shrink: 0;">schedule</span>
+          <div style="min-width: 0;">
+            <p style="font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.12em; color: var(--fg-3); margin: 0 0 4px;">Hours</p>
+            <p style="font-size: var(--fs-sm); font-weight: 500; color: var(--fg); margin: 0;">24 / 7</p>
           </div>
         </div>
       </div>
 
-      <!-- Success state -->
+      <!-- Submitted states -->
       @if (submitted()) {
         @if (sendError()) {
-          <div class="flex flex-col items-center gap-4 rounded-2xl border border-amber-200 bg-amber-50 px-8 py-12 text-center">
-            <mat-icon class="text-5xl text-amber-500" style="font-size:3rem;width:3rem;height:3rem;">schedule</mat-icon>
-            <h2 class="text-xl font-semibold text-amber-800">Message queued</h2>
-            <p class="text-sm text-amber-700">Thank you, <strong>{{ submittedName() }}</strong>. Message delivery is pending API integration — please reach us by phone or email for now.</p>
-            <button type="button" class="mt-2 text-sm font-medium text-amber-700 underline underline-offset-2" (click)="reset()">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; border-radius: var(--r-lg); border: 1px solid var(--clay-300); background: var(--clay-100); padding: 48px 32px; text-align: center;">
+            <span class="material-icons-outlined" style="font-size: 48px; color: var(--clay-500);">schedule</span>
+            <h2 style="font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 400; color: var(--clay-700); margin: 0;">Message queued</h2>
+            <p style="font-size: var(--fs-sm); color: var(--clay-700); margin: 0; max-width: 400px;">Thank you, <strong>{{ submittedName() }}</strong>. Message delivery is pending — please reach us by phone or email for now.</p>
+            <button type="button" style="font-size: var(--fs-sm); font-weight: 500; color: var(--clay-700); text-decoration: underline; text-underline-offset: 3px; background: none; border: none; cursor: pointer;" (click)="reset()">
               Send another message
             </button>
           </div>
         } @else {
-          <div class="flex flex-col items-center gap-4 rounded-2xl border border-green-200 bg-green-50 px-8 py-12 text-center">
-            <mat-icon class="text-5xl text-green-500" style="font-size:3rem;width:3rem;height:3rem;">check_circle</mat-icon>
-            <h2 class="text-xl font-semibold text-green-800">Message received!</h2>
-            <p class="text-sm text-green-700">Thank you, <strong>{{ submittedName() }}</strong>. Our concierge team will be in touch shortly.</p>
-            <button type="button" class="mt-2 text-sm font-medium text-green-700 underline underline-offset-2" (click)="reset()">
+          <div style="display: flex; flex-direction: column; align-items: center; gap: 16px; border-radius: var(--r-lg); border: 1px solid var(--glass-300); background: var(--glass-100); padding: 48px 32px; text-align: center;">
+            <span class="material-icons-outlined" style="font-size: 48px; color: var(--glass-500);">check_circle</span>
+            <h2 style="font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 400; color: var(--glass-700); margin: 0;">Message received</h2>
+            <p style="font-size: var(--fs-sm); color: var(--glass-700); margin: 0; max-width: 400px;">Thank you, <strong>{{ submittedName() }}</strong>. Our concierge team will be in touch shortly.</p>
+            <button type="button" style="font-size: var(--fs-sm); font-weight: 500; color: var(--glass-700); text-decoration: underline; text-underline-offset: 3px; background: none; border: none; cursor: pointer;" (click)="reset()">
               Send another message
             </button>
           </div>
         }
       } @else {
         <!-- Form -->
-        <app-card title="Send a message">
-          <form class="mt-2 space-y-4" [formGroup]="form" (ngSubmit)="submit()">
+        <div style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); padding: 28px;">
+          <h2 style="font-family: var(--font-display); font-size: var(--fs-lg); font-weight: 400; color: var(--fg); margin: 0 0 24px; letter-spacing: -0.01em;">Send a message</h2>
+          <form style="display: flex; flex-direction: column; gap: 16px;" [formGroup]="form" (ngSubmit)="submit()">
             <div class="grid gap-4 sm:grid-cols-2">
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Full name</mat-label>
@@ -89,7 +90,6 @@ import { ContactApiService } from '../../core/services/contact-api.service';
                   <mat-error>Name is required</mat-error>
                 }
               </mat-form-field>
-
               <mat-form-field appearance="outline" class="w-full">
                 <mat-label>Email address</mat-label>
                 <input matInput type="email" formControlName="email" autocomplete="email" />
@@ -100,7 +100,6 @@ import { ContactApiService } from '../../core/services/contact-api.service';
                 }
               </mat-form-field>
             </div>
-
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Subject</mat-label>
               <mat-select formControlName="subject">
@@ -114,7 +113,6 @@ import { ContactApiService } from '../../core/services/contact-api.service';
                 <mat-error>Please select a subject</mat-error>
               }
             </mat-form-field>
-
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Message</mat-label>
               <textarea matInput rows="5" formControlName="message" placeholder="Tell us how we can help…"></textarea>
@@ -122,16 +120,19 @@ import { ContactApiService } from '../../core/services/contact-api.service';
                 <mat-error>Message is required</mat-error>
               }
             </mat-form-field>
-
-            <div class="flex justify-end">
-              <app-button variant="primary" type="submit" [disabled]="form.invalid || sending()">
-                @if (sending()) { Sending… } @else { Send message }
+            <div style="display: flex; justify-content: flex-end; padding-top: 4px;">
+              <app-button variant="primary" type="submit" [loading]="sending()" [disabled]="form.invalid">
+                Send message
               </app-button>
             </div>
           </form>
-        </app-card>
+        </div>
       }
     </div>
+
+    <style>
+      @media (max-width: 540px) { .contact-info-grid { grid-template-columns: 1fr !important; } }
+    </style>
   `,
 })
 export class ContactComponent {

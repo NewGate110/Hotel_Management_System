@@ -3,16 +3,14 @@ namespace HMS.Domain.Enums;
 
 public enum RoomType
 {
-    StandardDouble,
-    DeluxeKing,
-    FamilySuite,
+    StandardDouble    = 0,
+    DeluxeKing        = 1,
+    FamilySuite       = 2,
 
-    // Resort Villas
-    BeachVilla,
-    WaterVilla,
-    OverwaterBungalow,
-    HoneymoonVilla,
-
-    // Premium Luxury
-    PresidentialVilla
+    // Upgrade tiers (formerly resort villa types — integer values preserved)
+    ExecutiveSuite    = 3,   // was BeachVilla
+    PenthouseSuite    = 4,   // was WaterVilla
+    GrandSuite        = 5,   // was OverwaterBungalow
+    JuniorSuite       = 6,   // was HoneymoonVilla
+    PresidentialSuite = 7,   // was PresidentialVilla
 }

@@ -36,7 +36,7 @@ public static class DataSeeder
             },
             new()
             {
-                Name    = "Grand Plaza Coconut Breeze Retreat",
+                Name    = "Grand Plaza Coconut Breeze Hotel",
                 City    = "Addu City",
                 Country = "Maldives",
                 Address = "Hithadhoo, Addu Atoll (Seenu), Maldives",
@@ -45,16 +45,16 @@ public static class DataSeeder
             },
             new()
             {
-                Name    = "Grand Plaza Pearl Sands Water Hotel",
+                Name    = "Grand Plaza Pearl Sands Hotel",
                 City    = "Dhigurah",
                 Country = "Maldives",
-                Address = "Dhigurah Island, South Ari Atoll (Alif Dhaal), Maldives",
+                Address = "Dhigurah Island, South Ari Atoll, Maldives",
                 Phone   = "+960 400 1004",
                 Email   = "pearlsands@grandplaza.mv"
             },
             new()
             {
-                Name    = "Grand Plaza Coral Tide Inn",
+                Name    = "Grand Plaza Coral Tide Hotel",
                 City    = "Dhidhdhoo",
                 Country = "Maldives",
                 Address = "Dhidhdhoo Island, Haa Alif Atoll, Maldives",
@@ -72,12 +72,12 @@ public static class DataSeeder
             },
         };
 
-        // ── Resorts ───────────────────────────────────────────────────────────
-        var resorts = new List<Hotel>
+        // ── Luxury Properties ─────────────────────────────────────────────────
+        var luxuryHotels = new List<Hotel>
         {
             new()
             {
-                Name    = "Grand Plaza Azure Lagoon Resort",
+                Name    = "Grand Plaza Azure Lagoon Hotel",
                 City    = "Male",
                 Country = "Maldives",
                 Address = "North Malé Atoll (Kaafu), Maldives",
@@ -86,7 +86,7 @@ public static class DataSeeder
             },
             new()
             {
-                Name    = "Grand Plaza Manta Bay Resort",
+                Name    = "Grand Plaza Manta Bay Hotel",
                 City    = "Hanifaru Bay",
                 Country = "Maldives",
                 Address = "Baa Atoll, UNESCO Biosphere Reserve, Maldives",
@@ -96,156 +96,156 @@ public static class DataSeeder
         };
 
         db.Hotels.AddRange(hotels);
-        db.Hotels.AddRange(resorts);
+        db.Hotels.AddRange(luxuryHotels);
         await db.SaveChangesAsync();
 
         // ── Rooms ─────────────────────────────────────────────────────────────
         var rooms = new List<Room>();
 
-        // Hotels — at least 3 rooms each with variety
+        // Standard hotels — 5 rooms each
         foreach (var hotel in hotels)
         {
             rooms.AddRange(new[]
             {
                 new Room
                 {
-                    HotelId     = hotel.Id,
-                    RoomNumber  = "101",
-                    Type        = RoomType.StandardDouble,
-                    Capacity    = 2,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "101",
+                    Type         = RoomType.StandardDouble,
+                    Capacity     = 2,
                     PriceOffPeak = 140,
-                    PricePeak   = 195,
-                    FloorNumber = 1,
-                    Status      = RoomStatus.Available,
-                    Description = "Comfortable standard room with island-inspired interior design."
+                    PricePeak    = 195,
+                    FloorNumber  = 1,
+                    Status       = RoomStatus.Available,
+                    Description  = "Comfortable standard room with ocean-inspired interior design and a private balcony."
                 },
                 new Room
                 {
-                    HotelId     = hotel.Id,
-                    RoomNumber  = "102",
-                    Type        = RoomType.StandardDouble,
-                    Capacity    = 2,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "102",
+                    Type         = RoomType.StandardDouble,
+                    Capacity     = 2,
                     PriceOffPeak = 165,
-                    PricePeak   = 225,
-                    FloorNumber = 1,
-                    Status      = RoomStatus.Available,
-                    Description = "Ocean-view standard room with private balcony seating area."
+                    PricePeak    = 225,
+                    FloorNumber  = 1,
+                    Status       = RoomStatus.Available,
+                    Description  = "Ocean-view standard room with king bed, rainfall shower, and in-room espresso machine."
                 },
                 new Room
                 {
-                    HotelId     = hotel.Id,
-                    RoomNumber  = "201",
-                    Type        = RoomType.DeluxeKing,
-                    Capacity    = 2,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "201",
+                    Type         = RoomType.DeluxeKing,
+                    Capacity     = 2,
                     PriceOffPeak = 285,
-                    PricePeak   = 385,
-                    FloorNumber = 2,
-                    Status      = RoomStatus.Available,
-                    Description = "Spacious deluxe room with premium amenities and panoramic sea views."
+                    PricePeak    = 385,
+                    FloorNumber  = 2,
+                    Status       = RoomStatus.Available,
+                    Description  = "Spacious deluxe room with premium amenities, panoramic sea views, and a deep-soak bathtub."
                 },
                 new Room
                 {
-                    HotelId     = hotel.Id,
-                    RoomNumber  = "202",
-                    Type        = RoomType.DeluxeKing,
-                    Capacity    = 2,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "202",
+                    Type         = RoomType.DeluxeKing,
+                    Capacity     = 2,
                     PriceOffPeak = 325,
-                    PricePeak   = 430,
-                    FloorNumber = 2,
-                    Status      = RoomStatus.Cleaning,
-                    Description = "Deluxe sunset-facing room with lounge area, minibar, and soaking tub."
+                    PricePeak    = 430,
+                    FloorNumber  = 2,
+                    Status       = RoomStatus.Cleaning,
+                    Description  = "Deluxe sunset-facing room with lounge area, minibar, and a private soaking tub."
                 },
                 new Room
                 {
-                    HotelId     = hotel.Id,
-                    RoomNumber  = "301",
-                    Type        = RoomType.FamilySuite,
-                    Capacity    = 4,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "301",
+                    Type         = RoomType.FamilySuite,
+                    Capacity     = 4,
                     PriceOffPeak = 510,
-                    PricePeak   = 665,
-                    FloorNumber = 3,
-                    Status      = RoomStatus.Available,
-                    Description = "Family suite with two bedrooms, a private living area, and partial ocean view."
+                    PricePeak    = 665,
+                    FloorNumber  = 3,
+                    Status       = RoomStatus.Available,
+                    Description  = "Two-bedroom family suite with a private living area, kitchenette, and partial ocean view."
                 },
             });
         }
 
-        // Resorts — at least 4 rooms each with luxury villa types
-        foreach (var resort in resorts)
+        // Luxury properties — 6 rooms each with upgrade tier types
+        foreach (var hotel in luxuryHotels)
         {
             rooms.AddRange(new[]
             {
                 new Room
                 {
-                    HotelId     = resort.Id,
-                    RoomNumber  = "101",
-                    Type        = RoomType.BeachVilla,
-                    Capacity    = 2,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "101",
+                    Type         = RoomType.ExecutiveSuite,
+                    Capacity     = 2,
                     PriceOffPeak = 660,
-                    PricePeak   = 910,
-                    FloorNumber = 1,
-                    Status      = RoomStatus.Available,
-                    Description = "Private beachfront villa with outdoor deck and tropical garden."
+                    PricePeak    = 910,
+                    FloorNumber  = 1,
+                    Status       = RoomStatus.Available,
+                    Description  = "Executive suite with private terrace, butler service, and a tropical garden view."
                 },
                 new Room
                 {
-                    HotelId     = resort.Id,
-                    RoomNumber  = "102",
-                    Type        = RoomType.BeachVilla,
-                    Capacity    = 2,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "102",
+                    Type         = RoomType.ExecutiveSuite,
+                    Capacity     = 2,
                     PriceOffPeak = 730,
-                    PricePeak   = 990,
-                    FloorNumber = 1,
-                    Status      = RoomStatus.Available,
-                    Description = "Luxury beach villa with private plunge pool and direct lagoon access."
+                    PricePeak    = 990,
+                    FloorNumber  = 1,
+                    Status       = RoomStatus.Available,
+                    Description  = "Luxury executive suite with private plunge pool, espresso bar, and direct lagoon access."
                 },
                 new Room
                 {
-                    HotelId     = resort.Id,
-                    RoomNumber  = "201",
-                    Type        = RoomType.WaterVilla,
-                    Capacity    = 2,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "201",
+                    Type         = RoomType.PenthouseSuite,
+                    Capacity     = 2,
                     PriceOffPeak = 960,
-                    PricePeak   = 1370,
-                    FloorNumber = 2,
-                    Status      = RoomStatus.Available,
-                    Description = "Over-lagoon water villa with glass floor panels and private sunken terrace."
+                    PricePeak    = 1370,
+                    FloorNumber  = 2,
+                    Status       = RoomStatus.Available,
+                    Description  = "Penthouse suite with floor-to-ceiling windows, private sundeck, and panoramic horizon views."
                 },
                 new Room
                 {
-                    HotelId     = resort.Id,
-                    RoomNumber  = "301",
-                    Type        = RoomType.OverwaterBungalow,
-                    Capacity    = 2,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "301",
+                    Type         = RoomType.GrandSuite,
+                    Capacity     = 2,
                     PriceOffPeak = 1250,
-                    PricePeak   = 1750,
-                    FloorNumber = 3,
-                    Status      = RoomStatus.Available,
-                    Description = "Luxury overwater bungalow with infinity pool and unobstructed sunset views."
+                    PricePeak    = 1750,
+                    FloorNumber  = 3,
+                    Status       = RoomStatus.Available,
+                    Description  = "Grand suite with infinity pool terrace, premium sound system, and unobstructed horizon views."
                 },
                 new Room
                 {
-                    HotelId     = resort.Id,
-                    RoomNumber  = "401",
-                    Type        = RoomType.HoneymoonVilla,
-                    Capacity    = 2,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "401",
+                    Type         = RoomType.JuniorSuite,
+                    Capacity     = 2,
                     PriceOffPeak = 1650,
-                    PricePeak   = 2250,
-                    FloorNumber = 4,
-                    Status      = RoomStatus.Available,
-                    Description = "Exclusive honeymoon villa with private butler, floating breakfast, and outdoor cinema."
+                    PricePeak    = 2250,
+                    FloorNumber  = 4,
+                    Status       = RoomStatus.Available,
+                    Description  = "Junior suite with dedicated concierge, in-suite dining, and an outdoor soaking tub."
                 },
                 new Room
                 {
-                    HotelId     = resort.Id,
-                    RoomNumber  = "501",
-                    Type        = RoomType.PresidentialVilla,
-                    Capacity    = 6,
+                    HotelId      = hotel.Id,
+                    RoomNumber   = "501",
+                    Type         = RoomType.PresidentialSuite,
+                    Capacity     = 6,
                     PriceOffPeak = 3600,
-                    PricePeak   = 5200,
-                    FloorNumber = 5,
-                    Status      = RoomStatus.Available,
-                    Description = "Grand presidential villa with private pool, ocean deck, spa suite, and dedicated personal chef."
+                    PricePeak    = 5200,
+                    FloorNumber  = 5,
+                    Status       = RoomStatus.Available,
+                    Description  = "Presidential suite spanning the entire top floor, with private pool, personal chef, and 360° ocean panorama."
                 },
             });
         }
@@ -263,6 +263,7 @@ public static class DataSeeder
             LastName           = "User",
             EmployeeId         = "EMP001",
             Department         = "Administration",
+            IsActive           = true,
             LastPasswordChange = DateTime.UtcNow,
             CreatedAt          = DateTime.UtcNow,
         };
@@ -275,7 +276,8 @@ public static class DataSeeder
             FirstName          = "Aishath",
             LastName           = "Latheef",
             EmployeeId         = "EMP002",
-            Department         = "Resort Operations",
+            Department         = "Hotel Operations",
+            IsActive           = true,
             LastPasswordChange = DateTime.UtcNow,
             CreatedAt          = DateTime.UtcNow,
         };
@@ -288,7 +290,8 @@ public static class DataSeeder
             FirstName          = "Mohamed",
             LastName           = "Shifan",
             EmployeeId         = "EMP003",
-            Department         = "Front Office",
+            Department         = "Front Desk",
+            IsActive           = true,
             LastPasswordChange = DateTime.UtcNow,
             CreatedAt          = DateTime.UtcNow,
         };
@@ -302,6 +305,7 @@ public static class DataSeeder
             LastName           = "Taylor",
             Phone              = "+960 7778899",
             Address            = "M. Blue Reef, Male, Maldives",
+            IsActive           = true,
             LastPasswordChange = DateTime.UtcNow,
             CreatedAt          = DateTime.UtcNow,
         };
@@ -315,6 +319,7 @@ public static class DataSeeder
             LastName           = "Ibrahim",
             Phone              = "+960 7889941",
             Address            = "K. Kaashidhoo, North Malé Atoll, Maldives",
+            IsActive           = true,
             LastPasswordChange = DateTime.UtcNow,
             CreatedAt          = DateTime.UtcNow,
         };
@@ -327,44 +332,44 @@ public static class DataSeeder
         {
             new()
             {
-                Name        = "Speedboat Transfer",
-                Description = "Round-trip speedboat transfer from Velana International Airport.",
-                Fee         = 95,
-                Unit        = "per person"
+                Name        = "Airport Transfer",
+                Description = "Private car transfer to or from the nearest international airport.",
+                Fee         = 75,
+                Unit        = "per booking"
             },
             new()
             {
-                Name        = "Seaplane Transfer",
-                Description = "Luxury seaplane transfer to the resort island.",
-                Fee         = 350,
-                Unit        = "per person"
+                Name        = "Breakfast Package",
+                Description = "Full buffet breakfast for two, served at the hotel restaurant.",
+                Fee         = 45,
+                Unit        = "per day"
             },
             new()
             {
-                Name        = "Sunset Dolphin Cruise",
-                Description = "Evening cruise with dolphin watching experience.",
-                Fee         = 80,
-                Unit        = "per person"
-            },
-            new()
-            {
-                Name        = "Spa & Wellness Package",
-                Description = "Relaxing spa treatment with sauna and deep-tissue massage.",
+                Name        = "Spa & Wellness Treatment",
+                Description = "60-minute signature massage and access to the wellness suite.",
                 Fee         = 150,
                 Unit        = "per session"
             },
             new()
             {
-                Name        = "Scuba Diving Excursion",
-                Description = "Guided scuba diving session at coral reef sites.",
-                Fee         = 200,
-                Unit        = "per trip"
+                Name        = "In-Room Dining — Dinner",
+                Description = "Three-course dinner delivered to your room, prepared by our chef.",
+                Fee         = 90,
+                Unit        = "per person"
             },
             new()
             {
-                Name        = "Floating Breakfast",
-                Description = "Private floating breakfast served in villa pool.",
-                Fee         = 65,
+                Name        = "Guided City Tour",
+                Description = "Half-day guided tour of local cultural sites with a hotel concierge.",
+                Fee         = 60,
+                Unit        = "per person"
+            },
+            new()
+            {
+                Name        = "Late Check-out",
+                Description = "Extend your stay until 18:00 (subject to availability).",
+                Fee         = 50,
                 Unit        = "per booking"
             },
         };
@@ -375,13 +380,11 @@ public static class DataSeeder
         // ── Bookings ──────────────────────────────────────────────────────────
         var now = DateTime.UtcNow.Date;
 
-        // Pick rooms per hotel — using LINQ to avoid index assumptions
         var confirmedRoom  = rooms.First(r => r.HotelId == hotels[0].Id && r.Type == RoomType.DeluxeKing);
         var checkedInRoom  = rooms.First(r => r.HotelId == hotels[1].Id && r.Type == RoomType.StandardDouble);
         var completedRoom  = rooms.First(r => r.HotelId == hotels[2].Id && r.Type == RoomType.FamilySuite);
-        var cancelledRoom  = rooms.First(r => r.HotelId == resorts[0].Id && r.Type == RoomType.BeachVilla);
+        var cancelledRoom  = rooms.First(r => r.HotelId == luxuryHotels[0].Id && r.Type == RoomType.ExecutiveSuite);
 
-        // 1 — Confirmed (future, 16 days out)
         var bookingConfirmed = new Booking
         {
             GuestId         = guest1.Id,
@@ -391,11 +394,10 @@ public static class DataSeeder
             Status          = BookingStatus.Confirmed,
             TotalAmount     = confirmedRoom.PriceOffPeak * 4,
             CancellationFee = 0,
-            Notes           = "Guest requested honeymoon-style room decoration.",
+            Notes           = "Guest requested early check-in.",
             CreatedAt       = now.AddDays(-3),
         };
 
-        // 2 — CheckedIn (started yesterday)
         var bookingCheckedIn = new Booking
         {
             GuestId         = guest2.Id,
@@ -405,11 +407,10 @@ public static class DataSeeder
             Status          = BookingStatus.CheckedIn,
             TotalAmount     = checkedInRoom.PriceOffPeak * 4,
             CancellationFee = 0,
-            Notes           = "Early check-in requested.",
+            Notes           = "Connecting room requested.",
             CreatedAt       = now.AddDays(-10),
         };
 
-        // 3 — Completed (stayed 30–35 days ago)
         var bookingCompleted = new Booking
         {
             GuestId         = guest1.Id,
@@ -423,16 +424,15 @@ public static class DataSeeder
             CreatedAt       = now.AddDays(-50),
         };
 
-        // 4 — Cancelled (with cancellation fee)
         var bookingCancelled = new Booking
         {
             GuestId         = guest2.Id,
-            HotelId         = resorts[0].Id,
+            HotelId         = luxuryHotels[0].Id,
             CheckInDate     = now.AddDays(5),
             CheckOutDate    = now.AddDays(10),
             Status          = BookingStatus.Cancelled,
             TotalAmount     = cancelledRoom.PriceOffPeak * 5,
-            CancellationFee = cancelledRoom.PriceOffPeak,   // one-night retention fee
+            CancellationFee = cancelledRoom.PriceOffPeak,
             Notes           = "Cancelled within 14-day window; one-night fee retained.",
             CreatedAt       = now.AddDays(-14),
         };
@@ -440,7 +440,6 @@ public static class DataSeeder
         db.Bookings.AddRange(bookingConfirmed, bookingCheckedIn, bookingCompleted, bookingCancelled);
         await db.SaveChangesAsync();
 
-        // BookingRooms
         db.BookingRooms.AddRange(
             new BookingRoom { BookingId = bookingConfirmed.Id,  RoomId = confirmedRoom.Id,  PriceAtBooking = confirmedRoom.PriceOffPeak  },
             new BookingRoom { BookingId = bookingCheckedIn.Id,  RoomId = checkedInRoom.Id,  PriceAtBooking = checkedInRoom.PriceOffPeak  },
@@ -448,13 +447,11 @@ public static class DataSeeder
             new BookingRoom { BookingId = bookingCancelled.Id,  RoomId = cancelledRoom.Id,  PriceAtBooking = cancelledRoom.PriceOffPeak  }
         );
 
-        // BookingServices — 1–2 per booking
         db.BookingServices.AddRange(
-            // Confirmed: speedboat + dolphin cruise
             new BookingService
             {
                 BookingId   = bookingConfirmed.Id,
-                ServiceId   = services[0].Id,   // Speedboat Transfer
+                ServiceId   = services[0].Id,
                 Quantity    = 2,
                 ServiceDate = bookingConfirmed.CheckInDate,
                 TotalFee    = services[0].Fee * 2,
@@ -462,53 +459,46 @@ public static class DataSeeder
             new BookingService
             {
                 BookingId   = bookingConfirmed.Id,
-                ServiceId   = services[2].Id,   // Sunset Dolphin Cruise
+                ServiceId   = services[1].Id,
                 Quantity    = 2,
                 ServiceDate = bookingConfirmed.CheckInDate.AddDays(1),
-                TotalFee    = services[2].Fee * 2,
+                TotalFee    = services[1].Fee * 2,
             },
-
-            // CheckedIn: seaplane transfer
             new BookingService
             {
                 BookingId   = bookingCheckedIn.Id,
-                ServiceId   = services[1].Id,   // Seaplane Transfer
+                ServiceId   = services[0].Id,
                 Quantity    = 2,
                 ServiceDate = bookingCheckedIn.CheckInDate,
-                TotalFee    = services[1].Fee * 2,
+                TotalFee    = services[0].Fee * 2,
             },
-
-            // Completed: spa + scuba
             new BookingService
             {
                 BookingId   = bookingCompleted.Id,
-                ServiceId   = services[3].Id,   // Spa & Wellness
+                ServiceId   = services[2].Id,
                 Quantity    = 2,
                 ServiceDate = bookingCompleted.CheckInDate.AddDays(1),
-                TotalFee    = services[3].Fee * 2,
+                TotalFee    = services[2].Fee * 2,
             },
             new BookingService
             {
                 BookingId   = bookingCompleted.Id,
-                ServiceId   = services[4].Id,   // Scuba Diving
+                ServiceId   = services[4].Id,
                 Quantity    = 2,
                 ServiceDate = bookingCompleted.CheckInDate.AddDays(2),
                 TotalFee    = services[4].Fee * 2,
             },
-
-            // Cancelled: floating breakfast (prepaid, non-refundable)
             new BookingService
             {
                 BookingId   = bookingCancelled.Id,
-                ServiceId   = services[5].Id,   // Floating Breakfast
-                Quantity    = 1,
+                ServiceId   = services[1].Id,
+                Quantity    = 2,
                 ServiceDate = bookingCancelled.CheckInDate,
-                TotalFee    = services[5].Fee,
+                TotalFee    = services[1].Fee * 2,
             }
         );
 
         await db.SaveChangesAsync();
-
         logger.LogInformation("Database seeding complete.");
     }
 }
