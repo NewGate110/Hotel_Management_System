@@ -20,6 +20,7 @@ import { AppPaginationComponent } from '../../../shared/ui/app-pagination/app-pa
 import { AppBadgeComponent } from '../../../shared/ui/app-badge/app-badge.component';
 import { AppLoaderComponent } from '../../../shared/ui/app-loader/app-loader.component';
 import { AppEmptyStateComponent } from '../../../shared/ui/app-empty-state/app-empty-state.component';
+import { AppButtonComponent } from '../../../shared/ui/app-button/app-button.component';
 
 // ── Create / Edit Staff Dialog ────────────────────────────────────────────────
 
@@ -137,15 +138,22 @@ export class StaffDialogComponent {
     AppBadgeComponent,
     AppLoaderComponent,
     AppEmptyStateComponent,
+    AppButtonComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h1 class="text-2xl font-semibold text-zinc-900">User management</h1>
-        <button mat-flat-button color="primary" (click)="openCreateDialog()">
-          <mat-icon>add</mat-icon> Create staff
-        </button>
+    <div style="display: flex; flex-direction: column; gap: 28px;">
+
+      <!-- Page header -->
+      <div style="display: flex; align-items: flex-end; justify-content: space-between; padding-bottom: 24px; border-bottom: 1px solid var(--border);">
+        <div>
+          <p class="eyebrow">Administration</p>
+          <h1 style="font-family: var(--font-display); font-size: var(--fs-3xl); font-weight: 300; letter-spacing: var(--ls-tight); color: var(--fg); margin: 8px 0 0;">User management</h1>
+        </div>
+        <app-button variant="primary" type="button" (click)="openCreateDialog()">
+          <span class="material-icons-outlined" style="font-size: 16px;">add</span>
+          Create staff
+        </app-button>
       </div>
 
       <mat-tab-group (selectedIndexChange)="onTabChange($event)">
@@ -164,13 +172,20 @@ export class StaffDialogComponent {
                 <ng-container matColumnDef="name">
                   <th mat-header-cell *matHeaderCellDef>Name</th>
                   <td mat-cell *matCellDef="let u">
-                    {{ u.firstName }} {{ u.lastName }}
-                    @if (!u.isActive) { <span class="ml-1 text-xs text-red-500">(deactivated)</span> }
+                    <span style="display: inline-flex; align-items: center; gap: 8px;">
+                      {{ u.firstName }} {{ u.lastName }}
+                      @if (!u.isActive) {
+                        <app-badge tone="danger" [dot]="true">Deactivated</app-badge>
+                      }
+                      @if (u.isLocked) {
+                        <app-badge tone="warning" [dot]="true">Locked</app-badge>
+                      }
+                    </span>
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="email">
                   <th mat-header-cell *matHeaderCellDef>Email</th>
-                  <td mat-cell *matCellDef="let u" class="text-sm">{{ u.email }}</td>
+                  <td mat-cell *matCellDef="let u" style="font-size: 13px; color: var(--fg-2);">{{ u.email }}</td>
                 </ng-container>
                 <ng-container matColumnDef="role">
                   <th mat-header-cell *matHeaderCellDef>Role</th>
@@ -180,32 +195,58 @@ export class StaffDialogComponent {
                 </ng-container>
                 <ng-container matColumnDef="department">
                   <th mat-header-cell *matHeaderCellDef>Dept</th>
-                  <td mat-cell *matCellDef="let u">{{ u.department }}</td>
+                  <td mat-cell *matCellDef="let u" style="color: var(--fg-2); font-size: 13px;">{{ u.department }}</td>
                 </ng-container>
                 <ng-container matColumnDef="employeeId">
                   <th mat-header-cell *matHeaderCellDef>Emp ID</th>
-                  <td mat-cell *matCellDef="let u" class="font-mono text-sm">{{ u.employeeId }}</td>
+                  <td mat-cell *matCellDef="let u" style="font-family: var(--font-mono); font-size: 12px; color: var(--fg-2);">{{ u.employeeId }}</td>
                 </ng-container>
-                <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef>Actions</th>
-                  <td mat-cell *matCellDef="let u" class="space-x-1 whitespace-nowrap">
-                    <button mat-icon-button matTooltip="Edit" (click)="openEditDialog(u)">
-                      <mat-icon class="text-lg">edit</mat-icon>
-                    </button>
-                    @if (u.isLocked) {
-                      <button mat-icon-button matTooltip="Unlock account" color="warn" (click)="unlock(u.id)">
-                        <mat-icon class="text-lg">lock_open</mat-icon>
+                <ng-container matColumnDef="media">
+                  <th mat-header-cell *matHeaderCellDef>Media</th>
+                  <td mat-cell *matCellDef="let u" style="white-space: nowrap;">
+                    @if (u.role === 'FrontDeskStaff' || u.role === 'HotelManager') {
+                      <button
+                        type="button"
+                        [class]="u.canManageMedia ? 'action-btn action-btn--success' : 'action-btn action-btn--warn'"
+                        [matTooltip]="u.canManageMedia ? 'Revoke media access' : 'Grant media access'"
+                        [disabled]="togglingMedia() === u.id"
+                        (click)="toggleMediaPermission(u)"
+                        style="width: auto; padding: 0 8px; gap: 4px;"
+                      >
+                        <span class="material-icons-outlined" style="font-size: 15px;">
+                          {{ u.canManageMedia ? 'photo_library' : 'no_photography' }}
+                        </span>
+                        <span style="font-size: 12px;">{{ u.canManageMedia ? 'On' : 'Off' }}</span>
                       </button>
                     }
-                    <button mat-icon-button
-                      [matTooltip]="u.isActive ? 'Deactivate' : 'Reactivate'"
-                      [color]="u.isActive ? 'warn' : 'primary'"
-                      (click)="toggleActive(u)">
-                      <mat-icon class="text-lg">{{ u.isActive ? 'person_off' : 'person_add' }}</mat-icon>
-                    </button>
-                    <button mat-icon-button matTooltip="Force password change" (click)="forcePasswordChange(u.id)">
-                      <mat-icon class="text-lg">key</mat-icon>
-                    </button>
+                  </td>
+                </ng-container>
+                <ng-container matColumnDef="actions">
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let u" style="white-space: nowrap; text-align: right;">
+                    <div style="display: inline-flex; align-items: center; gap: 4px;">
+                      <!-- Edit -->
+                      <button type="button" class="action-btn" matTooltip="Edit" (click)="openEditDialog(u)">
+                        <span class="material-icons-outlined" style="font-size: 15px;">edit</span>
+                      </button>
+                      <!-- Unlock -->
+                      @if (u.isLocked) {
+                        <button type="button" class="action-btn action-btn--warn" matTooltip="Unlock account" (click)="unlock(u.id)">
+                          <span class="material-icons-outlined" style="font-size: 15px;">lock_open</span>
+                        </button>
+                      }
+                      <!-- Deactivate / Reactivate -->
+                      <button type="button"
+                        [class]="u.isActive ? 'action-btn action-btn--danger' : 'action-btn action-btn--success'"
+                        [matTooltip]="u.isActive ? 'Deactivate account' : 'Reactivate account'"
+                        (click)="toggleActive(u)">
+                        <span class="material-icons-outlined" style="font-size: 15px;">{{ u.isActive ? 'person_off' : 'person_add' }}</span>
+                      </button>
+                      <!-- Force password change -->
+                      <button type="button" class="action-btn action-btn--accent" matTooltip="Force password change on next login" (click)="forcePasswordChange(u.id)">
+                        <span class="material-icons-outlined" style="font-size: 15px;">key</span>
+                      </button>
+                    </div>
                   </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="staffCols"></tr>
@@ -235,36 +276,45 @@ export class StaffDialogComponent {
                 <ng-container matColumnDef="name">
                   <th mat-header-cell *matHeaderCellDef>Name</th>
                   <td mat-cell *matCellDef="let g">
-                    {{ g.fullName }}
-                    @if (!g.isActive) { <span class="ml-1 text-xs text-red-500">(deactivated)</span> }
+                    <span style="display: inline-flex; align-items: center; gap: 8px;">
+                      {{ g.fullName }}
+                      @if (!g.isActive) {
+                        <app-badge tone="danger" [dot]="true">Deactivated</app-badge>
+                      }
+                      @if (g.isLocked) {
+                        <app-badge tone="warning" [dot]="true">Locked</app-badge>
+                      }
+                    </span>
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="email">
                   <th mat-header-cell *matHeaderCellDef>Email</th>
-                  <td mat-cell *matCellDef="let g" class="text-sm">{{ g.email }}</td>
+                  <td mat-cell *matCellDef="let g" style="font-size: 13px; color: var(--fg-2);">{{ g.email }}</td>
                 </ng-container>
                 <ng-container matColumnDef="phone">
                   <th mat-header-cell *matHeaderCellDef>Phone</th>
-                  <td mat-cell *matCellDef="let g" class="text-sm">{{ g.phone || '—' }}</td>
+                  <td mat-cell *matCellDef="let g" style="font-size: 13px; color: var(--fg-2);">{{ g.phone || '—' }}</td>
                 </ng-container>
                 <ng-container matColumnDef="bookings">
                   <th mat-header-cell *matHeaderCellDef>Bookings</th>
                   <td mat-cell *matCellDef="let g">{{ g.totalBookings }}</td>
                 </ng-container>
                 <ng-container matColumnDef="actions">
-                  <th mat-header-cell *matHeaderCellDef>Actions</th>
-                  <td mat-cell *matCellDef="let g" class="space-x-1 whitespace-nowrap">
-                    @if (g.isLocked) {
-                      <button mat-icon-button matTooltip="Unlock account" color="warn" (click)="unlock(g.id)">
-                        <mat-icon class="text-lg">lock_open</mat-icon>
+                  <th mat-header-cell *matHeaderCellDef></th>
+                  <td mat-cell *matCellDef="let g" style="white-space: nowrap; text-align: right;">
+                    <div style="display: inline-flex; align-items: center; gap: 4px;">
+                      @if (g.isLocked) {
+                        <button type="button" class="action-btn action-btn--warn" matTooltip="Unlock account" (click)="unlock(g.id)">
+                          <span class="material-icons-outlined" style="font-size: 15px;">lock_open</span>
+                        </button>
+                      }
+                      <button type="button"
+                        [class]="g.isActive ? 'action-btn action-btn--danger' : 'action-btn action-btn--success'"
+                        [matTooltip]="g.isActive ? 'Deactivate account' : 'Reactivate account'"
+                        (click)="toggleGuestActive(g)">
+                        <span class="material-icons-outlined" style="font-size: 15px;">{{ g.isActive ? 'person_off' : 'person_add' }}</span>
                       </button>
-                    }
-                    <button mat-icon-button
-                      [matTooltip]="g.isActive ? 'Deactivate' : 'Reactivate'"
-                      [color]="g.isActive ? 'warn' : 'primary'"
-                      (click)="toggleGuestActive(g)">
-                      <mat-icon class="text-lg">{{ g.isActive ? 'person_off' : 'person_add' }}</mat-icon>
-                    </button>
+                    </div>
                   </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="guestCols"></tr>
@@ -282,6 +332,41 @@ export class StaffDialogComponent {
 
       </mat-tab-group>
     </div>
+
+    <style>
+      .action-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 30px;
+        height: 30px;
+        border-radius: var(--r-sm);
+        border: 1px solid transparent;
+        background: transparent;
+        color: var(--fg-2);
+        cursor: pointer;
+        transition: background var(--dur-fast) var(--ease-out),
+                    color var(--dur-fast) var(--ease-out),
+                    border-color var(--dur-fast) var(--ease-out);
+      }
+      .action-btn:hover {
+        background: var(--sand-100);
+        border-color: var(--border);
+        color: var(--fg);
+      }
+      /* Deactivate — clay/danger */
+      .action-btn--danger { color: #A8412E; }
+      .action-btn--danger:hover { background: #FBEDEA; border-color: #F5C6BB; color: #A8412E; }
+      /* Reactivate — seaglass/success */
+      .action-btn--success { color: var(--glass-700, #2E6655); }
+      .action-btn--success:hover { background: var(--glass-100, #EAF4F0); border-color: var(--glass-300, #A8D5C5); color: var(--glass-700, #2E6655); }
+      /* Unlock — clay/warning */
+      .action-btn--warn { color: var(--clay-700, #7A3B1E); }
+      .action-btn--warn:hover { background: var(--clay-100, #F9EDE5); border-color: var(--clay-300, #E8C4A8); color: var(--clay-700, #7A3B1E); }
+      /* Force password — azure/brand */
+      .action-btn--accent { color: var(--brand); }
+      .action-btn--accent:hover { background: var(--azure-100); border-color: var(--azure-200); color: var(--brand); }
+    </style>
   `,
 })
 export class UserManagementComponent implements OnInit {
@@ -291,7 +376,7 @@ export class UserManagementComponent implements OnInit {
   private readonly cdr      = inject(ChangeDetectorRef);
 
   // ── Staff state ────────────────────────────────────────────────────────────
-  readonly staffCols = ['name', 'email', 'role', 'department', 'employeeId', 'actions'];
+  readonly staffCols = ['name', 'email', 'role', 'department', 'employeeId', 'media', 'actions'];
   readonly staffPageSize  = signal(10);
   readonly staffPageIndex = signal(0);
   readonly allStaff   = signal<StaffUserDto[]>([]);
@@ -426,6 +511,33 @@ export class UserManagementComponent implements OnInit {
     this.adminApi.forcePasswordChange(id).subscribe({
       next: () => this.snack.open('User will be prompted to change password on next login.', 'OK', { duration: 5000 }),
       error: () => this.snack.open('Action failed.', 'Dismiss', { duration: 4000 }),
+    });
+  }
+
+  // ── Media permission ───────────────────────────────────────────────────────
+
+  readonly togglingMedia = signal<number | null>(null);
+
+  toggleMediaPermission(staff: StaffUserDto): void {
+    this.togglingMedia.set(staff.id);
+    const newValue = !staff.canManageMedia;
+    this.adminApi.updateMediaPermission(staff.id, newValue).subscribe({
+      next: (updated) => {
+        this.allStaff.update(list => list.map(s => s.id === updated.id ? updated : s));
+        this.applyStaffPage();
+        this.snack.open(
+          newValue
+            ? `Media access granted to ${updated.firstName} ${updated.lastName}.`
+            : `Media access revoked from ${updated.firstName} ${updated.lastName}.`,
+          'OK',
+          { duration: 4000 },
+        );
+        this.togglingMedia.set(null);
+      },
+      error: () => {
+        this.snack.open('Failed to update media permission.', 'Dismiss', { duration: 4000 });
+        this.togglingMedia.set(null);
+      },
     });
   }
 }

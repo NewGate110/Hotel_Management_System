@@ -32,6 +32,7 @@ export interface StaffUserDto {
   department: string;
   isLocked: boolean;
   isActive: boolean;
+  canManageMedia: boolean;
   createdAt: string;
 }
 
