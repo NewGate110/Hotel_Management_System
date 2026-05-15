@@ -250,11 +250,68 @@ import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
                     </div>
                   </div>
 
-                  @if (nights() > 0) {
+                  <!-- Room selection grid -->
+                  @if (checkIn() && checkOut() && nights() > 0) {
+                    <div class="mt-4">
+                      <p class="mb-2 text-xs font-semibold text-zinc-600">Select a room</p>
+
+                      @if (availableRoomsLoading()) {
+                        <p class="text-xs text-zinc-400">Loading available rooms…</p>
+                      } @else if (availableRooms().length === 0) {
+                        <p class="text-xs text-zinc-400">No rooms available for these dates.</p>
+                      } @else {
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+                          @for (ar of availableRooms(); track ar.id) {
+                            <div
+                              role="radio"
+                              [attr.aria-checked]="selectedRoomId() === ar.id"
+                              tabindex="0"
+                              style="border-radius: var(--r-lg); overflow: hidden; cursor: pointer; transition: box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);"
+                              [style.border]="selectedRoomId() === ar.id ? '2px solid var(--brand)' : '2px solid var(--border)'"
+                              [style.boxShadow]="selectedRoomId() === ar.id ? 'var(--shadow-md)' : 'none'"
+                              (click)="selectRoom(ar.id)"
+                              (keydown.space)="selectRoom(ar.id)"
+                              (keydown.enter)="selectRoom(ar.id)"
+                            >
+                              <!-- Image -->
+                              <div style="height: 110px; overflow: hidden; background: var(--sand-100);">
+                                @if (ar.imageUrl) {
+                                  <img [src]="ar.imageUrl" [alt]="ar.type" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
+                                } @else {
+                                  <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                                    <span class="material-icons-outlined" style="font-size: 32px; color: var(--sand-300);">bed</span>
+                                  </div>
+                                }
+                              </div>
+                              <!-- Info -->
+                              <div style="padding: 10px 12px 12px; background: var(--surface);">
+                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                  <span style="font-family: var(--font-display); font-size: var(--fs-sm); font-weight: 400; color: var(--fg);">{{ ar.type }}</span>
+                                  <span style="font-family: var(--font-display); font-size: var(--fs-base); font-weight: 400; color: var(--fg); font-variant-numeric: tabular-nums;">&#36;{{ ar.priceOffPeak }}<span style="font-family: var(--font-sans); font-size: 10px; color: var(--fg-3);">/night</span></span>
+                                </div>
+                                <span style="font-size: 11px; color: var(--fg-3); display: flex; align-items: center; gap: 4px;">
+                                  <span class="material-icons-outlined" style="font-size: 12px;">person</span>
+                                  Up to {{ ar.capacity }} guests
+                                </span>
+                                @if (selectedRoomId() === ar.id) {
+                                  <div style="margin-top: 6px; display: flex; align-items: center; gap: 4px; color: var(--brand); font-size: 11px; font-weight: 600;">
+                                    <span class="material-icons-outlined" style="font-size: 14px;">check_circle</span>
+                                    Selected
+                                  </div>
+                                }
+                              </div>
+                            </div>
+                          }
+                        </div>
+                      }
+                    </div>
+                  }
+
+                  @if (nights() > 0 && selectedRoomId()) {
                     <div class="mt-3 rounded-xl bg-zinc-50 px-3 py-2.5 text-sm">
                       <div class="flex justify-between text-zinc-600">
                         <span
-                          >&#36;{{ r.priceOffPeak }} × {{ nights() }} night{{
+                          >&#36;{{ selectedRoomPrice() }} × {{ nights() }} night{{
                             nights() === 1 ? '' : 's'
                           }}</span
                         >
@@ -270,7 +327,7 @@ import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
                   <button
                     type="button"
                     (click)="goToStep2()"
-                    [disabled]="!checkIn() || !checkOut()"
+                    [disabled]="!checkIn() || !checkOut() || !selectedRoomId()"
                     class="mt-4 w-full rounded-xl bg-zinc-900 px-4 py-3 text-sm font-bold text-white transition-all hover:bg-zinc-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Continue
@@ -351,7 +408,7 @@ import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
                   <div class="rounded-xl bg-zinc-50 p-4 text-sm space-y-2">
                     <div class="flex justify-between text-zinc-600">
                       <span>Room</span>
-                      <span class="font-medium">{{ r.roomNumber }} · {{ r.type | formatType }}</span>
+                      <span class="font-medium">{{ selectedRoom()?.roomNumber ?? r.roomNumber }} · {{ (selectedRoom()?.type ?? r.type) | formatType }}</span>
                     </div>
                     <div class="flex justify-between text-zinc-600">
                       <span>Guests</span>
@@ -434,6 +491,11 @@ export class RoomDetailComponent {
   readonly unavailableDates = signal<{ from: string; to: string }[]>([]);
   readonly availabilityLoading = signal(false);
 
+  // Available rooms for the selected dates
+  readonly availableRooms = signal<RoomDto[]>([]);
+  readonly availableRoomsLoading = signal(false);
+  readonly selectedRoomId = signal<number | null>(null);
+
   // Booking wizard
   readonly step = signal<1 | 2 | 3>(1);
   readonly dateRange = new FormGroup({
@@ -465,10 +527,18 @@ export class RoomDetailComponent {
     return Math.max(0, Math.round((e.getTime() - s.getTime()) / 86400000));
   });
 
+  readonly selectedRoom = computed(() => {
+    const id = this.selectedRoomId();
+    if (id == null) return this.room();
+    return this.availableRooms().find((r) => r.id === id) ?? this.room();
+  });
+
+  readonly selectedRoomPrice = computed(() => this.selectedRoom()?.priceOffPeak ?? 0);
+
   readonly roomTotal = computed(() => {
-    const r = this.room();
+    const price = this.selectedRoomPrice();
     const n = this.nights();
-    return r && n ? r.priceOffPeak * n : 0;
+    return price && n ? price * n : 0;
   });
 
   readonly servicesTotal = computed(() => {
@@ -502,10 +572,37 @@ export class RoomDetailComponent {
     this.dateRange.controls.start.valueChanges.subscribe((v) => {
       this.checkIn.set(v);
       this.dateRangeError.set(null);
+      this.availableRooms.set([]);
+      this.selectedRoomId.set(null);
     });
     this.dateRange.controls.end.valueChanges.subscribe((v) => {
       this.checkOut.set(v);
       this.dateRangeError.set(null);
+      const ci = this.checkIn();
+      const co = v;
+      const r = this.room();
+      if (ci && co && co > ci && r) {
+        this.availableRoomsLoading.set(true);
+        this.roomsApi
+          .searchAvailable({
+            hotelId: r.hotelId,
+            checkIn: this.toYmd(ci),
+            checkOut: this.toYmd(co),
+          })
+          .subscribe({
+            next: (rooms) => {
+              this.availableRooms.set(rooms);
+              // Pre-select the current room if it is available
+              const preselect = rooms.find((rm) => rm.id === r.id) ?? rooms[0];
+              this.selectedRoomId.set(preselect?.id ?? null);
+              this.availableRoomsLoading.set(false);
+            },
+            error: () => {
+              this.availableRooms.set([]);
+              this.availableRoomsLoading.set(false);
+            },
+          });
+      }
     });
 
     this.route.paramMap.pipe(map((p) => Number(p.get('id')))).subscribe((id) => {
@@ -572,6 +669,10 @@ export class RoomDetailComponent {
       );
       return;
     }
+    if (!this.selectedRoomId()) {
+      this.dateRangeError.set('Please select a room before continuing.');
+      return;
+    }
     this.dateRangeError.set(null);
     this.step.set(2);
   }
@@ -597,12 +698,17 @@ export class RoomDetailComponent {
     return this.serviceQty().get(serviceId) ?? 0;
   }
 
+  selectRoom(id: number): void {
+    this.selectedRoomId.set(id);
+  }
+
   confirm(): void {
     const r = this.room();
     const ci = this.checkIn();
     const co = this.checkOut();
     const uid = this.auth.userId();
-    if (!r || !ci || !co || !uid) return;
+    const roomId = this.selectedRoomId() ?? r?.id;
+    if (!r || !ci || !co || !uid || !roomId) return;
 
     const services: { serviceId: number; quantity: number; serviceDate: string }[] = [];
     for (const [id, qty] of this.serviceQty()) {
@@ -616,7 +722,7 @@ export class RoomDetailComponent {
         hotelId: r.hotelId,
         checkInDate: this.toYmd(ci),
         checkOutDate: this.toYmd(co),
-        roomIds: [r.id],
+        roomIds: [roomId],
         services,
         notes: '',
         guestCount: this.guestCount(),
