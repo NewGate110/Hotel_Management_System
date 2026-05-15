@@ -50,6 +50,7 @@ public class HotelService : IHotelService
         hotel.Phone    = dto.Phone.Trim();
         hotel.Email    = dto.Email.Trim();
         hotel.IsActive = dto.IsActive;
+        hotel.ImageUrl = dto.ImageUrl;
 
         await _hotels.UpdateAsync(hotel);
         return _mapper.Map<HotelDto>(hotel);

@@ -87,6 +87,7 @@ public class AdminController : ControllerBase
     }
 
     /// <summary>Updates the hero image URL for a hotel.</summary>
+    [Authorize(Roles = "Admin")]
     [HttpPut("hotels/{id:int}/image")]
     [ProducesResponseType(typeof(HotelDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
