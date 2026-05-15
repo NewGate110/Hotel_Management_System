@@ -84,7 +84,7 @@ public class RoomService : IRoomService
         return _mapper.Map<RoomDto>(room);
     }
 
-    public async Task<RoomDto> UpdateRoomImageAsync(int roomId, UpdateRoomImageDto dto)
+    public async Task<RoomDto> UpdateRoomImageAsync(int roomId, UpdateImageDto dto)
     {
         var room = await _rooms.GetByIdAsync(roomId)
             ?? throw new KeyNotFoundException($"Room {roomId} not found.");

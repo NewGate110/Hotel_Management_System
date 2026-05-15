@@ -264,12 +264,12 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                   <!-- Room selection grid -->
                   @if (checkIn() && checkOut() && nights() > 0) {
                     <div class="mt-4">
-                      <p class="mb-2 text-xs font-semibold text-zinc-600">Select a room</p>
+                      <p class="mb-2 text-xs font-semibold" style="color: var(--fg-2);">Select a room</p>
 
                       @if (availableRoomsLoading()) {
-                        <p class="text-xs text-zinc-400">Loading available rooms…</p>
+                        <p class="text-xs" style="color: var(--fg-3);">Loading available rooms…</p>
                       } @else if (availableRooms().length === 0) {
-                        <p class="text-xs text-zinc-400">No rooms available for these dates.</p>
+                        <p class="text-xs" style="color: var(--fg-3);">No rooms available for these dates.</p>
                       } @else {
                         <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
                           @for (ar of availableRooms(); track ar.id) {

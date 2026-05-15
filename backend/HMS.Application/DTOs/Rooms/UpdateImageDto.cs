@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HMS.Application.DTOs.Rooms;
 
-public class UpdateRoomImageDto
+public class UpdateImageDto
 {
     [MaxLength(2000)]
     public string? ImageUrl { get; set; }

@@ -73,7 +73,7 @@ public class AdminController : ControllerBase
     [ProducesResponseType(typeof(RoomDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<RoomDto>> UpdateRoomImage(int id, [FromBody] UpdateRoomImageDto dto)
+    public async Task<ActionResult<RoomDto>> UpdateRoomImage(int id, [FromBody] UpdateImageDto dto)
     {
         // Non-admins must have the CanManageMedia claim
         if (!User.IsInRole("Admin"))
@@ -91,7 +91,7 @@ public class AdminController : ControllerBase
     [HttpPut("hotels/{id:int}/image")]
     [ProducesResponseType(typeof(HotelDto), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<HotelDto>> UpdateHotelImage(int id, [FromBody] UpdateRoomImageDto dto)
+    public async Task<ActionResult<HotelDto>> UpdateHotelImage(int id, [FromBody] UpdateImageDto dto)
     {
         try   { return Ok(await _hotelService.UpdateHotelImageAsync(id, dto.ImageUrl)); }
         catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
