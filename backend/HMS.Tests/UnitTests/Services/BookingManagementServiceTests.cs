@@ -341,7 +341,7 @@ public class BookingManagementServiceTests
     {
         var sut = BuildSut();
         _bookingRepo.Setup(r => r.GetByIdWithDetailsAsync(It.IsAny<int>()))
-                    .ReturnsAsync(new Booking { Status = status });
+                    .ReturnsAsync(new Booking { Status = status, GuestId = 1 });
 
         await Assert.ThrowsAsync<InvalidOperationException>(
             () => sut.CancelBookingAsync(bookingId: 1, requestingUserId: 1));
@@ -352,7 +352,7 @@ public class BookingManagementServiceTests
     {
         var sut = BuildSut();
         _bookingRepo.Setup(r => r.GetByIdWithDetailsAsync(It.IsAny<int>()))
-                    .ReturnsAsync(new Booking { Status = BookingStatus.Cancelled });
+                    .ReturnsAsync(new Booking { Status = BookingStatus.Cancelled, GuestId = 1 });
 
         await Assert.ThrowsAsync<InvalidOperationException>(
             () => sut.CancelBookingAsync(bookingId: 1, requestingUserId: 1));
@@ -366,6 +366,7 @@ public class BookingManagementServiceTests
 
         var booking = new Booking
         {
+            GuestId      = 1,
             Status       = BookingStatus.Confirmed,
             CheckInDate  = DateTime.UtcNow.AddDays(15),
             CheckOutDate = DateTime.UtcNow.AddDays(16),
@@ -391,6 +392,7 @@ public class BookingManagementServiceTests
 
         var booking = new Booking
         {
+            GuestId      = 1,
             Status       = BookingStatus.Confirmed,
             CheckInDate  = DateTime.UtcNow.AddHours(12),
             CheckOutDate = DateTime.UtcNow.AddHours(36),
