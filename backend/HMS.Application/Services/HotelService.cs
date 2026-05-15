@@ -54,4 +54,13 @@ public class HotelService : IHotelService
         await _hotels.UpdateAsync(hotel);
         return _mapper.Map<HotelDto>(hotel);
     }
+
+    public async Task<HotelDto> UpdateHotelImageAsync(int hotelId, string? imageUrl)
+    {
+        var hotel = await _hotels.GetByIdAsync(hotelId)
+            ?? throw new KeyNotFoundException($"Hotel {hotelId} not found.");
+        hotel.ImageUrl = imageUrl;
+        await _hotels.UpdateAsync(hotel);
+        return _mapper.Map<HotelDto>(hotel);
+    }
 }

@@ -13,5 +13,6 @@ public class RoomDto
     public decimal PricePeak { get; set; }
     public string Status { get; set; } = string.Empty;      // enum serialised as string
     public string Description { get; set; } = string.Empty;
+    public string? ImageUrl { get; set; }
     public int FloorNumber { get; set; }
 }

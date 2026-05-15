@@ -14,6 +14,7 @@ public class Room
     public decimal PricePeak { get; set; }
     public RoomStatus Status { get; set; } = RoomStatus.Available;
     public string Description { get; set; } = string.Empty;
+    public string? ImageUrl { get; set; }
     public int FloorNumber { get; set; }
 
     public Hotel Hotel { get; set; } = null!;

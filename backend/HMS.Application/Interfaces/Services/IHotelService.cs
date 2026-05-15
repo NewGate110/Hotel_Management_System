@@ -10,4 +10,5 @@ public interface IHotelService
     Task<HotelDto?> GetHotelByIdAsync(int id);
     Task<IEnumerable<RoomDto>> GetRoomsForHotelAsync(int hotelId);
     Task<HotelDto> UpdateHotelAsync(int id, UpdateHotelDto dto);
+    Task<HotelDto> UpdateHotelImageAsync(int hotelId, string? imageUrl);
 }

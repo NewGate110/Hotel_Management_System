@@ -24,4 +24,7 @@ public class UpdateHotelDto
     public string Email { get; set; } = string.Empty;
 
     public bool IsActive { get; set; } = true;
+
+    [MaxLength(2000)]
+    public string? ImageUrl { get; set; }
 }

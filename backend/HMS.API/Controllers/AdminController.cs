@@ -67,6 +67,35 @@ public class AdminController : ControllerBase
         catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
     }
 
+    /// <summary>Updates the display image URL for a room. Accessible by Admin always; also by staff/managers with CanManageMedia = true.</summary>
+    [HttpPut("rooms/{id:int}/image")]
+    [Authorize(Roles = "Admin,HotelManager,FrontDeskStaff")]
+    [ProducesResponseType(typeof(RoomDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status403Forbidden)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<RoomDto>> UpdateRoomImage(int id, [FromBody] UpdateRoomImageDto dto)
+    {
+        // Non-admins must have the CanManageMedia claim
+        if (!User.IsInRole("Admin"))
+        {
+            var claim = User.FindFirst("canManageMedia")?.Value;
+            if (claim != "true")
+                return Forbid();
+        }
+        try   { return Ok(await _roomService.UpdateRoomImageAsync(id, dto)); }
+        catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
+    }
+
+    /// <summary>Updates the hero image URL for a hotel.</summary>
+    [HttpPut("hotels/{id:int}/image")]
+    [ProducesResponseType(typeof(HotelDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<HotelDto>> UpdateHotelImage(int id, [FromBody] UpdateRoomImageDto dto)
+    {
+        try   { return Ok(await _hotelService.UpdateHotelImageAsync(id, dto.ImageUrl)); }
+        catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
+    }
+
     // ── Staff CRUD ─────────────────────────────────────────────────────────────
 
     /// <summary>Returns all staff members across all hotels.</summary>
