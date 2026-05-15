@@ -30,5 +30,10 @@ public class HmsDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(HmsDbContext).Assembly);
+
+        // CanManageMedia defaults to false in the DB for existing NULL rows (matches migration)
+        modelBuilder.Entity<StaffUser>()
+            .Property(s => s.CanManageMedia)
+            .HasDefaultValue(false);
     }
 }
