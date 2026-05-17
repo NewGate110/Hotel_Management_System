@@ -25,6 +25,7 @@ export interface RoomSearchResultItem {
   floorNumber: number;
   pricePerNight: number;
   description: string;
+  imageUrl?: string;
 }
 
 export interface RoomSearchResponse {

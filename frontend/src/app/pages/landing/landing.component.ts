@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   inject,
+  OnInit,
   signal,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
@@ -10,6 +11,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatSelectModule } from '@angular/material/select';
+import { map } from 'rxjs/operators';
 import { FormatTypePipe } from '../../shared/pipes/format-type.pipe';
 import { RoomsApiService } from '../../core/services/rooms-api.service';
 import type { RoomSearchResultItem } from '../../core/models/room.models';
@@ -206,27 +208,22 @@ function toYmd(d: Date): string {
         <div class="rule-ink" style="margin-bottom: 40px;"></div>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px;" class="suites-grid">
-          @for (suite of featuredSuites; track suite.name) {
+          @for (room of featuredRooms(); track room.roomId) {
             <div class="suite-card" style="background: var(--surface); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow var(--dur-slow) var(--ease-glide);">
               <div style="aspect-ratio: 4/3; overflow: hidden;">
                 <img
-                  [src]="suite.img"
-                  [alt]="suite.name"
-                  class="suite-img"
-                  style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-glide) var(--ease-glide);"
+                  [src]="room.imageUrl || 'https://images.unsplash.com/photo-1631049307264-da0ec9d70304?auto=format&fit=crop&w=700&q=80'"
+                  [alt]="room.type | formatType"
+                  style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease-glide);"
                 />
               </div>
-              <div style="padding: 20px 22px 24px;">
-                <span class="badge badge-info">{{ suite.tag }}</span>
-                <h3 style="font-family: var(--font-display); font-size: 28px; font-weight: 400; letter-spacing: -0.02em; color: var(--fg); margin: 8px 0;">{{ suite.name }}</h3>
-                <p style="font-size: var(--fs-sm); color: var(--fg-3); line-height: 1.6; min-height: 44px;">{{ suite.desc }}</p>
-                <div class="rule" style="margin: 16px 0;"></div>
-                <div style="display: flex; align-items: baseline; justify-content: space-between;">
-                  <div>
-                    <span class="price" style="font-size: 28px;">&#36;{{ suite.price }}</span>
-                    <span class="price-unit">/ night</span>
-                  </div>
-                  <a routerLink="/rooms/search" style="font-size: var(--fs-sm); color: var(--brand); text-decoration: none;">View details →</a>
+              <div style="padding: 24px;">
+                <span style="display: inline-block; font-size: var(--fs-xs); font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brand); margin-bottom: 8px;">{{ room.city }}</span>
+                <h3 style="font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 300; color: var(--fg); margin: 0 0 8px;">{{ room.type | formatType }}</h3>
+                <p style="font-size: var(--fs-sm); color: var(--fg-2); line-height: 1.6; margin: 0 0 20px;">{{ room.description }}</p>
+                <div style="display: flex; align-items: center; justify-content: space-between;">
+                  <span style="font-family: var(--font-display); font-size: var(--fs-lg); font-weight: 400; color: var(--fg);">from ${{ room.pricePerNight }}<span style="font-family: var(--font-sans); font-size: var(--fs-xs); color: var(--fg-3); margin-left: 4px;">/ night</span></span>
+                  <a [routerLink]="['/rooms', room.roomId]" style="font-size: var(--fs-sm); font-weight: 500; color: var(--brand); text-decoration: none;">View room →</a>
                 </div>
               </div>
             </div>
@@ -462,7 +459,7 @@ function toYmd(d: Date): string {
     </style>
   `,
 })
-export class LandingComponent {
+export class LandingComponent implements OnInit {
   private readonly roomsApi = inject(RoomsApiService);
   private readonly fb = inject(FormBuilder);
 
@@ -512,11 +509,13 @@ export class LandingComponent {
   nextReview(): void { this.activeReview.update((v) => (v + 1) % this.reviews.length); }
   prevReview(): void { this.activeReview.update((v) => (v - 1 + this.reviews.length) % this.reviews.length); }
 
-  readonly featuredSuites = [
-    { name: 'The Driftwood', desc: 'A one-bedroom suite with a private terrace facing the Pacific.', price: 820, tag: 'Ocean view', img: 'https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=700&q=80' },
-    { name: 'The Dune', desc: 'Ground-floor with outdoor soaking tub, walled garden and step-out to sand.', price: 1140, tag: 'Beachfront', img: 'https://images.unsplash.com/photo-1573843981267-be1999ff37cd?auto=format&fit=crop&w=700&q=80' },
-    { name: 'The Mirador', desc: 'Two bedrooms perched on the cliff. Floor-to-ceiling glass on three sides.', price: 1680, tag: 'Cliffside', img: 'https://images.unsplash.com/photo-1583212292454-1fe6229603b7?auto=format&fit=crop&w=700&q=80' },
-  ];
+  readonly featuredRooms = signal<RoomSearchResultItem[]>([]);
+
+  ngOnInit(): void {
+    this.roomsApi.searchRooms({}).pipe(
+      map(res => [...res.results].sort((a, b) => b.pricePerNight - a.pricePerNight).slice(0, 3))
+    ).subscribe(rooms => this.featuredRooms.set(rooms));
+  }
 
   readonly experiences = [
     { icon: 'spa', label: 'Luxury Spa', blurb: 'Nine treatments from hot stone to deep tissue, with ocean-view treatment rooms.' },
