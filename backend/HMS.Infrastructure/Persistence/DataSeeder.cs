@@ -191,78 +191,78 @@ public static class DataSeeder
                 {
                     HotelId      = hotel.Id,
                     RoomNumber   = "101",
-                    Type         = RoomType.ExecutiveSuite,
+                    Type         = RoomType.BeachVilla,
                     Capacity     = 2,
                     PriceOffPeak = 660,
                     PricePeak    = 910,
                     FloorNumber  = 1,
                     Status       = RoomStatus.Available,
-                    Description  = "Executive suite with private terrace, butler service, and a tropical garden view.",
+                    Description  = "Beach villa with private terrace, butler service, and direct beach access.",
                     ImageUrl     = "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
                     HotelId      = hotel.Id,
                     RoomNumber   = "102",
-                    Type         = RoomType.ExecutiveSuite,
+                    Type         = RoomType.BeachVilla,
                     Capacity     = 2,
                     PriceOffPeak = 730,
                     PricePeak    = 990,
                     FloorNumber  = 1,
                     Status       = RoomStatus.Available,
-                    Description  = "Luxury executive suite with private plunge pool, espresso bar, and direct lagoon access.",
+                    Description  = "Luxury beach villa with private plunge pool, espresso bar, and direct lagoon access.",
                     ImageUrl     = "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
                     HotelId      = hotel.Id,
                     RoomNumber   = "201",
-                    Type         = RoomType.PenthouseSuite,
+                    Type         = RoomType.WaterVilla,
                     Capacity     = 2,
                     PriceOffPeak = 960,
                     PricePeak    = 1370,
                     FloorNumber  = 2,
                     Status       = RoomStatus.Available,
-                    Description  = "Penthouse suite with floor-to-ceiling windows, private sundeck, and panoramic horizon views.",
+                    Description  = "Water villa with floor-to-ceiling windows, private sundeck, and panoramic lagoon views.",
                     ImageUrl     = "https://images.unsplash.com/photo-1631049552057-403cdb8f0658?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
                     HotelId      = hotel.Id,
                     RoomNumber   = "301",
-                    Type         = RoomType.GrandSuite,
+                    Type         = RoomType.OverwaterBungalow,
                     Capacity     = 2,
                     PriceOffPeak = 1250,
                     PricePeak    = 1750,
                     FloorNumber  = 3,
                     Status       = RoomStatus.Available,
-                    Description  = "Grand suite with infinity pool terrace, premium sound system, and unobstructed horizon views.",
+                    Description  = "Overwater bungalow with infinity pool terrace, glass floor panels, and direct ocean access.",
                     ImageUrl     = "https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
                     HotelId      = hotel.Id,
                     RoomNumber   = "401",
-                    Type         = RoomType.JuniorSuite,
+                    Type         = RoomType.HoneymoonVilla,
                     Capacity     = 2,
                     PriceOffPeak = 1650,
                     PricePeak    = 2250,
                     FloorNumber  = 4,
                     Status       = RoomStatus.Available,
-                    Description  = "Junior suite with dedicated concierge, in-suite dining, and an outdoor soaking tub.",
+                    Description  = "Honeymoon villa with dedicated concierge, rose-petal turndown service, and an outdoor soaking tub.",
                     ImageUrl     = "https://images.unsplash.com/photo-1560347876-aeef00ee58a1?w=800&q=80&fit=crop"
                 },
                 new Room
                 {
                     HotelId      = hotel.Id,
                     RoomNumber   = "501",
-                    Type         = RoomType.PresidentialSuite,
+                    Type         = RoomType.PresidentialVilla,
                     Capacity     = 6,
                     PriceOffPeak = 3600,
                     PricePeak    = 5200,
                     FloorNumber  = 5,
                     Status       = RoomStatus.Available,
-                    Description  = "Presidential suite spanning the entire top floor, with private pool, personal chef, and 360° ocean panorama.",
+                    Description  = "Presidential villa spanning the entire private island tip, with personal chef, infinity pool, and 360° ocean panorama.",
                     ImageUrl     = "https://images.unsplash.com/photo-1642125749606-19099bf48c0b?w=800&q=80&fit=crop"
                 },
             });
@@ -401,7 +401,7 @@ public static class DataSeeder
         var confirmedRoom  = rooms.First(r => r.HotelId == hotels[0].Id && r.Type == RoomType.DeluxeKing);
         var checkedInRoom  = rooms.First(r => r.HotelId == hotels[1].Id && r.Type == RoomType.StandardDouble);
         var completedRoom  = rooms.First(r => r.HotelId == hotels[2].Id && r.Type == RoomType.FamilySuite);
-        var cancelledRoom  = rooms.First(r => r.HotelId == luxuryHotels[0].Id && r.Type == RoomType.ExecutiveSuite);
+        var cancelledRoom  = rooms.First(r => r.HotelId == luxuryHotels[0].Id && r.Type == RoomType.BeachVilla);
 
         var bookingConfirmed = new Booking
         {

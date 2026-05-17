@@ -48,27 +48,32 @@ frontend/
 **Prerequisites:** [Docker Desktop](https://www.docker.com/products/docker-desktop/)
 
 ```bash
+# 1. Copy the environment file
+cp .env.example .env
+
+# 2. Start all services
 docker-compose up -d
+
+# 3. Wait ~30 seconds for the database to initialise and seed demo data.
 ```
 
 | Service | URL |
 |---------|-----|
 | Frontend | http://localhost:4200 |
 | Swagger UI | http://localhost:5101/swagger |
-| pgAdmin | http://localhost:5050 |
+| pgAdmin | http://localhost:5050 (Email: `admin@hms.local` · Password: `changeme`) |
 | PostgreSQL | localhost:5433 |
 
 The backend automatically applies migrations and seeds demo data on first run.
 
-To stop and remove all containers:
+To stop all services:
 ```bash
 docker-compose down
 ```
 
-To rebuild images after code changes:
+To wipe the database and reseed from scratch:
 ```bash
-docker-compose build --no-cache
-docker-compose up -d
+docker-compose down -v && docker-compose build --no-cache && docker-compose up -d
 ```
 
 ---
@@ -98,6 +103,13 @@ ng serve
 ```
 App: http://localhost:4200
 
+**Make shortcuts:**
+```bash
+make backend    # dotnet run from HMS.API
+make frontend   # ng serve
+make help       # list all targets
+```
+
 ---
 
 ## Default Test Accounts
@@ -108,6 +120,8 @@ App: http://localhost:4200
 | Manager | manager@grandplaza.com | Manager@1234! | Aishath Latheef |
 | Staff | staff@grandplaza.com | Staff@1234! | Mohamed Shifan |
 | Guest | guest@example.com | Guest@1234! | Grace Taylor |
+
+A quick-access **Demo users** panel is available on the login page (bottom-right corner) for fast role switching.
 
 ---
 
@@ -129,11 +143,12 @@ App: http://localhost:4200
 ## Testing
 
 ```bash
-# Backend unit tests (from /backend)
-dotnet test
+# Backend unit tests (from /backend — no database required)
+dotnet test HMS.Tests
+dotnet test HMS.Tests --logger "console;verbosity=detailed"
 
 # Frontend unit tests (from /frontend)
-ng test
+ng test --watch=false
 ```
 
 Test coverage: cancellation policy, password policy, pricing policy, auth service, booking management service.
