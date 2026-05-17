@@ -18,7 +18,8 @@ import {
       [attr.type]="type()"
       [disabled]="disabled()"
       (click)="clicked.emit($event)"
-      class="inline-flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-semibold transition-all disabled:pointer-events-none disabled:opacity-50"
+      class="inline-flex w-full items-center justify-center gap-2 transition-all disabled:pointer-events-none disabled:opacity-40"
+      style="font-family: var(--font-sans); font-size: 14px; font-weight: 500; padding: 12px 22px; border-radius: var(--r-md); border: 1px solid transparent; cursor: pointer; letter-spacing: 0.01em; white-space: nowrap;"
       [ngClass]="classes()"
     >
       @if (loading()) {
@@ -33,7 +34,7 @@ import {
 })
 export class AppButtonComponent {
   type = input<'button' | 'submit'>('button');
-  variant = input<'primary' | 'secondary' | 'ghost'>('primary');
+  variant = input<'primary' | 'secondary' | 'ghost' | 'accent'>('primary');
   disabled = input(false);
   loading = input(false);
   clicked = output<MouseEvent>();
@@ -41,11 +42,13 @@ export class AppButtonComponent {
   readonly classes = computed(() => {
     switch (this.variant()) {
       case 'secondary':
-        return 'border border-zinc-200 bg-white text-zinc-900 hover:bg-zinc-50 active:scale-[0.98]';
+        return 'bg-[var(--surface)] text-[var(--fg)] border-[var(--border-strong)] hover:border-[var(--sand-900)] active:scale-[0.98]';
       case 'ghost':
-        return 'text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 active:scale-[0.98]';
+        return 'bg-transparent text-[var(--fg)] hover:bg-[var(--sand-100)] active:scale-[0.98]';
+      case 'accent':
+        return 'bg-[var(--accent)] text-[var(--sand-50)] hover:bg-[var(--accent-hover)] active:scale-[0.98]';
       default:
-        return 'bg-zinc-900 text-white hover:bg-zinc-800 active:scale-[0.98]';
+        return 'bg-[var(--brand)] text-[var(--sand-50)] hover:bg-[var(--brand-hover)] active:scale-[0.98]';
     }
   });
 }

@@ -18,13 +18,16 @@ import { roleDashboardPath } from '../../core/constants/roles';
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="min-h-screen bg-white">
+    <div class="min-h-screen" style="background: var(--bg);">
       <!-- ─── FIXED NAVBAR ─── -->
       <header
         [class]="
           isTransparent()
             ? 'fixed inset-x-0 top-0 z-30 transition-all duration-300 ease-in-out border-b border-transparent'
-            : 'fixed inset-x-0 top-0 z-30 transition-all duration-300 ease-in-out border-b border-zinc-200/60 bg-white/80 shadow-sm shadow-black/5 backdrop-blur-xl'
+            : 'fixed inset-x-0 top-0 z-30 transition-all duration-300 ease-in-out border-b backdrop-blur-xl'
+        "
+        [style]="isTransparent() ? '' : 'background: rgba(250,247,242,0.92); border-color: var(--border); box-shadow: var(--shadow-sm);'
+
         "
         role="banner"
       >
@@ -57,7 +60,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
             [class]="
               isTransparent()
                 ? 'border border-white/20 bg-white/10 backdrop-blur-sm'
-                : 'border border-zinc-100 bg-zinc-50'
+                : 'border border-[var(--border)] bg-[var(--surface)]'
             "
             aria-label="Site navigation"
           >
@@ -102,7 +105,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 [class]="
                   isTransparent()
                     ? 'border border-white/30 text-white hover:bg-white/10'
-                    : 'border border-zinc-200 text-zinc-700 hover:bg-zinc-50'
+                    : 'border border-[var(--border-strong)] text-[var(--fg-2)] hover:bg-[var(--sand-100)] hover:text-[var(--fg)]'
                 "
                 >Dashboard</a
               >
@@ -115,7 +118,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 [class]="
                   isTransparent()
                     ? 'bg-white/15 text-white hover:bg-white/25'
-                    : 'bg-zinc-900 text-white hover:bg-zinc-700'
+                    : 'bg-[var(--sand-900)] text-[var(--sand-50)] hover:bg-[var(--sand-800)]'
                 "
                 title="Sign out"
               >
@@ -134,7 +137,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 [class]="
                   isTransparent()
                     ? 'border border-white/30 text-white hover:bg-white/10'
-                    : 'border border-zinc-200 text-zinc-700 hover:bg-zinc-50'
+                    : 'border border-[var(--border-strong)] text-[var(--fg)] hover:bg-[var(--sand-100)]'
                 "
                 >Sign in</a
               >
@@ -143,8 +146,8 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 class="rounded-full px-4 py-2 text-[13px] font-semibold transition-all duration-200"
                 [class]="
                   isTransparent()
-                    ? 'bg-white text-zinc-900 hover:bg-zinc-100'
-                    : 'bg-zinc-900 text-white hover:bg-zinc-800'
+                    ? 'bg-white text-[var(--sand-900)] hover:bg-[var(--sand-100)]'
+                    : 'bg-[var(--sand-900)] text-[var(--sand-50)] hover:bg-[var(--sand-800)]'
                 "
                 >Register</a
               >
@@ -156,7 +159,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
               (click)="mobileOpen.update((v) => !v)"
               class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200 md:hidden"
               [class]="
-                isTransparent() ? 'text-white hover:bg-white/10' : 'text-zinc-700 hover:bg-zinc-100'
+                isTransparent() ? 'text-white hover:bg-white/10' : 'text-[var(--fg-2)] hover:bg-[var(--sand-100)]'
               "
               [attr.aria-label]="mobileOpen() ? 'Close menu' : 'Open menu'"
               [attr.aria-expanded]="mobileOpen()"
@@ -174,9 +177,10 @@ import { roleDashboardPath } from '../../core/constants/roles';
             class="border-t px-4 pb-5 pt-3 md:hidden"
             [class]="
               isTransparent()
-                ? 'border-white/10 bg-zinc-950/88 backdrop-blur-xl'
-                : 'border-zinc-100 bg-white/92 backdrop-blur-xl'
+                ? 'border-white/10 backdrop-blur-xl'
+                : 'border-[var(--border)] backdrop-blur-xl'
             "
+            [style]="isTransparent() ? 'background: rgba(14,36,48,0.88);' : 'background: rgba(250,247,242,0.96);'"
             aria-label="Mobile navigation"
           >
             <div class="flex flex-col gap-0.5">
@@ -213,7 +217,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
 
             <div
               class="mt-3 flex gap-2 border-t pt-3"
-              [class]="isTransparent() ? 'border-white/10' : 'border-zinc-100'"
+              [class]="isTransparent() ? 'border-white/10' : 'border-[var(--border)]'"
             >
               @if (auth.isAuthenticated()) {
                 <a
@@ -222,7 +226,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                   [class]="
                     isTransparent()
                       ? 'border border-white/25 text-white hover:bg-white/10'
-                      : 'border border-zinc-200 text-zinc-700 hover:bg-zinc-50'
+                      : 'border border-[var(--border-strong)] text-[var(--fg-2)] hover:bg-[var(--sand-100)] hover:text-[var(--fg)]'
                   "
                   >Dashboard</a
                 >
@@ -230,7 +234,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                   type="button"
                   (click)="auth.logout()"
                   class="flex-1 rounded-xl py-2.5 text-center text-sm font-semibold transition-colors"
-                  [class]="isTransparent() ? 'bg-white text-zinc-900' : 'bg-zinc-900 text-white'"
+                  [class]="isTransparent() ? 'bg-white text-[var(--sand-900)]' : 'bg-[var(--sand-900)] text-[var(--sand-50)]'"
                 >
                   Sign out
                 </button>
@@ -241,14 +245,14 @@ import { roleDashboardPath } from '../../core/constants/roles';
                   [class]="
                     isTransparent()
                       ? 'border border-white/25 text-white hover:bg-white/10'
-                      : 'border border-zinc-200 text-zinc-700 hover:bg-zinc-50'
+                      : 'border border-[var(--border-strong)] text-[var(--fg-2)] hover:bg-[var(--sand-100)] hover:text-[var(--fg)]'
                   "
                   >Sign in</a
                 >
                 <a
                   routerLink="/register"
                   class="flex-1 rounded-xl py-2.5 text-center text-sm font-semibold transition-colors"
-                  [class]="isTransparent() ? 'bg-white text-zinc-900' : 'bg-zinc-900 text-white'"
+                  [class]="isTransparent() ? 'bg-white text-[var(--sand-900)]' : 'bg-[var(--sand-900)] text-[var(--sand-50)]'"
                   >Register</a
                 >
               }
@@ -320,8 +324,8 @@ export class PublicLayoutComponent {
         : `${base} text-white/75 hover:text-white hover:bg-white/10`;
     }
     return rla.isActive
-      ? `${base} bg-zinc-900 text-white`
-      : `${base} text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900`;
+      ? `${base} bg-[var(--sand-900)] text-[var(--sand-50)]`
+      : `${base} text-[var(--fg-2)] hover:bg-[var(--sand-100)] hover:text-[var(--fg)]`;
   }
 
   mobileLinkClass(rla: { isActive: boolean }): string {
@@ -332,7 +336,7 @@ export class PublicLayoutComponent {
         : `${base} text-white/75 hover:bg-white/10 hover:text-white`;
     }
     return rla.isActive
-      ? `${base} bg-zinc-100 text-zinc-900 font-semibold`
-      : `${base} text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900`;
+      ? `${base} bg-[var(--sand-100)] text-[var(--fg)] font-semibold`
+      : `${base} text-[var(--fg-2)] hover:bg-[var(--bg-alt)] hover:text-[var(--fg)]`;
   }
 }

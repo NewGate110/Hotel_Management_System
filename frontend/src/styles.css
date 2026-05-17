@@ -1,48 +1,713 @@
 @import 'tailwindcss';
 @import '@angular/material/prebuilt-themes/azure-blue.css';
 
-@custom-variant dark (&:where(.dark, .dark *));
+/* ─── Azure Shores Design System Tokens ─── */
+:root {
+  /* Sand / Bone neutrals */
+  --sand-50:  #FAF7F2;
+  --sand-100: #F3EEE5;
+  --sand-200: #E8E0D2;
+  --sand-300: #D4C8B3;
+  --sand-400: #B5A58A;
+  --sand-500: #8C7B5F;
+  --sand-600: #6B5D45;
+  --sand-700: #4A3F30;
+  --sand-800: #2E261C;
+  --sand-900: #1A140D;
 
+  /* Azure / Deep Ocean */
+  --azure-50:  #EEF3F5;
+  --azure-100: #D5E0E6;
+  --azure-200: #A9C1CC;
+  --azure-300: #7A9EAD;
+  --azure-400: #4F7A8B;
+  --azure-500: #2E5768;
+  --azure-600: #1F4253;
+  --azure-700: #153240;
+  --azure-800: #0E2430;
+  --azure-900: #081820;
+
+  /* Clay / Terracotta */
+  --clay-50:  #FBF0EA;
+  --clay-100: #F5DACB;
+  --clay-200: #EBB89E;
+  --clay-300: #DD9572;
+  --clay-400: #C87551;
+  --clay-500: #B05A3C;
+  --clay-600: #8E4530;
+  --clay-700: #6B3424;
+
+  /* Seaglass / Sage */
+  --glass-100: #E3ECE8;
+  --glass-300: #9FBDB1;
+  --glass-500: #5E8A7A;
+  --glass-700: #3C5A50;
+
+  /* Pure */
+  --white: #FFFFFF;
+  --black: #0A0806;
+
+  /* Semantic status */
+  --success: #5E8A7A;
+  --warning: #C87551;
+  --danger:  #A8412E;
+  --info:    #4F7A8B;
+
+  /* ── Semantic color roles (light theme) ── */
+  --bg:          var(--sand-50);
+  --bg-alt:      var(--sand-100);
+  --bg-sunk:     var(--sand-200);
+  --surface:     var(--white);
+  --surface-2:   var(--sand-50);
+  --surface-ink: var(--azure-900);
+
+  --fg:      var(--sand-900);
+  --fg-2:    var(--sand-700);
+  --fg-3:    var(--sand-500);
+  --fg-inv:  var(--sand-50);
+  --fg-inv-2:var(--sand-200);
+
+  --border:       var(--sand-200);
+  --border-strong:var(--sand-300);
+  --border-ink:   var(--sand-900);
+
+  --brand:       var(--azure-500);
+  --brand-hover: var(--azure-600);
+  --brand-press: var(--azure-700);
+  --accent:      var(--clay-500);
+  --accent-hover:var(--clay-600);
+
+  --focus-ring:  var(--azure-400);
+
+  /* ── Typography ── */
+  --font-display: 'Fraunces', 'Playfair Display', Georgia, serif;
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-mono:    'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  --fs-xs:   12px;
+  --fs-sm:   14px;
+  --fs-base: 16px;
+  --fs-md:   18px;
+  --fs-lg:   20px;
+  --fs-xl:   24px;
+  --fs-2xl:  32px;
+  --fs-3xl:  40px;
+  --fs-4xl:  52px;
+  --fs-5xl:  72px;
+  --fs-6xl:  104px;
+
+  --lh-tight:  1.05;
+  --lh-snug:   1.2;
+  --lh-normal: 1.5;
+  --lh-loose:  1.7;
+
+  --ls-tight:   -0.03em;
+  --ls-snug:    -0.015em;
+  --ls-normal:   0;
+  --ls-wide:     0.04em;
+  --ls-widest:   0.16em;
+
+  --fw-light:   300;
+  --fw-regular: 400;
+  --fw-medium:  500;
+  --fw-semi:    600;
+  --fw-bold:    700;
+
+  /* ── Spacing (4px base) ── */
+  --space-0:  0;
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+  --space-20: 80px;
+  --space-24: 96px;
+  --space-32: 128px;
+  --space-40: 160px;
+
+  /* ── Border radius ── */
+  --r-none: 0;
+  --r-sm:   2px;
+  --r-md:   4px;
+  --r-lg:   8px;
+  --r-xl:   16px;
+  --r-2xl:  24px;
+  --r-pill: 999px;
+
+  /* ── Shadows (warm sand tint) ── */
+  --shadow-xs: 0 1px 2px rgba(42,30,15,0.04);
+  --shadow-sm: 0 2px 6px rgba(42,30,15,0.06), 0 1px 2px rgba(42,30,15,0.04);
+  --shadow-md: 0 8px 20px rgba(42,30,15,0.08), 0 2px 4px rgba(42,30,15,0.04);
+  --shadow-lg: 0 20px 40px rgba(42,30,15,0.10), 0 4px 8px rgba(42,30,15,0.04);
+  --shadow-xl: 0 32px 64px rgba(42,30,15,0.14), 0 8px 16px rgba(42,30,15,0.06);
+  --shadow-inset: inset 0 1px 2px rgba(42,30,15,0.06);
+
+  /* ── Motion ── */
+  --ease-out:    cubic-bezier(0.22, 0.61, 0.36, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-glide:  cubic-bezier(0.16, 1, 0.3, 1);
+
+  --dur-fast:  150ms;
+  --dur-base:  240ms;
+  --dur-slow:  420ms;
+  --dur-glide: 640ms;
+
+  /* ── Z-index layers ── */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-sticky:  100;
+  --z-overlay: 200;
+  --z-modal:   300;
+  --z-toast:   400;
+
+  /* ── Layout ── */
+  --container:      1200px;
+  --container-wide: 1440px;
+  --container-text: 680px;
+}
+
+/* ── Midnight (dark) theme ── */
+body.theme-midnight {
+  --bg:          #08121C;
+  --bg-alt:      #0C1C28;
+  --bg-sunk:     #060D15;
+  --surface:     #11222F;
+  --surface-2:   #162B3A;
+  --surface-ink: #050B12;
+
+  --fg:      #EDE4D3;
+  --fg-2:    #B9AC94;
+  --fg-3:    #847968;
+  --fg-inv:  #0B1621;
+  --fg-inv-2:#2E261C;
+
+  --border:       rgba(237,228,211,0.08);
+  --border-strong:rgba(237,228,211,0.18);
+  --border-ink:   #EDE4D3;
+
+  --brand:       #9EC4D2;
+  --brand-hover: #B8D6E1;
+  --brand-press: #D3E6ED;
+
+  --accent:      #DD9572;
+  --accent-hover:#E8AA8B;
+
+  --focus-ring:  #9EC4D2;
+
+  --sand-100: #0C1C28;
+  --sand-200: #162B3A;
+  --sand-300: rgba(237,228,211,0.22);
+  --sand-700: #B9AC94;
+  --sand-800: #DCCEB6;
+  --sand-900: #060D15;
+
+  --azure-100: rgba(158,196,210,0.14);
+  --azure-700: #B8D6E1;
+  --clay-100:  rgba(221,149,114,0.16);
+  --clay-200:  rgba(221,149,114,0.55);
+  --clay-700:  #E8AA8B;
+  --glass-100: rgba(158,200,182,0.14);
+  --glass-500: #7AB09C;
+  --glass-700: #9FC8B6;
+
+  --shadow-xs: 0 1px 2px rgba(0,0,0,0.30);
+  --shadow-sm: 0 2px 6px rgba(0,0,0,0.35), 0 1px 2px rgba(0,0,0,0.25);
+  --shadow-md: 0 10px 24px rgba(0,0,0,0.45), 0 2px 4px rgba(0,0,0,0.30);
+  --shadow-lg: 0 24px 48px rgba(0,0,0,0.55), 0 4px 10px rgba(0,0,0,0.30);
+  --shadow-xl: 0 40px 80px rgba(0,0,0,0.65), 0 10px 20px rgba(0,0,0,0.35);
+}
+
+/* ── Tailwind v4 theme extension ── */
 @theme {
-  --font-sans: 'Outfit', ui-sans-serif, system-ui, sans-serif;
-  --color-gp-surface: oklch(99% 0.002 264);
-  --color-gp-muted: oklch(96% 0.008 264);
-  --color-gp-border: oklch(90% 0.02 264);
-  --color-gp-accent: oklch(52% 0.14 264);
+  --font-sans:    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  --font-display: 'Fraunces', 'Playfair Display', Georgia, serif;
+  --font-mono:    'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+  /* Expose palette as Tailwind color utilities */
+  --color-sand-50:  #FAF7F2;
+  --color-sand-100: #F3EEE5;
+  --color-sand-200: #E8E0D2;
+  --color-sand-300: #D4C8B3;
+  --color-sand-400: #B5A58A;
+  --color-sand-500: #8C7B5F;
+  --color-sand-600: #6B5D45;
+  --color-sand-700: #4A3F30;
+  --color-sand-800: #2E261C;
+  --color-sand-900: #1A140D;
+
+  --color-azure-50:  #EEF3F5;
+  --color-azure-100: #D5E0E6;
+  --color-azure-200: #A9C1CC;
+  --color-azure-300: #7A9EAD;
+  --color-azure-400: #4F7A8B;
+  --color-azure-500: #2E5768;
+  --color-azure-600: #1F4253;
+  --color-azure-700: #153240;
+  --color-azure-800: #0E2430;
+  --color-azure-900: #081820;
+
+  --color-clay-50:  #FBF0EA;
+  --color-clay-100: #F5DACB;
+  --color-clay-200: #EBB89E;
+  --color-clay-300: #DD9572;
+  --color-clay-400: #C87551;
+  --color-clay-500: #B05A3C;
+  --color-clay-600: #8E4530;
+  --color-clay-700: #6B3424;
+
+  --color-glass-100: #E3ECE8;
+  --color-glass-300: #9FBDB1;
+  --color-glass-500: #5E8A7A;
+  --color-glass-700: #3C5A50;
 }
 
-html,
-body {
-  height: 100%;
-}
+/* ── Base ── */
+html, body { height: 100%; }
 
 body {
   margin: 0;
   font-family: var(--font-sans);
-  @apply bg-neutral-50 text-neutral-900 antialiased dark:bg-neutral-950 dark:text-neutral-100;
+  background-color: var(--bg);
+  color: var(--fg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* ── Typography utilities ── */
+.display-1 {
+  font-family: var(--font-display);
+  font-size: clamp(56px, 9vw, 104px);
+  font-weight: 300;
+  letter-spacing: -0.035em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.display-2 {
+  font-family: var(--font-display);
+  font-size: clamp(44px, 6vw, 72px);
+  font-weight: 300;
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+
+.display-3 {
+  font-family: var(--font-display);
+  font-size: var(--fs-4xl);
+  font-weight: 400;
+  letter-spacing: var(--ls-tight);
+  line-height: var(--lh-tight);
+  text-wrap: balance;
+}
+
+h1 { font-family: var(--font-display); font-size: var(--fs-4xl); font-weight: 400; letter-spacing: var(--ls-tight); line-height: var(--lh-snug); text-wrap: balance; }
+h2 { font-family: var(--font-display); font-size: var(--fs-3xl); font-weight: 400; letter-spacing: var(--ls-tight); line-height: var(--lh-snug); text-wrap: balance; }
+h3 { font-family: var(--font-display); font-size: var(--fs-2xl); font-weight: 400; letter-spacing: var(--ls-tight); line-height: var(--lh-snug); text-wrap: balance; }
+h4 { font-family: var(--font-sans); font-size: var(--fs-xl); font-weight: 600; line-height: var(--lh-snug); }
+h5 { font-family: var(--font-sans); font-size: var(--fs-lg); font-weight: 600; line-height: var(--lh-snug); }
+h6 { font-family: var(--font-sans); font-size: var(--fs-md); font-weight: 600; line-height: var(--lh-snug); }
+
+p {
+  font-size: var(--fs-base);
+  line-height: var(--lh-normal);
+  color: var(--fg-2);
+}
+
+p.lead {
+  font-family: var(--font-display);
+  font-weight: 300;
+  font-size: var(--fs-xl);
+  line-height: var(--lh-snug);
+  color: var(--fg);
+  font-style: italic;
+}
+
+.eyebrow {
+  font-family: var(--font-sans);
+  font-size: var(--fs-xs);
+  font-weight: 500;
+  letter-spacing: var(--ls-widest);
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.caption {
+  font-size: var(--fs-sm);
+  color: var(--fg-3);
+  line-height: var(--lh-normal);
+}
+
+.numeric {
+  font-family: var(--font-display);
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  font-variant-numeric: lining-nums tabular-nums;
+  letter-spacing: var(--ls-tight);
+}
+
+.price {
+  font-family: var(--font-display);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  font-feature-settings: "lnum" 1, "tnum" 1;
+  font-variant-numeric: lining-nums tabular-nums;
+  color: var(--fg);
+}
+
+.price-unit {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  color: var(--fg-3);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-left: 4px;
+}
+
+code, pre, kbd, samp {
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+}
+
+a {
+  color: var(--brand);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  transition: color var(--dur-fast) var(--ease-out);
+}
+a:hover { color: var(--brand-hover); }
+
+::selection {
+  background: var(--clay-200);
+  color: var(--sand-900);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-radius: var(--r-sm);
+}
+
+/* ── Button utilities ── */
+.btn {
+  font-family: var(--font-sans);
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  padding: 12px 22px;
+  border-radius: var(--r-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  letter-spacing: 0.01em;
+  transition: all var(--dur-fast) var(--ease-out);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--brand);
+  color: var(--sand-50);
+}
+.btn-primary:hover { background: var(--brand-hover); color: var(--sand-50); }
+.btn-primary:active { background: var(--brand-press); }
+
+.btn-secondary {
+  background: var(--surface);
+  color: var(--fg);
+  border-color: var(--border-strong);
+}
+.btn-secondary:hover { border-color: var(--sand-900); color: var(--fg); }
+
+.btn-ghost {
+  background: transparent;
+  color: var(--fg);
+}
+.btn-ghost:hover { background: var(--sand-100); color: var(--fg); }
+
+.btn-accent {
+  background: var(--accent);
+  color: var(--sand-50);
+}
+.btn-accent:hover { background: var(--accent-hover); color: var(--sand-50); }
+
+.btn-sm { padding: 8px 14px; font-size: 13px; }
+.btn-lg { padding: 16px 28px; font-size: 15px; }
+.btn-icon { padding: 10px; border-radius: var(--r-md); }
+.btn:disabled { opacity: 0.4; cursor: not-allowed; pointer-events: none; }
+
+/* ── Form utilities ── */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field label {
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+.input, .select {
+  font-family: var(--font-sans);
+  font-size: 15px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--r-sm);
+  color: var(--fg);
+  width: 100%;
+  transition: border-color var(--dur-fast) var(--ease-out);
+  box-shadow: var(--shadow-inset);
+}
+
+.input:focus, .select:focus {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+  border-color: var(--brand);
+}
+
+/* ── Date input native chrome (applies to all type="date" inputs globally) ── */
+input[type="date"] {
+  color-scheme: light;
+}
+input[type="date"]::-webkit-datetime-edit {
+  color: var(--fg);
+}
+input[type="date"]::-webkit-datetime-edit-fields-wrapper {
+  padding: 0;
+}
+input[type="date"]::-webkit-datetime-edit-text {
+  color: var(--fg-3);
+  padding: 0 2px;
+}
+input[type="date"]::-webkit-datetime-edit-month-field,
+input[type="date"]::-webkit-datetime-edit-day-field,
+input[type="date"]::-webkit-datetime-edit-year-field {
+  color: var(--fg);
+  border-radius: 2px;
+}
+input[type="date"]::-webkit-datetime-edit-month-field:focus,
+input[type="date"]::-webkit-datetime-edit-day-field:focus,
+input[type="date"]::-webkit-datetime-edit-year-field:focus {
+  background: var(--azure-100);
+  color: var(--azure-900);
+  outline: none;
+}
+input[type="date"]::-webkit-calendar-picker-indicator {
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  margin-left: 4px;
+  cursor: pointer;
+  opacity: 0.45;
+  filter: invert(28%) sepia(60%) saturate(500%) hue-rotate(170deg) brightness(90%);
+  transition: opacity var(--dur-fast) var(--ease-out);
+}
+input[type="date"]::-webkit-calendar-picker-indicator:hover {
+  opacity: 0.85;
+}
+
+/* ── Badge utilities ── */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-sans);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.badge-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.badge-success { background: var(--glass-100); color: var(--glass-700); }
+.badge-warning  { background: var(--clay-100);  color: var(--clay-700);  }
+.badge-danger   { background: #FBEDEA;           color: #A8412E;          }
+.badge-info     { background: var(--azure-100);  color: var(--azure-700); }
+.badge-neutral  { background: var(--sand-100);   color: var(--sand-700);  }
+.badge-ink      { background: var(--sand-900);   color: var(--clay-100);  }
+
+/* ── Card / surface utilities ── */
+.card-surface {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.rule {
+  height: 1px;
+  background: var(--border-strong);
+  border: 0;
+  margin: 0;
+}
+
+.rule-ink {
+  height: 1px;
+  background: var(--sand-900);
+  border: 0;
+}
+
+/* ── Layout containers ── */
+.container       { max-width: var(--container);      margin: 0 auto; padding: 0 var(--space-8); }
+.container-wide  { max-width: var(--container-wide); margin: 0 auto; padding: 0 var(--space-8); }
+.container-text  { max-width: var(--container-text); margin: 0 auto; padding: 0 var(--space-8); }
+
+@media (max-width: 767px) {
+  .container, .container-wide, .container-text { padding: 0 var(--space-5); }
+}
+
+/* ── Material overrides ── */
 .mat-mdc-snack-bar-container.gp-snackbar-error {
-  --mdc-snackbar-container-color: oklch(45% 0.18 25);
+  --mdc-snackbar-container-color: #A8412E;
   --mat-snack-bar-button-color: #fff;
 }
 
 .mat-mdc-snack-bar-container.gp-snackbar-success {
-  --mdc-snackbar-container-color: oklch(42% 0.12 155);
+  --mdc-snackbar-container-color: var(--glass-500);
   --mat-snack-bar-button-color: #fff;
 }
 
-:focus-visible {
-  @apply outline-none ring-2 ring-blue-600 ring-offset-2 ring-offset-white dark:ring-offset-neutral-950 dark:ring-blue-400;
+/* ── Material datepicker calendar overlay ── */
+
+/* Popup panel */
+.mat-datepicker-content {
+  background: var(--surface) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: var(--r-lg) !important;
+  box-shadow: var(--shadow-xl) !important;
 }
 
+/* Calendar container */
+.mat-datepicker-content .mat-calendar {
+  font-family: var(--font-sans) !important;
+  color: var(--fg) !important;
+}
+
+/* Header row: "May 2026" button + prev/next arrows */
+.mat-datepicker-content .mat-calendar-header {
+  padding: 8px 8px 0 !important;
+  background: transparent !important;
+}
+
+.mat-datepicker-content .mat-calendar-controls {
+  margin: 0 !important;
+}
+
+/* "Month YYYY" period button */
+.mat-datepicker-content .mat-calendar-period-button {
+  font-family: var(--font-display) !important;
+  font-weight: 400 !important;
+  font-size: 15px !important;
+  color: var(--fg) !important;
+  letter-spacing: -0.01em !important;
+}
+.mat-datepicker-content .mat-calendar-period-button:hover {
+  background: var(--sand-100) !important;
+  border-radius: var(--r-sm) !important;
+}
+
+/* Prev / next arrow buttons */
+.mat-datepicker-content .mat-calendar-previous-button,
+.mat-datepicker-content .mat-calendar-next-button {
+  color: var(--fg-2) !important;
+  border-radius: var(--r-sm) !important;
+}
+.mat-datepicker-content .mat-calendar-previous-button:hover,
+.mat-datepicker-content .mat-calendar-next-button:hover {
+  background: var(--sand-100) !important;
+  color: var(--fg) !important;
+}
+
+/* Day-of-week header row (M T W T F S S) */
+.mat-datepicker-content .mat-calendar-table-header th,
+.mat-datepicker-content .mat-calendar-table-header-divider::after {
+  color: var(--fg-3) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.08em !important;
+}
+.mat-datepicker-content .mat-calendar-table-header-divider::after {
+  background: var(--border) !important;
+}
+
+/* Month/year label in body (e.g., "MAY 2026" row) */
+.mat-datepicker-content .mat-calendar-body-label {
+  color: var(--fg-3) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.1em !important;
+  text-transform: uppercase !important;
+}
+
+/* Individual day cells */
+.mat-datepicker-content .mat-calendar-body-cell-content {
+  font-family: var(--font-sans) !important;
+  font-size: 13px !important;
+  color: var(--fg) !important;
+  border-radius: var(--r-sm) !important;
+  border: none !important;
+}
+
+/* Hover */
+.mat-datepicker-content .mat-calendar-body-cell:not(.mat-calendar-body-disabled):hover
+  > .mat-calendar-body-cell-content:not(.mat-calendar-body-selected) {
+  background: var(--sand-100) !important;
+  color: var(--fg) !important;
+}
+
+/* Today */
+.mat-datepicker-content .mat-calendar-body-today:not(.mat-calendar-body-selected)
+  > .mat-calendar-body-cell-content {
+  border: 1px solid var(--brand) !important;
+  color: var(--brand) !important;
+  font-weight: 600 !important;
+}
+
+/* Selected date */
+.mat-datepicker-content .mat-calendar-body-selected {
+  background: var(--brand) !important;
+  color: var(--sand-50) !important;
+  font-weight: 600 !important;
+}
+
+/* Disabled dates */
+.mat-datepicker-content .mat-calendar-body-disabled > .mat-calendar-body-cell-content {
+  color: var(--fg-3) !important;
+  opacity: 0.4 !important;
+}
+
+/* ── Calendar unavailable ── */
 .cal-unavailable {
-  background-color: oklch(95% 0.03 25);
+  background-color: var(--sand-100);
   border-radius: 50%;
   position: relative;
 }
 
 .cal-unavailable .mat-calendar-body-cell-content {
-  color: oklch(55% 0.15 25);
+  color: var(--clay-500);
   text-decoration: line-through;
 }
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--bg-sunk); }
+::-webkit-scrollbar-thumb { background: var(--sand-300); border-radius: var(--r-pill); }
+::-webkit-scrollbar-thumb:hover { background: var(--sand-400); }

@@ -34,7 +34,7 @@ import { ShellFooterComponent } from '../footer/shell-footer.component';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex min-h-screen bg-zinc-50">
+    <div class="flex min-h-screen" style="background: var(--bg);">
       @if (isHandset() && mobileNavOpen()) {
         <div
           class="fixed inset-0 z-30 bg-black/40"
@@ -43,7 +43,7 @@ import { ShellFooterComponent } from '../footer/shell-footer.component';
         ></div>
       }
       <div
-        class="shrink-0 border-r border-zinc-200/80 bg-white"
+        class="shrink-0"
         [class.hidden]="isHandset() && !mobileNavOpen()"
         [class.fixed]="isHandset()"
         [class.z-40]="isHandset()"
@@ -57,7 +57,8 @@ import { ShellFooterComponent } from '../footer/shell-footer.component';
       </div>
       <div class="flex min-w-0 flex-1 flex-col">
         <header
-          class="flex h-14 items-center justify-between gap-3 border-b border-zinc-200/80 bg-white/90 px-3 backdrop-blur md:px-4"
+          class="flex h-14 items-center justify-between gap-3 px-3 md:px-4"
+          style="background: var(--bg); border-bottom: 1px solid var(--border);"
         >
           <div class="flex min-w-0 flex-1 items-center gap-2">
             @if (isHandset()) {
@@ -109,11 +110,12 @@ import { ShellFooterComponent } from '../footer/shell-footer.component';
           (click)="notifOpen.set(false)"
         ></div>
         <aside
-          class="fixed right-0 top-0 z-50 flex h-full w-full max-w-sm flex-col border-l border-zinc-200 bg-white shadow-xl"
+          class="fixed right-0 top-0 z-50 flex h-full w-full max-w-sm flex-col"
+          style="background: var(--surface); border-left: 1px solid var(--border); box-shadow: var(--shadow-xl);"
           aria-label="Notifications"
         >
-          <div class="flex items-center justify-between border-b border-zinc-200 px-4 py-3">
-            <h2 class="text-sm font-semibold text-zinc-900">Notifications</h2>
+          <div class="flex items-center justify-between px-4 py-3" style="border-bottom: 1px solid var(--border);">
+            <h2 style="font-size: 14px; font-weight: 600; color: var(--fg); margin: 0;">Notifications</h2>
             <button
               type="button"
               class="rounded p-1 text-zinc-500 hover:bg-zinc-100"

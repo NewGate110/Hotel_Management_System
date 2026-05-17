@@ -6,15 +6,18 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <section
-      class="rounded-xl border border-zinc-200/80 bg-white p-5 shadow-sm"
+      class="card-surface"
+      style="padding: 20px;"
       [class]="paddingClass()"
     >
       @if (title()) {
-        <header class="mb-4 flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-          <h2 class="text-base font-semibold tracking-tight text-zinc-900">
-            {{ title() }}
-          </h2>
-          <ng-content select="[cardActions]" />
+        <header style="margin-bottom: 16px; display: flex; flex-direction: column; gap: 4px;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+            <h2 style="font-family: var(--font-display); font-size: 18px; font-weight: 400; letter-spacing: -0.01em; margin: 0; color: var(--fg);">
+              {{ title() }}
+            </h2>
+            <ng-content select="[cardActions]" />
+          </div>
         </header>
       }
       <ng-content />

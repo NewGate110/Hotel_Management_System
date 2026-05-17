@@ -486,5 +486,6 @@ appsettings.Local.json
 .local/
 
 .agents/
+superpowers/
 .claude/
 skills-lock.json

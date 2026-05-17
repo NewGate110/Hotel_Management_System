@@ -13,6 +13,7 @@ import { NotificationService } from '../../../core/services/notification.service
 import type { HotelDto } from '../../../core/models/hotel.models';
 import type { RoomDto } from '../../../core/models/room.models';
 import { AppLoaderComponent } from '../../../shared/ui/app-loader/app-loader.component';
+import { AppButtonComponent } from '../../../shared/ui/app-button/app-button.component';
 
 interface RoomPricingRow {
   room: RoomDto;
@@ -30,28 +31,32 @@ interface RoomPricingRow {
     MatFormFieldModule,
     MatInputModule,
     MatSlideToggleModule,
-    MatButtonModule,
     MatIconModule,
     AppLoaderComponent,
+    AppButtonComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <h1 class="mb-6 text-2xl font-semibold text-zinc-900">Hotel Configuration</h1>
+    <!-- Page header -->
+    <div style="padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 28px;">
+      <p class="eyebrow">Administration</p>
+      <h1 style="font-family: var(--font-display); font-size: var(--fs-3xl); font-weight: 300; letter-spacing: var(--ls-tight); color: var(--fg); margin: 8px 0 0;">Hotel Configuration</h1>
+    </div>
 
     @if (loading()) {
       <app-loader />
     } @else if (hotels().length === 0) {
-      <p class="text-sm text-zinc-500">No hotels found.</p>
+      <p style="font-size: var(--fs-sm); color: var(--fg-3);">No hotels found.</p>
     } @else {
-      <!-- Hotel selector tabs -->
-      <div class="mb-6 flex flex-wrap gap-2">
+      <!-- Hotel selector pills -->
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
         @for (h of hotels(); track h.id) {
           <button
-            class="rounded-full px-4 py-1.5 text-sm font-medium transition-colors"
-            [class.bg-sky-600]="selectedHotelId() === h.id"
-            [class.text-white]="selectedHotelId() === h.id"
-            [class.bg-zinc-100]="selectedHotelId() !== h.id"
-            [class.text-zinc-700]="selectedHotelId() !== h.id"
+            type="button"
+            style="border-radius: var(--r-pill); padding: 6px 16px; font-size: var(--fs-sm); font-weight: 500; cursor: pointer; transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);"
+            [style.background]="selectedHotelId() === h.id ? 'var(--sand-900)' : 'var(--surface)'"
+            [style.color]="selectedHotelId() === h.id ? 'var(--sand-50)' : 'var(--fg-2)'"
+            [style.border]="selectedHotelId() === h.id ? '1px solid var(--sand-900)' : '1px solid var(--border-strong)'"
             (click)="selectHotel(h.id)">
             {{ h.name }}
           </button>
@@ -64,7 +69,7 @@ interface RoomPricingRow {
           <!-- ── Hotel Details ────────────────────────────────────────────── -->
           <mat-expansion-panel [expanded]="true">
             <mat-expansion-panel-header>
-              <mat-panel-title class="font-medium">Hotel Details</mat-panel-title>
+              <mat-panel-title style="font-weight: 500; color: var(--fg);">Hotel Details</mat-panel-title>
             </mat-expansion-panel-header>
 
             <form [formGroup]="hotelForm" class="grid gap-4 py-2 md:grid-cols-2">
@@ -101,70 +106,74 @@ interface RoomPricingRow {
                 <input matInput type="email" formControlName="email" />
               </mat-form-field>
 
-              <div class="flex items-center gap-3">
+              <div style="display: flex; align-items: center; gap: 12px;">
                 <mat-slide-toggle formControlName="isActive" color="primary">
                   Hotel active
                 </mat-slide-toggle>
               </div>
             </form>
 
-            <div class="flex justify-end pt-2">
-              <button mat-flat-button color="primary"
-                [disabled]="savingHotel() || hotelForm.invalid"
+            <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+              <app-button variant="primary" type="button"
+                [loading]="savingHotel()"
+                [disabled]="hotelForm.invalid"
                 (click)="saveHotel()">
-                @if (savingHotel()) { Saving… } @else {
-                  <mat-icon>save</mat-icon> Save hotel details
-                }
-              </button>
+                <span class="material-icons-outlined" style="font-size: 15px;">save</span>
+                Save hotel details
+              </app-button>
             </div>
           </mat-expansion-panel>
 
           <!-- ── Room Pricing ────────────────────────────────────────────── -->
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-title class="font-medium">Room Pricing</mat-panel-title>
-              <mat-panel-description>Off-peak & peak rates per room</mat-panel-description>
+              <mat-panel-title style="font-weight: 500; color: var(--fg);">Room Pricing</mat-panel-title>
+              <mat-panel-description style="color: var(--fg-3);">Off-peak &amp; peak rates per room</mat-panel-description>
             </mat-expansion-panel-header>
 
             @if (loadingRooms()) {
               <app-loader />
             } @else if (pricingRows().length === 0) {
-              <p class="py-4 text-sm text-zinc-500">No rooms configured for this hotel.</p>
+              <p style="padding: 16px 0; font-size: var(--fs-sm); color: var(--fg-3);">No rooms configured for this hotel.</p>
             } @else {
-              <div class="overflow-x-auto">
-                <table class="w-full text-sm">
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; font-size: var(--fs-sm); border-collapse: collapse;">
                   <thead>
-                    <tr class="border-b border-zinc-100 text-left text-xs text-zinc-500">
-                      <th class="py-2 pr-4">Room</th>
-                      <th class="py-2 pr-4">Type</th>
-                      <th class="py-2 pr-4">Off-peak ($/night)</th>
-                      <th class="py-2 pr-4">Peak ($/night)</th>
-                      <th class="py-2"></th>
+                    <tr style="border-bottom: 1px solid var(--border); text-align: left;">
+                      <th style="padding: 8px 16px 8px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Room</th>
+                      <th style="padding: 8px 16px 8px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Type</th>
+                      <th style="padding: 8px 16px 8px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Off-peak ($/night)</th>
+                      <th style="padding: 8px 16px 8px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Peak ($/night)</th>
+                      <th style="padding: 8px 0;"></th>
                     </tr>
                   </thead>
-                  <tbody class="divide-y divide-zinc-50">
+                  <tbody>
                     @for (row of pricingRows(); track row.room.id; let i = $index) {
-                      <tr class="py-2">
-                        <td class="py-2 pr-4 font-mono text-zinc-700">{{ row.room.roomNumber }}</td>
-                        <td class="py-2 pr-4 text-zinc-500">{{ row.room.type }}</td>
-                        <td class="py-2 pr-4">
+                      <tr style="border-bottom: 1px solid var(--border);">
+                        <td style="padding: 10px 16px 10px 0; font-family: var(--font-mono); font-size: 12px; color: var(--fg);">{{ row.room.roomNumber }}</td>
+                        <td style="padding: 10px 16px 10px 0; color: var(--fg-2);">{{ row.room.type }}</td>
+                        <td style="padding: 10px 16px 10px 0;">
                           <input type="number" step="0.01" min="0.01"
-                            class="w-24 rounded-lg border border-zinc-200 px-2 py-1 text-sm focus:border-sky-400 focus:outline-none"
+                            style="width: 96px; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--surface); color: var(--fg); padding: 5px 10px; font-size: var(--fs-sm); outline: none; transition: border-color var(--dur-fast) var(--ease-out);"
                             [value]="row.offPeak"
+                            (focus)="$any($event.target).style.borderColor='var(--brand)'"
+                            (blur)="$any($event.target).style.borderColor='var(--border)'"
                             (change)="updateOffPeak(i, $event)" />
                         </td>
-                        <td class="py-2 pr-4">
+                        <td style="padding: 10px 16px 10px 0;">
                           <input type="number" step="0.01" min="0.01"
-                            class="w-24 rounded-lg border border-zinc-200 px-2 py-1 text-sm focus:border-sky-400 focus:outline-none"
+                            style="width: 96px; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--surface); color: var(--fg); padding: 5px 10px; font-size: var(--fs-sm); outline: none; transition: border-color var(--dur-fast) var(--ease-out);"
                             [value]="row.peak"
+                            (focus)="$any($event.target).style.borderColor='var(--brand)'"
+                            (blur)="$any($event.target).style.borderColor='var(--border)'"
                             (change)="updatePeak(i, $event)" />
                         </td>
-                        <td class="py-2">
-                          <button mat-flat-button color="primary" class="text-xs"
-                            [disabled]="row.saving"
+                        <td style="padding: 10px 0;">
+                          <app-button variant="secondary" type="button"
+                            [loading]="row.saving"
                             (click)="saveRoomPricing(i)">
-                            {{ row.saving ? '…' : 'Save' }}
-                          </button>
+                            Save
+                          </app-button>
                         </td>
                       </tr>
                     }
@@ -177,13 +186,13 @@ interface RoomPricingRow {
           <!-- ── Policies (informational) ───────────────────────────────── -->
           <mat-expansion-panel>
             <mat-expansion-panel-header>
-              <mat-panel-title class="font-medium">Policies</mat-panel-title>
+              <mat-panel-title style="font-weight: 500; color: var(--fg);">Policies</mat-panel-title>
             </mat-expansion-panel-header>
-            <div class="space-y-2 py-2 text-sm text-zinc-600">
-              <p><strong>VAT:</strong> 20% applied on checkout. Fixed by system — not configurable here.</p>
-              <p><strong>Cancellation:</strong> Free (&gt;14 days) · 50% (3–14 days) · 100% (&lt;72 h).</p>
-              <p><strong>Quiet hours:</strong> 22:00–07:00.</p>
-              <p><strong>Late checkout:</strong> Subject to availability.</p>
+            <div style="display: flex; flex-direction: column; gap: 10px; padding: 8px 0; font-size: var(--fs-sm); color: var(--fg-2);">
+              <p style="margin: 0;"><strong style="color: var(--fg);">VAT:</strong> 20% applied on checkout. Fixed by system — not configurable here.</p>
+              <p style="margin: 0;"><strong style="color: var(--fg);">Cancellation:</strong> Free (&gt;14 days) · 50% (3–14 days) · 100% (&lt;72 h).</p>
+              <p style="margin: 0;"><strong style="color: var(--fg);">Quiet hours:</strong> 22:00–07:00.</p>
+              <p style="margin: 0;"><strong style="color: var(--fg);">Late checkout:</strong> Subject to availability.</p>
             </div>
           </mat-expansion-panel>
 

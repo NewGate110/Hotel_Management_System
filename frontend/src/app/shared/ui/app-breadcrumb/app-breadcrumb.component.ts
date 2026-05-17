@@ -12,23 +12,24 @@ export interface BreadcrumbItem {
   imports: [RouterLink],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <nav aria-label="Breadcrumb" class="text-sm text-zinc-500">
-      <ol class="flex flex-wrap items-center gap-2">
+    <nav aria-label="Breadcrumb" style="font-size: var(--fs-sm); color: var(--fg-3);">
+      <ol class="flex flex-wrap items-center gap-2" style="list-style: none; margin: 0; padding: 0;">
         @for (item of items(); track $index; let last = $last) {
           <li class="flex items-center gap-2">
             @if (!last && item.link) {
               <a
-                class="font-medium text-zinc-600 hover:text-zinc-900"
+                style="font-weight: 500; color: var(--fg-2); text-decoration: none; transition: color var(--dur-fast) var(--ease-out);"
                 [routerLink]="item.link"
-                >{{ item.label }}</a
-              >
+                onmouseenter="this.style.color='var(--fg)'"
+                onmouseleave="this.style.color='var(--fg-2)'"
+              >{{ item.label }}</a>
             } @else {
-              <span [class.font-semibold]="last" [class.text-zinc-900]="last">
+              <span [style.fontWeight]="last ? '600' : '400'" [style.color]="last ? 'var(--fg)' : 'var(--fg-3)'">
                 {{ item.label }}
               </span>
             }
             @if (!last) {
-              <span aria-hidden="true" class="text-zinc-400">/</span>
+              <span aria-hidden="true" style="color: var(--sand-300);">/</span>
             }
           </li>
         }

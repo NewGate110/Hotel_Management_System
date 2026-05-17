@@ -28,36 +28,30 @@ interface DemoUser { role: string; name: string; email: string; password: string
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex min-h-[calc(100vh-68px)]">
+    <div style="display: flex; min-height: calc(100vh - 68px);">
       <!-- Left: hero image -->
-      <div class="relative hidden flex-1 lg:block">
+      <div style="position: relative; flex: 1; display: none;" class="login-hero">
         <img
           src="https://images.unsplash.com/photo-1574223706388-0e0f6f0390b2?h=1200&w=800&auto=format&fit=crop"
           alt=""
           aria-hidden="true"
-          class="h-full w-full object-cover"
+          style="height: 100%; width: 100%; object-fit: cover;"
         />
-        <div
-          class="absolute inset-0 bg-gradient-to-br from-zinc-950/75 via-zinc-900/50 to-zinc-800/30"
-        ></div>
-        <div class="absolute inset-0 flex flex-col justify-end p-12">
-          <img
-            src="/logo.png"
-            alt="Grand Plaza"
-            class="mb-6 h-12 w-auto object-contain object-left"
-          />
-          <p class="text-lg font-medium text-white/90">Your home away from home.</p>
-          <p class="mt-1 text-sm text-white/55">Luxury hospitality in the heart of the Maldives.</p>
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,36,48,0.25) 0%, rgba(14,36,48,0.05) 40%, rgba(14,36,48,0.75) 100%);"></div>
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 48px;">
+          <img src="/logo.png" alt="Grand Plaza" style="margin-bottom: 24px; height: 48px; width: auto; object-fit: contain; object-position: left; filter: invert(0.92) brightness(1.1);" />
+          <p style="font-family: var(--font-display); font-size: var(--fs-lg); font-style: italic; font-weight: 300; color: rgba(250,247,242,0.9);">Your home away from home.</p>
+          <p style="margin-top: 4px; font-size: var(--fs-sm); color: rgba(250,247,242,0.55);">Luxury hospitality in the heart of the Maldives.</p>
         </div>
       </div>
 
       <!-- Right: form -->
-      <div class="flex flex-1 items-center justify-center px-6 py-12 lg:px-12">
-        <div class="w-full max-w-sm">
-          <h1 class="text-2xl font-semibold tracking-tight text-zinc-900">{{ msg.loginTitle }}</h1>
-          <p class="mt-1 text-sm text-zinc-500">Use your Grand Plaza credentials</p>
+      <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 24px; background: var(--bg);">
+        <div style="width: 100%; max-width: 380px;">
+          <h1 style="font-family: var(--font-display); font-size: 36px; font-weight: 300; letter-spacing: -0.02em; color: var(--fg); margin: 0;">{{ msg.loginTitle }}</h1>
+          <p style="margin-top: 6px; font-size: var(--fs-sm); color: var(--fg-3);">Use your Grand Plaza credentials</p>
 
-          <form class="mt-8 space-y-5" [formGroup]="form" (ngSubmit)="submit()">
+          <form style="margin-top: 32px; display: flex; flex-direction: column; gap: 20px;" [formGroup]="form" (ngSubmit)="submit()">
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Email</mat-label>
               <input matInput type="email" formControlName="email" autocomplete="username" />
@@ -69,19 +63,14 @@ interface DemoUser { role: string; name: string; email: string; password: string
             </mat-form-field>
             <mat-form-field appearance="outline" class="w-full">
               <mat-label>Password</mat-label>
-              <input
-                matInput
-                type="password"
-                formControlName="password"
-                autocomplete="current-password"
-              />
+              <input matInput type="password" formControlName="password" autocomplete="current-password" />
               @if (form.controls.password.hasError('required')) {
                 <mat-error>Password is required</mat-error>
               }
             </mat-form-field>
             <mat-checkbox formControlName="remember">Stay signed in</mat-checkbox>
             @if (error()) {
-              <p class="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700" role="alert">
+              <p style="border-radius: var(--r-md); background: var(--clay-100); padding: 10px 14px; font-size: var(--fs-sm); color: var(--clay-700); margin: 0;" role="alert">
                 {{ error() }}
               </p>
             }
@@ -90,22 +79,17 @@ interface DemoUser { role: string; name: string; email: string; password: string
             </app-button>
           </form>
 
-          <p class="mt-6 text-center text-sm text-zinc-500">
-            <a
-              routerLink="/forgot-password"
-              class="font-medium text-zinc-900 underline-offset-4 hover:underline"
-              >Forgot password?</a
-            >
-            <span class="mx-2 text-zinc-300">·</span>
-            <a
-              routerLink="/register"
-              class="font-medium text-zinc-900 underline-offset-4 hover:underline"
-              >Create account</a
-            >
+          <p style="margin-top: 24px; text-align: center; font-size: var(--fs-sm); color: var(--fg-3);">
+            <a routerLink="/forgot-password" style="font-weight: 500; color: var(--fg); text-underline-offset: 3px;" onmouseenter="this.style.textDecoration='underline'" onmouseleave="this.style.textDecoration='none'">Forgot password?</a>
+            <span style="margin: 0 8px; color: var(--sand-300);">·</span>
+            <a routerLink="/register" style="font-weight: 500; color: var(--fg); text-underline-offset: 3px;" onmouseenter="this.style.textDecoration='underline'" onmouseleave="this.style.textDecoration='none'">Create account</a>
           </p>
         </div>
       </div>
     </div>
+    <style>
+      @media (min-width: 1024px) { .login-hero { display: block !important; } }
+    </style>
 
     <!-- Demo user selector — non-production only, credentials not present in prod bundle -->
     @if (isDemo) {
@@ -120,7 +104,8 @@ interface DemoUser { role: string; name: string; email: string; password: string
 
           <!-- Panel -->
           <div
-            class="absolute bottom-full right-0 mb-3 w-64 overflow-hidden rounded-2xl border border-zinc-200 bg-white shadow-xl"
+            class="absolute bottom-full right-0 mb-3 w-64 overflow-hidden"
+            style="border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-xl);"
             role="dialog"
             aria-modal="true"
             aria-label="Select a demo account"
@@ -211,12 +196,12 @@ export class LoginComponent {
 
   roleBadgeClass(role: string): string {
     const map: Record<string, string> = {
-      Admin:   'bg-rose-100 text-rose-700',
-      Manager: 'bg-amber-100 text-amber-700',
-      Staff:   'bg-sky-100 text-sky-700',
-      Guest:   'bg-emerald-100 text-emerald-700',
+      Admin:   'badge badge-danger',
+      Manager: 'badge badge-warning',
+      Staff:   'badge badge-info',
+      Guest:   'badge badge-success',
     };
-    return map[role] ?? 'bg-zinc-100 text-zinc-700';
+    return map[role] ?? 'badge badge-neutral';
   }
 
   submit(): void {

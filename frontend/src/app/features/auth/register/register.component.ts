@@ -21,40 +21,30 @@ import { MSG } from '../../../core/i18n/ui-messages';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="flex min-h-[calc(100vh-68px)]">
+    <div style="display: flex; min-height: calc(100vh - 68px);">
       <!-- Left: hero image -->
-      <div class="relative hidden flex-1 lg:block">
+      <div style="position: relative; flex: 1; display: none;" class="register-hero">
         <img
           src="https://images.unsplash.com/photo-1574223706388-0e0f6f0390b2?h=1200&w=800&auto=format&fit=crop"
           alt=""
           aria-hidden="true"
-          class="h-full w-full object-cover"
+          style="height: 100%; width: 100%; object-fit: cover;"
         />
-        <div
-          class="absolute inset-0 bg-gradient-to-br from-zinc-950/75 via-zinc-900/50 to-zinc-800/30"
-        ></div>
-        <div class="absolute inset-0 flex flex-col justify-end p-12">
-          <img
-            src="/logo.png"
-            alt="Grand Plaza"
-            class="mb-6 h-12 w-auto object-contain object-left"
-          />
-          <p class="text-lg font-medium text-white/90">Begin your Grand Plaza journey.</p>
-          <p class="mt-1 text-sm text-white/55">
-            Create an account to manage your stays and rewards.
-          </p>
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,36,48,0.25) 0%, rgba(14,36,48,0.05) 40%, rgba(14,36,48,0.75) 100%);"></div>
+        <div style="position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 48px;">
+          <img src="/logo.png" alt="Grand Plaza" style="margin-bottom: 24px; height: 48px; width: auto; object-fit: contain; object-position: left; filter: invert(0.92) brightness(1.1);" />
+          <p style="font-family: var(--font-display); font-size: var(--fs-lg); font-style: italic; font-weight: 300; color: rgba(250,247,242,0.9);">Begin your Grand Plaza journey.</p>
+          <p style="margin-top: 4px; font-size: var(--fs-sm); color: rgba(250,247,242,0.55);">Create an account to manage your stays and rewards.</p>
         </div>
       </div>
 
       <!-- Right: form -->
-      <div class="flex flex-1 items-center justify-center px-6 py-12 lg:px-12">
-        <div class="w-full max-w-md">
-          <h1 class="text-2xl font-semibold tracking-tight text-zinc-900">
-            {{ msg.registerTitle }}
-          </h1>
+      <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 24px; background: var(--bg);">
+        <div style="width: 100%; max-width: 440px;">
+          <h1 style="font-family: var(--font-display); font-size: 36px; font-weight: 300; letter-spacing: -0.02em; color: var(--fg); margin: 0;">{{ msg.registerTitle }}</h1>
 
-          <form class="mt-8 grid gap-4 md:grid-cols-2" [formGroup]="form" (ngSubmit)="submit()">
-            <mat-form-field appearance="outline" class="w-full md:col-span-2">
+          <form style="margin-top: 32px; display: grid; gap: 16px; grid-template-columns: 1fr 1fr;" [formGroup]="form" (ngSubmit)="submit()">
+            <mat-form-field appearance="outline" class="w-full" style="grid-column: 1 / -1;">
               <mat-label>Email</mat-label>
               <input matInput type="email" formControlName="email" autocomplete="email" />
               @if (form.controls.email.hasError('required')) {
@@ -63,14 +53,9 @@ import { MSG } from '../../../core/i18n/ui-messages';
                 <mat-error>Enter a valid email address</mat-error>
               }
             </mat-form-field>
-            <mat-form-field appearance="outline" class="w-full md:col-span-2">
+            <mat-form-field appearance="outline" class="w-full" style="grid-column: 1 / -1;">
               <mat-label>Password</mat-label>
-              <input
-                matInput
-                type="password"
-                formControlName="password"
-                autocomplete="new-password"
-              />
+              <input matInput type="password" formControlName="password" autocomplete="new-password" />
               @if (form.controls.password.hasError('required')) {
                 <mat-error>Password is required</mat-error>
               } @else if (form.controls.password.hasError('minlength')) {
@@ -91,40 +76,36 @@ import { MSG } from '../../../core/i18n/ui-messages';
                 <mat-error>Last name is required</mat-error>
               }
             </mat-form-field>
-            <mat-form-field appearance="outline" class="w-full md:col-span-2">
+            <mat-form-field appearance="outline" class="w-full" style="grid-column: 1 / -1;">
               <mat-label>Phone</mat-label>
               <input matInput formControlName="phone" autocomplete="tel" />
             </mat-form-field>
-            <mat-form-field appearance="outline" class="w-full md:col-span-2">
+            <mat-form-field appearance="outline" class="w-full" style="grid-column: 1 / -1;">
               <mat-label>Address</mat-label>
               <textarea matInput rows="2" formControlName="address"></textarea>
             </mat-form-field>
             @if (error()) {
-              <p
-                class="col-span-2 rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700"
-                role="alert"
-              >
+              <p style="grid-column: 1 / -1; border-radius: var(--r-md); background: var(--clay-100); padding: 10px 14px; font-size: var(--fs-sm); color: var(--clay-700); margin: 0;" role="alert">
                 {{ error() }}
               </p>
             }
-            <div class="md:col-span-2">
+            <div style="grid-column: 1 / -1;">
               <app-button variant="primary" class="w-full" [loading]="loading()" type="submit">
                 Create account
               </app-button>
             </div>
           </form>
 
-          <p class="mt-6 text-center text-sm text-zinc-500">
+          <p style="margin-top: 24px; text-align: center; font-size: var(--fs-sm); color: var(--fg-3);">
             Already registered?
-            <a
-              routerLink="/login"
-              class="font-medium text-zinc-900 underline-offset-4 hover:underline"
-              >Sign in</a
-            >
+            <a routerLink="/login" style="font-weight: 500; color: var(--fg); text-underline-offset: 3px;" onmouseenter="this.style.textDecoration='underline'" onmouseleave="this.style.textDecoration='none'">Sign in</a>
           </p>
         </div>
       </div>
     </div>
+    <style>
+      @media (min-width: 1024px) { .register-hero { display: block !important; } }
+    </style>
   `,
 })
 export class RegisterComponent {
