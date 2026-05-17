@@ -4,6 +4,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { ReportsApiService } from '../../../core/services/reports-api.service';
+import { BookingsApiService } from '../../../core/services/bookings-api.service';
 import { environment } from '../../../../environments/environment';
 import type { OccupancyReportDto, RevenueReportDto } from '../../../core/models/report.models';
 import { AppStatCardComponent } from '../../../shared/ui/app-stat-card/app-stat-card.component';
@@ -27,7 +28,7 @@ import type { ChartConfiguration } from 'chart.js';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-6">
-      <h1 class="text-2xl font-semibold text-zinc-900">Management dashboard</h1>
+      <h1 class="text-2xl font-semibold" style="color: var(--fg)">Management dashboard</h1>
       <form [formGroup]="range" class="flex flex-wrap items-end gap-3">
         <mat-form-field appearance="outline">
           <mat-label>From</mat-label>
@@ -45,17 +46,17 @@ import type { ChartConfiguration } from 'chart.js';
       </form>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <app-stat-card label="Occupancy" [value]="occPct()" hint="Selected window" />
-        <app-stat-card label="ADR (mock)" [value]="'$' + adr()" hint="Derived sample" />
-        <app-stat-card label="RevPAR (mock)" [value]="'$' + revpar()" />
-        <app-stat-card label="Cancellations" value="—" hint="API pending" />
+        <app-stat-card label="ADR" [value]="'$' + adr()" hint="Revenue per booking" />
+        <app-stat-card label="RevPAR" [value]="'$' + revpar()" hint="Revenue per room" />
+        <app-stat-card label="Cancellations" [value]="cancellations()" hint="Selected window" />
       </div>
       @defer (on idle) {
         <div class="grid gap-4 lg:grid-cols-2">
-          <app-chart-card title="Revenue trend (sample)" [type]="'bar'" [data]="revChartData()" />
-          <app-chart-card title="Occupancy trend (sample)" [type]="'line'" [data]="occChartData()" />
+          <app-chart-card title="Revenue trend" [type]="'bar'" [data]="revChartData()" />
+          <app-chart-card title="Occupancy trend" [type]="'line'" [data]="occChartData()" />
         </div>
       } @placeholder {
-        <p class="text-sm text-zinc-500">Preparing charts…</p>
+        <p class="text-sm" style="color: var(--fg-3)">Preparing charts…</p>
       }
     </div>
   `,
@@ -63,6 +64,7 @@ import type { ChartConfiguration } from 'chart.js';
 export class ManagerDashboardComponent {
   private readonly fb = inject(FormBuilder);
   private readonly reportsApi = inject(ReportsApiService);
+  private readonly bookingsApi = inject(BookingsApiService);
 
   readonly occ = signal<OccupancyReportDto | null>(null);
   readonly rev = signal<RevenueReportDto | null>(null);
@@ -75,6 +77,7 @@ export class ManagerDashboardComponent {
   readonly occPct = signal('—');
   readonly adr = signal('0');
   readonly revpar = signal('0');
+  readonly cancellations = signal('—');
 
   readonly revChartData = signal<ChartConfiguration['data']>({
     labels: [],
@@ -115,6 +118,17 @@ export class ManagerDashboardComponent {
         labels: [`${from} → ${to}`],
         datasets: [{ label: 'Revenue $', data: [Number(r.totalRevenue)] }],
       });
+    });
+    // Fetches all bookings; filtered client-side by date range since the endpoint has no date params.
+    this.bookingsApi.getByHotel(hid).subscribe((bookings) => {
+      const fromDate = v.from;
+      const toDate = v.to;
+      const count = bookings.filter((b) => {
+        if (b.status !== 'Cancelled') return false;
+        const checkIn = new Date(b.checkInDate);
+        return checkIn >= fromDate && checkIn <= toDate;
+      }).length;
+      this.cancellations.set(String(count));
     });
   }
 

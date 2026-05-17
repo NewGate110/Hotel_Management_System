@@ -23,7 +23,7 @@ import { AppButtonComponent } from '../../../shared/ui/app-button/app-button.com
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto max-w-xl space-y-6">
-      <h1 class="text-2xl font-semibold text-zinc-900">Profile</h1>
+      <h1 class="text-2xl font-semibold" style="color: var(--fg)">Profile</h1>
       @if (loading()) {
         <app-loader />
       } @else {
@@ -56,29 +56,21 @@ import { AppButtonComponent } from '../../../shared/ui/app-button/app-button.com
             </app-button>
           </form>
         </app-card>
-        <app-card title="Saved preferences (mock)">
-          <p class="text-sm text-zinc-600">
-            Late check-out, high floor, hypoallergenic pillows — wire to API when guest preferences exist.
-          </p>
-        </app-card>
 
-        <!-- Payment Methods placeholder -->
-        <app-card title="Payment Methods">
+        <app-card title="Payment methods">
           <div class="mt-2 flex flex-col items-start gap-3">
-            <div class="flex items-center gap-3 rounded-xl border border-zinc-100 bg-zinc-50 px-4 py-3 text-sm text-zinc-600 w-full">
-              <span class="material-icons-outlined text-zinc-400">credit_card_off</span>
+            <div class="flex items-center gap-3 rounded-xl border px-4 py-3 text-sm w-full"
+                 style="border-color: var(--border); background: var(--surface); color: var(--fg-2)">
+              <span class="material-icons-outlined" style="color: var(--fg-3)">credit_card_off</span>
               <span>No saved cards — payment is processed at checkout.</span>
             </div>
             <button
               disabled
-              class="inline-flex items-center gap-1.5 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-400 cursor-not-allowed opacity-60">
+              class="inline-flex items-center gap-1.5 rounded-lg border px-4 py-2 text-sm font-medium cursor-not-allowed opacity-60"
+              style="border-color: var(--border); background: var(--surface); color: var(--fg-3)">
               <span class="material-icons-outlined text-[16px]">add</span>
-              Add Card
-              <span class="ml-1 rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-semibold uppercase text-zinc-500">Coming soon</span>
+              Add card
             </button>
-            <p class="text-xs text-zinc-400">
-              Card storage is part of our payment simulation. All charges are processed securely at check-out.
-            </p>
           </div>
         </app-card>
       }

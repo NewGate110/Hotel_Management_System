@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -20,10 +21,11 @@ import type { BookingDto } from '../../../core/models/booking.models';
     MatInputModule,
     MatButtonModule,
     MatCheckboxModule,
+    DatePipe,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <h1 class="mb-4 text-2xl font-semibold text-zinc-900">Check-in</h1>
+    <h1 class="mb-4 text-2xl font-semibold" style="color: var(--fg)">Check-in</h1>
     <mat-stepper linear>
       <mat-step [stepControl]="lookupForm" label="Lookup">
         <form [formGroup]="lookupForm" class="space-y-4 py-4">
@@ -32,7 +34,8 @@ import type { BookingDto } from '../../../core/models/booking.models';
             <input matInput type="number" formControlName="bookingId" />
           </mat-form-field>
           <div>
-            <button mat-flat-button class="!bg-zinc-900 !text-white" type="button" matStepperNext (click)="loadBooking()">
+            <button mat-flat-button type="button" matStepperNext (click)="loadBooking()"
+                    style="background: var(--sand-900); color: var(--sand-50)">
               Load booking
             </button>
           </div>
@@ -40,7 +43,7 @@ import type { BookingDto } from '../../../core/models/booking.models';
       </mat-step>
       <mat-step [stepControl]="verifyForm" label="Verify">
         @if (booking(); as b) {
-          <div class="space-y-2 py-4 text-sm text-zinc-700">
+          <div class="space-y-2 py-4 text-sm" style="color: var(--fg-2)">
             <p><strong>Guest:</strong> {{ b.guestName }}</p>
             <p><strong>Hotel:</strong> {{ b.hotelName }}</p>
             <p><strong>Status:</strong> {{ b.status }}</p>
@@ -55,19 +58,28 @@ import type { BookingDto } from '../../../core/models/booking.models';
         </form>
         <div class="flex justify-between">
           <button mat-button matStepperPrevious type="button">Back</button>
-          <button mat-flat-button class="!bg-zinc-900 !text-white" matStepperNext type="button" [disabled]="verifyForm.invalid">
+          <button mat-flat-button matStepperNext type="button" [disabled]="verifyForm.invalid"
+                  style="background: var(--sand-900); color: var(--sand-50)">
             Next
           </button>
         </div>
       </mat-step>
       <mat-step label="Room & keys">
-        <p class="py-4 text-sm text-zinc-600">
-          Room assignment follows hotel PMS rules. Placeholder confirms key packet prepared.
-        </p>
+        <div class="py-4 text-sm" style="color: var(--fg-2)">
+          @if (booking(); as b) {
+            <p><strong>Room{{ b.rooms.length !== 1 ? 's' : '' }}:</strong>
+              {{ b.rooms.length ? b.rooms.map(r => r.roomNumber).join(', ') : 'Not yet assigned' }}
+            </p>
+            <p class="mt-1"><strong>Check-in:</strong> {{ b.checkInDate | date:'mediumDate' }}</p>
+          } @else {
+            <p>Load a booking in step 1 to see room details.</p>
+          }
+        </div>
         <mat-checkbox [checked]="keyReady()" (change)="keyReady.set($event.checked)">Key cards encoded</mat-checkbox>
         <div class="mt-6 flex justify-between">
           <button mat-button matStepperPrevious type="button">Back</button>
-          <button mat-flat-button class="!bg-zinc-900 !text-white" type="button" [disabled]="submitting()" (click)="submit()">
+          <button mat-flat-button type="button" [disabled]="submitting()" (click)="submit()"
+                  style="background: var(--sand-900); color: var(--sand-50)">
             Complete check-in
           </button>
         </div>
@@ -90,11 +102,12 @@ export class CheckInFlowComponent {
   });
 
   readonly verifyForm = this.fb.nonNullable.group({
-    idRef: ['PASSPORT-VERIFY', Validators.required],
-    verified: [true, Validators.requiredTrue],
+    idRef: ['', Validators.required],
+    verified: [false, Validators.requiredTrue],
   });
 
   loadBooking(): void {
+    if (this.lookupForm.invalid) return;
     const id = this.lookupForm.controls.bookingId.value;
     this.bookingsApi.getById(id).subscribe((b) => this.booking.set(b));
   }
