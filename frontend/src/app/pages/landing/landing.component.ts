@@ -222,7 +222,7 @@ function toYmd(d: Date): string {
                 <h3 style="font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 300; color: var(--fg); margin: 0 0 8px;">{{ room.type | formatType }}</h3>
                 <p style="font-size: var(--fs-sm); color: var(--fg-2); line-height: 1.6; margin: 0 0 20px;">{{ room.description }}</p>
                 <div style="display: flex; align-items: center; justify-content: space-between;">
-                  <span style="font-family: var(--font-display); font-size: var(--fs-lg); font-weight: 400; color: var(--fg);">from ${{ room.pricePerNight }}<span style="font-family: var(--font-sans); font-size: var(--fs-xs); color: var(--fg-3); margin-left: 4px;">/ night</span></span>
+                  <span style="font-family: var(--font-display); font-size: var(--fs-lg); font-weight: 400; color: var(--fg);">from \${{ room.pricePerNight }}<span style="font-family: var(--font-sans); font-size: var(--fs-xs); color: var(--fg-3); margin-left: 4px;">/ night</span></span>
                   <a [routerLink]="['/rooms', room.roomId]" style="font-size: var(--fs-sm); font-weight: 500; color: var(--brand); text-decoration: none;">View room →</a>
                 </div>
               </div>

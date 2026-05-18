@@ -70,13 +70,7 @@ public class RoomsController : ControllerBase
         [FromQuery] decimal? minPrice = null,
         [FromQuery] decimal? maxPrice = null)
     {
-        if (!checkIn.HasValue)
-            return BadRequest("Check-in date is required.");
-
-        if (!checkOut.HasValue)
-            return BadRequest("Check-out date is required.");
-
-        if (checkOut <= checkIn)
+        if (checkIn.HasValue && checkOut.HasValue && checkOut <= checkIn)
             return BadRequest("Check-out must be after check-in.");
 
         RoomType? parsedType = null;
