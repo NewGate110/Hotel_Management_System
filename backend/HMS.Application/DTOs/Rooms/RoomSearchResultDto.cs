@@ -14,6 +14,7 @@ public class RoomSearchResultDto
     public int FloorNumber { get; set; }
     public decimal PricePerNight { get; set; }
     public string Description { get; set; } = string.Empty;
+    public string? ImageUrl { get; set; }
 }
 
 public class RoomSearchResponse

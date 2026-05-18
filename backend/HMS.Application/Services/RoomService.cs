@@ -53,6 +53,7 @@ public class RoomService : IRoomService
             FloorNumber  = r.FloorNumber,
             PricePerNight = r.PriceOffPeak,
             Description  = r.Description,
+            ImageUrl     = r.ImageUrl,
         }).ToList();
 
         return new RoomSearchResponse
