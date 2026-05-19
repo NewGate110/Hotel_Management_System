@@ -18,6 +18,11 @@ import { roleDashboardPath } from '../../core/constants/roles';
   standalone: true,
   imports: [RouterOutlet, RouterLink, RouterLinkActive],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+    @media (max-width: 767px) {
+      .mobile-menu-open { background: rgba(14,36,48,0.92); }
+    }
+  `],
   template: `
     <div class="min-h-screen" style="background: var(--bg);">
       <!-- ─── FIXED NAVBAR ─── -->
@@ -27,9 +32,8 @@ import { roleDashboardPath } from '../../core/constants/roles';
             ? 'fixed inset-x-0 top-0 z-30 transition-all duration-300 ease-in-out border-b border-transparent'
             : 'fixed inset-x-0 top-0 z-30 transition-all duration-300 ease-in-out border-b backdrop-blur-xl'
         "
-        [style]="isTransparent() ? '' : 'background: rgba(250,247,242,0.92); border-color: var(--border); box-shadow: var(--shadow-sm);'
-
-        "
+        [class.mobile-menu-open]="mobileOpen() && isTransparent()"
+        [style]="isTransparent() ? '' : 'background: rgba(250,247,242,0.92); border-color: var(--border); box-shadow: var(--shadow-sm);'"
         role="banner"
       >
         <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-[18px]">
@@ -60,7 +64,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
             class="hidden items-center gap-0.5 rounded-full px-2 py-1 text-[13px] transition-all duration-300 md:flex"
             [class]="
               isTransparent()
-                ? 'border border-white/20 bg-white/10 backdrop-blur-sm'
+                ? 'border border-white/30 bg-black/20 backdrop-blur-md'
                 : 'border border-[var(--border)] bg-[var(--surface)]'
             "
             aria-label="Site navigation"
@@ -105,8 +109,8 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 class="hidden rounded-full px-4 py-2 text-[13px] font-medium transition-all duration-200 sm:block"
                 [class]="
                   isTransparent()
-                    ? 'border border-white/30 text-white hover:bg-white/10'
-                    : 'border border-[var(--border-strong)] text-[var(--fg-2)] hover:bg-[var(--sand-100)] hover:text-[var(--fg)]'
+                    ? 'border border-white/30 !text-white hover:bg-white/10'
+                    : 'border border-[var(--border-strong)] text-[var(--fg)] hover:bg-[var(--sand-100)]'
                 "
                 >Dashboard</a
               >
@@ -119,7 +123,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 [class]="
                   isTransparent()
                     ? 'bg-white/15 text-white hover:bg-white/25'
-                    : 'bg-[var(--sand-900)] text-[var(--sand-50)] hover:bg-[var(--sand-800)]'
+                    : 'bg-[var(--sand-900)] !text-[var(--sand-50)] hover:bg-[var(--sand-800)]'
                 "
                 title="Sign out"
               >
@@ -137,7 +141,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 class="hidden rounded-full px-4 py-2 text-[13px] font-medium transition-all duration-200 sm:block"
                 [class]="
                   isTransparent()
-                    ? 'border border-white/30 text-white hover:bg-white/10'
+                    ? 'border border-white/30 !text-white hover:bg-white/10'
                     : 'border border-[var(--border-strong)] text-[var(--fg)] hover:bg-[var(--sand-100)]'
                 "
                 >Sign in</a
@@ -148,7 +152,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 [class]="
                   isTransparent()
                     ? 'bg-white text-[var(--sand-900)] hover:bg-[var(--sand-100)]'
-                    : 'bg-[var(--sand-900)] text-[var(--sand-50)] hover:bg-[var(--sand-800)]'
+                    : 'bg-[var(--sand-900)] !text-[var(--sand-50)] hover:bg-[var(--sand-800)]'
                 "
                 >Register</a
               >
@@ -160,7 +164,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
               (click)="mobileOpen.update((v) => !v)"
               class="ml-1 flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200 md:hidden"
               [class]="
-                isTransparent() ? 'text-white hover:bg-white/10' : 'text-[var(--fg-2)] hover:bg-[var(--sand-100)]'
+                isTransparent() ? '!text-white hover:bg-white/10' : 'text-[var(--fg-2)] hover:bg-[var(--sand-100)]'
               "
               [attr.aria-label]="mobileOpen() ? 'Close menu' : 'Open menu'"
               [attr.aria-expanded]="mobileOpen()"
@@ -179,7 +183,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
             [class]="
               isTransparent()
                 ? 'border-white/10 backdrop-blur-xl'
-                : 'border-[var(--border)] backdrop-blur-xl'
+                : 'border-[var(--border)]'
             "
             [style]="isTransparent() ? 'background: rgba(14,36,48,0.88);' : 'background: rgba(250,247,242,0.96);'"
             aria-label="Mobile navigation"
@@ -226,8 +230,8 @@ import { roleDashboardPath } from '../../core/constants/roles';
                   class="flex-1 rounded-xl py-2.5 text-center text-sm font-medium transition-colors"
                   [class]="
                     isTransparent()
-                      ? 'border border-white/25 text-white hover:bg-white/10'
-                      : 'border border-[var(--border-strong)] text-[var(--fg-2)] hover:bg-[var(--sand-100)] hover:text-[var(--fg)]'
+                      ? 'border border-white/30 !text-white hover:bg-white/10'
+                      : 'border border-[var(--border-strong)] text-[var(--fg)] hover:bg-[var(--sand-100)]'
                   "
                   >Dashboard</a
                 >
@@ -235,7 +239,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                   type="button"
                   (click)="auth.logout()"
                   class="flex-1 rounded-xl py-2.5 text-center text-sm font-semibold transition-colors"
-                  [class]="isTransparent() ? 'bg-white text-[var(--sand-900)]' : 'bg-[var(--sand-900)] text-[var(--sand-50)]'"
+                  [class]="isTransparent() ? 'bg-white/90 text-[var(--sand-900)]' : 'bg-[var(--sand-900)] !text-[var(--sand-50)]'"
                 >
                   Sign out
                 </button>
@@ -245,7 +249,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                   class="flex-1 rounded-xl py-2.5 text-center text-sm font-medium transition-colors"
                   [class]="
                     isTransparent()
-                      ? 'border border-white/25 text-white hover:bg-white/10'
+                      ? 'border border-white/30 !text-white hover:bg-white/10'
                       : 'border border-[var(--border-strong)] text-[var(--fg-2)] hover:bg-[var(--sand-100)] hover:text-[var(--fg)]'
                   "
                   >Sign in</a
@@ -253,7 +257,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 <a
                   routerLink="/register"
                   class="flex-1 rounded-xl py-2.5 text-center text-sm font-semibold transition-colors"
-                  [class]="isTransparent() ? 'bg-white text-[var(--sand-900)]' : 'bg-[var(--sand-900)] text-[var(--sand-50)]'"
+                  [class]="isTransparent() ? 'bg-white/90 text-[var(--sand-900)]' : 'bg-[var(--sand-900)] !text-[var(--sand-50)]'"
                   >Register</a
                 >
               }
@@ -321,11 +325,11 @@ export class PublicLayoutComponent {
     const base = 'rounded-full px-3.5 py-1.5 font-medium transition-all duration-200';
     if (this.isTransparent()) {
       return rla.isActive
-        ? `${base} bg-white/20 text-white`
-        : `${base} text-white/75 hover:text-white hover:bg-white/10`;
+        ? `${base} bg-white/20 !text-white`
+        : `${base} !text-white hover:bg-white/10`;
     }
     return rla.isActive
-      ? `${base} bg-[var(--sand-900)] text-[var(--sand-50)]`
+      ? `${base} bg-[var(--sand-900)] !text-[var(--sand-50)]`
       : `${base} text-[var(--fg-2)] hover:bg-[var(--sand-100)] hover:text-[var(--fg)]`;
   }
 
@@ -333,11 +337,11 @@ export class PublicLayoutComponent {
     const base = 'block rounded-xl px-4 py-2.5 text-sm font-medium transition-colors';
     if (this.isTransparent()) {
       return rla.isActive
-        ? `${base} bg-white/20 text-white font-semibold`
-        : `${base} text-white/75 hover:bg-white/10 hover:text-white`;
+        ? `${base} bg-white/30 !text-white font-semibold`
+        : `${base} !text-white hover:bg-white/10`;
     }
     return rla.isActive
-      ? `${base} bg-[var(--sand-100)] text-[var(--fg)] font-semibold`
+      ? `${base} bg-[var(--sand-900)] !text-[var(--sand-50)] font-semibold`
       : `${base} text-[var(--fg-2)] hover:bg-[var(--bg-alt)] hover:text-[var(--fg)]`;
   }
 }

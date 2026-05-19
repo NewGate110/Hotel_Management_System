@@ -159,10 +159,4 @@ Test coverage: cancellation policy, password policy, pricing policy, auth servic
 
 UML diagrams (Use Case, Class, Sequence) are in `docs/diagrams/` as PlantUML `.puml` files.
 
----
 
-## Authors
-
-- **Student Name:** [Your Name]
-- **Student ID:** [Your Student ID]
-- **Module:** UFCF8S-30-2 Advanced Software Development

@@ -174,6 +174,17 @@ function toYmd(d: Date): string {
           <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" class="results-grid">
             @for (room of results(); track room.roomId) {
               <div class="room-card card-surface" style="overflow: hidden; transition: box-shadow var(--dur-slow) var(--ease-glide);">
+                @if (room.imageUrl) {
+                  <img
+                    [src]="room.imageUrl"
+                    [alt]="room.type"
+                    style="width: 100%; height: 180px; object-fit: cover; display: block;"
+                  />
+                } @else {
+                  <div style="width: 100%; height: 180px; background: var(--sand-100); display: flex; align-items: center; justify-content: center;">
+                    <span class="material-icons-outlined" style="font-size: 40px; color: var(--sand-300);">bed</span>
+                  </div>
+                }
                 <div style="padding: 20px 22px 12px;">
                   <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
                     <div>
