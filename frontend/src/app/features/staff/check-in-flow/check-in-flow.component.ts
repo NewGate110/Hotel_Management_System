@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DatePipe } from '@angular/common';
@@ -56,7 +57,7 @@ import type { BookingDto } from '../../../core/models/booking.models';
           </mat-form-field>
           <mat-checkbox formControlName="verified">Identity verified</mat-checkbox>
         </form>
-        <div class="flex justify-between">
+        <div class="flex items-center justify-between">
           <button mat-button matStepperPrevious type="button">Back</button>
           <button mat-flat-button matStepperNext type="button" [disabled]="verifyForm.invalid"
                   style="background: var(--sand-900); color: var(--sand-50)">
@@ -76,7 +77,7 @@ import type { BookingDto } from '../../../core/models/booking.models';
           }
         </div>
         <mat-checkbox [checked]="keyReady()" (change)="keyReady.set($event.checked)">Key cards encoded</mat-checkbox>
-        <div class="mt-6 flex justify-between">
+        <div class="mt-6 flex items-center justify-between">
           <button mat-button matStepperPrevious type="button">Back</button>
           <button mat-flat-button type="button" [disabled]="submitting()" (click)="submit()"
                   style="background: var(--sand-900); color: var(--sand-50)">

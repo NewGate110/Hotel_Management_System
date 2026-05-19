@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using HMS.Application.DTOs.AuditLogs;
 using HMS.Application.DTOs.Hotels;
 using HMS.Application.DTOs.Rooms;
@@ -43,6 +43,18 @@ public class AdminController : ControllerBase
     {
         var hotels = await _hotelService.GetAllHotelsAsync();
         return Ok(hotels);
+    }
+
+    /// <summary>Creates a new hotel property.</summary>
+    [HttpPost("hotels")]
+    [ProducesResponseType(typeof(HotelDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<HotelDto>> CreateHotel([FromBody] CreateHotelDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        var hotel = await _hotelService.CreateHotelAsync(dto);
+        return CreatedAtAction(nameof(GetHotels), new { }, hotel);
     }
 
     /// <summary>Updates hotel details (name, address, contact info, active flag).</summary>

@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 /** Matches API-serialised `RoomStatus` from the backend. */
 export type RoomStatus = 'Available' | 'Occupied' | 'Cleaning' | 'OutOfService';
 

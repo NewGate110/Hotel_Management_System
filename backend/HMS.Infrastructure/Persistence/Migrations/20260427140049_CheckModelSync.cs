@@ -1,4 +1,5 @@
-﻿using System;
+// Author: S2401265 Ahmed Aslan Ibrahim
+using System;
 using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable

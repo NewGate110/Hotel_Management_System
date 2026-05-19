@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using HMS.Application.Interfaces.Repositories;
 using HMS.Domain.Entities;
 using HMS.Infrastructure.Persistence;
@@ -29,5 +29,12 @@ public class HotelRepository : IHotelRepository
     {
         _db.Hotels.Update(hotel);
         await _db.SaveChangesAsync();
+    }
+
+    public async Task<Hotel> AddAsync(Hotel hotel)
+    {
+        _db.Hotels.Add(hotel);
+        await _db.SaveChangesAsync();
+        return hotel;
     }
 }

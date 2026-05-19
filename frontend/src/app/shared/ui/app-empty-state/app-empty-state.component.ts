@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { MSG } from '../../../core/i18n/ui-messages';
 import { AppButtonComponent } from '../app-button/app-button.component';

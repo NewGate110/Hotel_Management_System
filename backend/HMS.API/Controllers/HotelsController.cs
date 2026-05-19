@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using HMS.Application.DTOs.Hotels;
 using HMS.Application.DTOs.Rooms;
 using HMS.Application.Interfaces.Services;

@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;

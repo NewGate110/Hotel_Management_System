@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatTableModule } from '@angular/material/table';
 import { UsersApiService } from '../../../core/services/users-api.service';

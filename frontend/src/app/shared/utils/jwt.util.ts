@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 export interface JwtPayload {
   sub?: string;
   email?: string;

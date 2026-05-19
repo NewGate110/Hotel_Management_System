@@ -1,9 +1,11 @@
 # Test Evidence — HMS Unit Test Suite
 **Module:** UFCF8S-30-2 Advanced Software Development  
-**Author:** Salaams  
-**Framework:** xUnit 2.9.3 + Moq 4.20.72 (.NET 10)  
-**Run date:** 14 May 2026  
-**Result: 82 passed / 0 failed / 0 skipped — Total time: 0.686 s**
+**Author:** S2401265 Ahmed Aslan Ibrahim  
+**Frameworks:** xUnit 2.9.3 + Moq 4.20.72 (.NET 10) · Vitest 4.1.5 + Angular TestBed (Angular 21)  
+**Run date:** 19 May 2026  
+**Result: 117 passed / 0 failed / 0 skipped**
+- Backend (xUnit): **99 passed** — Total time: 2.43 s
+- Frontend (Vitest): **18 passed** — Total time: 2.61 s
 
 ---
 
@@ -250,26 +252,88 @@ A total of 1 test files matched the specified pattern.
   Passed AuthServiceTests.ChangePassword_ValidChange_UpdatesHashAndTimestamp               [2 ms]
 
 Test Run Successful.
-Total tests: 82
-     Passed: 82
- Total time: 0.6861 Seconds
+Total tests: 99
+     Passed: 99
+ Total time: 2.4294 Seconds
 ```
 
 ---
 
-## 4. Summary
-
-| Test Class | Tests | Result |
-|------------|-------|--------|
-| PricingPolicyTests | 20 | ✅ All passed |
-| CancellationPolicyTests | 10 | ✅ All passed |
-| PasswordPolicyTests | 11 | ✅ All passed |
-| BookingManagementServiceTests | 25 | ✅ All passed |
-| AuthServiceTests | 23 | ✅ All passed |
-| **Total** | **82** | **✅ 82 / 82** |
+## 4. Frontend Tests (Vitest 4.1.5 + Angular TestBed)
 
 **Run command:**
 ```
-cd HotelManagementSystem/backend
-dotnet test HMS.Tests --verbosity normal
+cd HMS/frontend
+npx ng test --watch=false
+```
+
+### 4.1 Test Files
+
+| File | Tests | Result |
+|------|-------|--------|
+| `app.spec.ts` | 2 | ✅ Passed |
+| `core/guards/auth.guard.spec.ts` | 2 | ✅ Passed |
+| `core/services/auth-api.service.spec.ts` | 4 | ✅ Passed |
+| `features/auth/login/login.component.spec.ts` | 6 | ✅ Passed |
+| `features/rooms/room-search/room-search.component.spec.ts` | 4 | ✅ Passed |
+| **Total** | **18** | **✅ 18 / 18** |
+
+### 4.2 Test Descriptions
+
+**auth.guard.spec.ts (2 tests)**
+- `allows authenticated users through`
+- `redirects unauthenticated users to /login`
+
+**auth-api.service.spec.ts (4 tests)**
+- `should be created`
+- `login() POSTs to /api/Auth/login`
+- `logout() POSTs to /api/Auth/logout`
+- `register() POSTs to /api/Auth/register`
+
+**login.component.spec.ts (6 tests)**
+- `creates the component`
+- `form is invalid when empty`
+- `form is valid with correct data`
+- `email field validates format`
+- `calls authService.login on submit`
+- `displays error message on failed login`
+
+**room-search.component.spec.ts (4 tests)**
+- `creates the component`
+- `search() sets dateError when checkOut is not after checkIn`
+- `search() calls roomsApi.searchRooms with form values`
+- `clearFilters() resets hotelName, roomType, minPrice, maxPrice to null`
+
+```
+ Test Files  5 passed (5)
+      Tests  18 passed (18)
+   Duration  2.61s
+```
+
+---
+
+## 5. Summary
+
+| Test Suite | Framework | Tests | Result |
+|------------|-----------|-------|--------|
+| PricingPolicyTests | xUnit + Moq | 20 | ✅ All passed |
+| CancellationPolicyTests | xUnit + Moq | 10 | ✅ All passed |
+| PasswordPolicyTests | xUnit + Moq | 11 | ✅ All passed |
+| BookingManagementServiceTests | xUnit + Moq | 25 | ✅ All passed |
+| AuthServiceTests | xUnit + Moq | 23 | ✅ All passed |
+| JwtTokenServiceTests | xUnit + Moq | 2 | ✅ All passed |
+| ReportServiceTests | xUnit + Moq | 8 | ✅ All passed |
+| Frontend (Angular/Vitest) | Vitest 4.1.5 | 18 | ✅ All passed |
+| **Grand Total** | | **117** | **✅ 117 / 117** |
+
+**Backend run command:**
+```
+cd HMS/backend
+dotnet test HMS.Tests/HMS.Tests.csproj --logger:"console;verbosity=normal"
+```
+
+**Frontend run command:**
+```
+cd HMS/frontend
+npx ng test --watch=false
 ```

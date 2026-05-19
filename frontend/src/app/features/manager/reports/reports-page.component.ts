@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -33,7 +34,7 @@ const STATUS_COLOURS: Record<string, string> = {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-6">
-      <h1 class="text-2xl font-semibold" style="color: var(--fg)">Reports</h1>
+      <h1 class="text-2xl font-semibold text-zinc-900">Reports</h1>
       <form [formGroup]="range" class="flex flex-wrap items-end gap-3">
         <mat-form-field appearance="outline">
           <mat-label>From</mat-label>
@@ -77,30 +78,33 @@ export class ReportsPageComponent {
 
   load(): void {
     const v = this.range.getRawValue();
-    if (!v.from || !v.to) return;
     const from = v.from.toISOString().slice(0, 10);
     const to = v.to.toISOString().slice(0, 10);
     const hid = environment.defaultHotelId;
+
     this.reportsApi.getRevenue(hid, from, to).subscribe((r) => {
       this.revenueChart.set({
         labels: ['Period total'],
         datasets: [{ label: '$', data: [Number(r.totalRevenue)] }],
       });
     });
+
     this.reportsApi.getOccupancy(hid, from, to).subscribe((o) => {
       this.occupancyChart.set({
         labels: ['Occupancy'],
         datasets: [{ label: '%', data: [o.occupancyRate], tension: 0.3 }],
       });
     });
-    // Filtered by checkInDate; bookings where the stay overlaps but starts outside the window are excluded.
+
+    const fromDate = new Date(from);
+    const toDate = new Date(to);
     this.bookingsApi.getByHotel(hid).subscribe((bookings) => {
-      const filtered = bookings.filter((b) => {
-        const d = b.checkInDate.slice(0, 10);
-        return d >= from && d <= to;
+      const inRange = bookings.filter((b) => {
+        const d = new Date(b.checkInDate);
+        return d >= fromDate && d <= toDate;
       });
       const counts: Record<string, number> = {};
-      for (const b of filtered) {
+      for (const b of inRange) {
         counts[b.status] = (counts[b.status] ?? 0) + 1;
       }
       const labels = Object.keys(counts);
@@ -108,7 +112,7 @@ export class ReportsPageComponent {
         labels,
         datasets: [{
           data: labels.map((l) => counts[l]),
-          backgroundColor: labels.map((l) => STATUS_COLOURS[l] ?? '#6b7280'),
+          backgroundColor: labels.map((l) => STATUS_COLOURS[l] ?? '#d4d4d4'),
         }],
       });
     });

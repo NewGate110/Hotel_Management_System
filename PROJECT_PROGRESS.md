@@ -27,11 +27,12 @@ The Grand Plaza Hotel Management System is a full-stack web application managing
 |---|---|
 | Frontend | Angular 21 (standalone components, signal-based reactivity) |
 | Backend | ASP.NET Core 10 Web API |
-| Database | SQLite via Entity Framework Core (code-first, migrations) |
+| Database | PostgreSQL 18.3 via Entity Framework Core (code-first, migrations) |
 | Auth | JWT Bearer — token stored in `HttpOnly; Secure; SameSite=Strict` cookie |
-| Styling | Tailwind CSS + Angular Material |
+| Styling | Tailwind CSS 4.3 + Angular Material |
 | ORM | EF Core with AutoMapper |
 | Password hashing | BCrypt |
+| Containerisation | Docker Compose (frontend + backend + postgres + pgAdmin) |
 
 ---
 
@@ -223,7 +224,18 @@ Angular `roleGuard` reads the `data.roles` array on each route and redirects to 
 - Soft-delete pattern: `User.IsActive` flag (default `true`)
 - `LoginAsync` checks `IsActive` and throws `UnauthorizedAccessException` ("Account deactivated") before password verification
 
-### 5.9 Data Protection
+### 5.9 Delegated Media Permission (`canManageMedia`)
+
+A fine-grained media permission that lets an Admin grant specific `FrontDeskStaff` members the ability to edit room images without full Admin access:
+
+- `StaffUser.CanManageMedia` (bool, DB column, default `false`) is the source of truth
+- On login, `JwtTokenService` includes a `canManageMedia` claim in the JWT **only when `true`** — omitted entirely when false
+- Frontend reads the flag from the login response body, stores in `AuthSession`, and exposes via `AuthService.canManageMedia` signal
+- `PUT /api/admin/rooms/{id}/image` — Admin and HotelManager always allowed; FrontDeskStaff allowed only if their token contains the claim
+- `PATCH /api/admin/staff/{id}/media-permission` — Admin only (toggles the DB flag)
+- `RoomImageEditorComponent` renders only when `canManageMedia()` or user is Admin/HotelManager
+
+### 5.10 Data Protection
 
 - Passwords: BCrypt (never stored in plain text)
 - JWT secret: loaded from `appsettings.json` / environment variable — not committed
@@ -388,8 +400,12 @@ Computed dynamically from `GET /api/users/guests/{id}/stats` — displayed on gu
 | Method | Path | Auth | Description |
 |---|---|---|---|
 | GET | `/hotels` | Admin | All hotels |
+| POST | `/hotels` | Admin | Create a new hotel |
 | PUT | `/hotels/{id}` | Admin | Update hotel details |
+| PUT | `/hotels/{id}/image` | Admin | Update hotel image URL |
 | PUT | `/rooms/{id}/pricing` | Admin | Update room pricing |
+| PUT | `/rooms/{id}/image` | Admin / canManageMedia | Update room image URL |
+| PATCH | `/staff/{id}/media-permission` | Admin | Grant/revoke `canManageMedia` for a staff member |
 | GET | `/staff` | Admin | All staff |
 | GET | `/staff/{id}` | Admin | Staff detail |
 | POST | `/staff` | Admin | Create staff account |
@@ -428,6 +444,7 @@ Computed dynamically from `GET /api/users/guests/{id}/stats` — displayed on gu
 | `AddBookingGuestCount` | 12 May 2026 | Added `GuestCount` column to `Bookings` |
 | `AddPasswordResetTokens` | 14 May 2026 | New `PasswordResetTokens` table |
 | `AddUserIsActive` | 14 May 2026 | Added `IsActive` column to `Users` |
+| `AddImageUrlsAndCanManageMedia` | 15 May 2026 | Added `ImageUrl` to `Hotels` and `Rooms`; `CanManageMedia` bool to `StaffUser` |
 
 ---
 
@@ -438,7 +455,7 @@ Computed dynamically from `GET /api/users/guests/{id}/stats` — displayed on gu
 | **Payment processing** | Simulated — no real payment gateway. Pre-auth on check-in, capture on check-out. `TransactionRef` is a generated string. |
 | **Password reset delivery** | Dev/mock mode — reset token returned in API response body and shown in UI amber box. In production this would be emailed. |
 | **Email notifications** | Not implemented — no SMTP integration. |
-| **Room photos** | Not implemented — spec mentions photos but no file storage solution is included. |
+| **Room / hotel photos** | Implemented via URL-based image fields (`ImageUrl` on both `Hotel` and `Room`). 7 hotels and 37 rooms seeded with Unsplash URLs. Admins and authorised staff can update room images inline via `RoomImageEditorComponent` (`PUT /api/admin/rooms/{id}/image`). Hotel images managed by Admin (`PUT /api/admin/hotels/{id}/image`). |
 | **Preferences / special requests** | Profile page shows a mock "Saved preferences" card — not yet persisted to DB. |
 | **CSAT / Handle time metrics** | Labelled "N/A" on staff performance page — not tracked by the system (no ticket/conversation entity). |
 | **HSTS** | Enforced by ASP.NET Core's `UseHsts()` in production mode (disabled in development). |
@@ -448,4 +465,4 @@ Computed dynamically from `GET /api/users/guests/{id}/stats` — displayed on gu
 
 ---
 
-*Document generated: 14 May 2026*
+*Document last updated: 19 May 2026*

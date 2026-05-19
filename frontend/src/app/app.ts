@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { InactivityService } from './core/auth/inactivity.service';

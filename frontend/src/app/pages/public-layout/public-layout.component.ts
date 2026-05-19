@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import {
   ChangeDetectionStrategy,
   Component,
@@ -216,7 +217,7 @@ import { roleDashboardPath } from '../../core/constants/roles';
             </div>
 
             <div
-              class="mt-3 flex gap-2 border-t pt-3"
+              class="mt-3 flex flex-wrap gap-2 border-t pt-3"
               [class]="isTransparent() ? 'border-white/10' : 'border-[var(--border)]'"
             >
               @if (auth.isAuthenticated()) {

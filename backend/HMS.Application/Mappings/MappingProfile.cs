@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using AutoMapper;
 using HMS.Application.DTOs.Bookings;
 using HMS.Application.DTOs.Hotels;

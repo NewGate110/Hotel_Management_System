@@ -1,0 +1,94 @@
+HOW TO RUN — Grand Plaza Hotel Management System (HMS)
+Module: UFCF8S-30-2 Advanced Software Development, UWE Bristol
+======================================================================
+
+PREREQUISITES
+-------------
+- Docker Desktop (https://www.docker.com/products/docker-desktop/) with Docker Compose
+- Git (to clone the repository)
+- Ports 4200, 5050, 5101, 5433 must be free on your machine
+
+RECOMMENDED: DOCKER COMPOSE (full stack, one command)
+------------------------------------------------------
+1. Open a terminal and navigate to the HMS/ directory:
+
+   cd HMS
+
+2. Copy the environment file:
+
+   cp .env.example .env
+
+3. Start all services:
+
+   docker-compose up -d
+
+4. Wait approximately 20-30 seconds for containers to become healthy.
+   Verify status:
+
+   docker-compose ps
+
+   All four services should show "running" or "healthy":
+     hms-backend   (API)
+     hms-frontend  (Angular + nginx)
+     hms-postgres  (PostgreSQL database)
+     hms-pgadmin   (pgAdmin web UI)
+
+5. Access the application:
+
+   Frontend (main app):  http://localhost:4200
+   Backend Swagger UI:   http://localhost:5101/swagger
+   pgAdmin:              http://localhost:5050
+   PostgreSQL direct:    localhost:5433
+
+DEMO CREDENTIALS (seeded automatically on first run)
+----------------------------------------------------
+  Role: Admin        | Email: admin@grandplaza.com     | Password: Admin@1234!
+  Role: Guest        | Email: guest@example.com        | Password: Guest@1234!
+  Role: Staff        | Email: staff@grandplaza.com     | Password: Staff@1234!
+  Role: Manager      | Email: manager@grandplaza.com   | Password: Manager@1234!
+
+STOPPING THE STACK
+------------------
+   docker-compose down           # Stop containers (preserves database)
+   docker-compose down -v        # Stop and delete all data (full reset)
+
+REBUILDING AFTER CODE CHANGES
+------------------------------
+   docker-compose build --no-cache
+   docker-compose up -d
+
+======================================================================
+ALTERNATIVE: LOCAL DEVELOPMENT (without Docker)
+
+BACKEND (.NET 10 required)
+--------------------------
+1. Install .NET 10 SDK from https://dotnet.microsoft.com/download
+2. Set up a PostgreSQL instance and update connection string in:
+   HMS/backend/HMS.API/appsettings.Development.json
+3. Run:
+   cd HMS/backend
+   dotnet restore
+   cd HMS.API && dotnet run
+   API available at: http://localhost:5001
+
+FRONTEND (Node.js 20+ required)
+--------------------------------
+1. Install Node.js from https://nodejs.org/
+2. Run:
+   cd HMS/frontend
+   npm install
+   ng serve
+   App available at: http://localhost:4200
+
+======================================================================
+RUNNING TESTS
+
+Backend unit tests (99 tests):
+   cd HMS/backend
+   dotnet test HMS.Tests/HMS.Tests.csproj --logger:"console;verbosity=normal"
+
+Frontend unit tests (18 tests):
+   cd HMS/frontend
+   npx ng test --watch=false
+
+======================================================================

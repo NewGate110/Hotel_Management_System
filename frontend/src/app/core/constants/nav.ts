@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import type { UserRole } from './roles';
 import type { SidebarNavItem } from '../../shared/ui/app-sidebar/app-sidebar.component';
 

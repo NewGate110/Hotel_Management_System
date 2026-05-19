@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
 import { NgClass } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -47,7 +48,7 @@ interface DemoUser { role: string; name: string; email: string; password: string
 
       <!-- Right: form -->
       <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 48px 24px; background: var(--bg);">
-        <div style="width: 100%; max-width: 380px;">
+        <div style="width: 100%; max-width: 380px; width: 100%;">
           <h1 style="font-family: var(--font-display); font-size: 36px; font-weight: 300; letter-spacing: -0.02em; color: var(--fg); margin: 0;">{{ msg.loginTitle }}</h1>
           <p style="margin-top: 6px; font-size: var(--fs-sm); color: var(--fg-3);">Use your Grand Plaza credentials</p>
 
@@ -98,6 +99,7 @@ interface DemoUser { role: string; name: string; email: string; password: string
           <!-- Click-away backdrop -->
           <div
             class="fixed inset-0"
+            style="z-index: 49;"
             (click)="demoOpen.set(false)"
             aria-hidden="true"
           ></div>
@@ -105,7 +107,7 @@ interface DemoUser { role: string; name: string; email: string; password: string
           <!-- Panel -->
           <div
             class="absolute bottom-full right-0 mb-3 w-64 overflow-hidden"
-            style="border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-xl);"
+            style="border-radius: var(--r-lg); border: 1px solid var(--border); background: var(--surface); box-shadow: var(--shadow-xl); z-index: 50;"
             role="dialog"
             aria-modal="true"
             aria-label="Select a demo account"

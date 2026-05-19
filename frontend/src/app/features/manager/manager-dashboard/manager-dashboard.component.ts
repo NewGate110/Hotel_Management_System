@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,7 +29,7 @@ import type { ChartConfiguration } from 'chart.js';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-6">
-      <h1 class="text-2xl font-semibold" style="color: var(--fg)">Management dashboard</h1>
+      <h1 class="text-2xl font-semibold text-zinc-900">Management dashboard</h1>
       <form [formGroup]="range" class="flex flex-wrap items-end gap-3">
         <mat-form-field appearance="outline">
           <mat-label>From</mat-label>
@@ -44,7 +45,7 @@ import type { ChartConfiguration } from 'chart.js';
         </mat-form-field>
         <app-button variant="primary" type="button" (clicked)="load()">Apply range</app-button>
       </form>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <app-stat-card label="Occupancy" [value]="occPct()" hint="Selected window" />
         <app-stat-card label="ADR" [value]="'$' + adr()" hint="Revenue per booking" />
         <app-stat-card label="RevPAR" [value]="'$' + revpar()" hint="Revenue per room" />
@@ -56,7 +57,7 @@ import type { ChartConfiguration } from 'chart.js';
           <app-chart-card title="Occupancy trend" [type]="'line'" [data]="occChartData()" />
         </div>
       } @placeholder {
-        <p class="text-sm" style="color: var(--fg-3)">Preparing charts…</p>
+        <p class="text-sm text-zinc-500">Preparing charts…</p>
       }
     </div>
   `,
@@ -98,6 +99,7 @@ export class ManagerDashboardComponent {
     const from = toYmd(v.from);
     const to = toYmd(v.to);
     const hid = environment.defaultHotelId;
+
     this.reportsApi.getOccupancy(hid, from, to).subscribe((o) => {
       this.occ.set(o);
       this.occPct.set(`${o.occupancyRate.toFixed(1)}%`);
@@ -106,30 +108,28 @@ export class ManagerDashboardComponent {
         datasets: [{ label: 'Occupancy %', data: [o.occupancyRate], tension: 0.3 }],
       });
     });
+
     this.reportsApi.getRevenue(hid, from, to).subscribe((r) => {
       this.rev.set(r);
       const adrVal =
         r.totalBookings > 0 ? (Number(r.totalRevenue) / r.totalBookings).toFixed(0) : '0';
       this.adr.set(adrVal);
       const rooms = this.occ()?.totalRooms ?? 1;
-      const revparVal = (Number(r.totalRevenue) / rooms).toFixed(0);
-      this.revpar.set(revparVal);
+      this.revpar.set((Number(r.totalRevenue) / rooms).toFixed(0));
       this.revChartData.set({
         labels: [`${from} → ${to}`],
         datasets: [{ label: 'Revenue $', data: [Number(r.totalRevenue)] }],
       });
     });
-    // Fetches all bookings; filtered client-side by date range since the endpoint has no date params.
+
     this.bookingsApi.getByHotel(hid).subscribe((bookings) => {
-      const fromDate = v.from;
-      const toDate = v.to;
+      const fromDate = new Date(from);
+      const toDate = new Date(to);
       const count = bookings.filter((b) => {
-        if (b.status !== 'Cancelled') return false;
         const checkIn = new Date(b.checkInDate);
-        return checkIn >= fromDate && checkIn <= toDate;
+        return b.status === 'Cancelled' && checkIn >= fromDate && checkIn <= toDate;
       }).length;
       this.cancellations.set(String(count));
     });
   }
-
 }

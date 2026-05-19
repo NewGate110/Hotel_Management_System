@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using HMS.Application.DTOs.Services;
 
 namespace HMS.Application.Interfaces.Services;

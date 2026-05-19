@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 export type UserRole = 'Guest' | 'FrontDeskStaff' | 'HotelManager' | 'Admin';
 
 export const USER_ROLES: readonly UserRole[] = [

@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import {
   ChangeDetectionStrategy, ChangeDetectorRef, Component, Inject, OnInit,
   inject, signal,
@@ -167,6 +168,7 @@ export class StaffDialogComponent {
           } @else if (allStaff().length === 0) {
             <app-empty-state icon="badge" title="No staff accounts" hint="Use 'Create staff' to add the first account." />
           } @else {
+            <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
             <app-table class="mt-4 block">
               <table mat-table [dataSource]="pagedStaff()" class="w-full">
                 <ng-container matColumnDef="name">
@@ -253,6 +255,7 @@ export class StaffDialogComponent {
                 <tr mat-row *matRowDef="let row; columns: staffCols"></tr>
               </table>
             </app-table>
+            </div>
             <app-pagination
               [length]="allStaff().length"
               [pageSize]="staffPageSize()"
@@ -271,6 +274,7 @@ export class StaffDialogComponent {
           } @else if (allGuests().length === 0) {
             <app-empty-state icon="people_outline" title="No guest accounts" hint="Guests appear here after they register." />
           } @else {
+            <div style="overflow-x: auto; -webkit-overflow-scrolling: touch;">
             <app-table class="mt-4 block">
               <table mat-table [dataSource]="pagedGuests()" class="w-full">
                 <ng-container matColumnDef="name">
@@ -321,6 +325,7 @@ export class StaffDialogComponent {
                 <tr mat-row *matRowDef="let row; columns: guestCols"></tr>
               </table>
             </app-table>
+            </div>
             <app-pagination
               [length]="allGuests().length"
               [pageSize]="guestPageSize()"

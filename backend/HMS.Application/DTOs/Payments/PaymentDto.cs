@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 namespace HMS.Application.DTOs.Payments;
 
 public class PaymentDto

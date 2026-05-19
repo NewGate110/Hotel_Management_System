@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Individual Report — Ahmed Aslan Ibrahim</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.65;
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 56px;
+    }
+    @media print {
+      body { padding: 0; max-width: 100%; }
+    }
+    header { margin-bottom: 36px; border-bottom: 2px solid #1a1a1a; padding-bottom: 16px; }
+    header h1 { font-size: 20pt; font-weight: 700; margin-bottom: 4px; }
+    header .meta { font-size: 9.5pt; color: #555; margin-top: 6px; }
+    h2 { font-size: 13pt; font-weight: 700; margin: 28px 0 8px; border-left: 3px solid #1a6fd4; padding-left: 10px; }
+    h3 { font-size: 11pt; font-weight: 600; margin: 18px 0 5px; }
+    p { margin-bottom: 10px; }
+    ul { margin: 6px 0 10px 20px; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; font-size: 10pt; }
+    th { background: #f0f4fa; text-align: left; padding: 7px 10px; border: 1px solid #ccd; font-weight: 600; }
+    td { padding: 6px 10px; border: 1px solid #dde; vertical-align: top; }
+    tr:nth-child(even) td { background: #fafbfc; }
+    code { font-family: 'JetBrains Mono', 'Courier New', monospace; font-size: 9.5pt; background: #f4f6fa; padding: 1px 5px; border-radius: 3px; }
+    .word-count { font-size: 9pt; color: #888; text-align: right; margin-top: 32px; border-top: 1px solid #eee; padding-top: 8px; }
+    blockquote { border-left: 3px solid #ccc; padding-left: 14px; color: #444; font-style: italic; margin: 12px 0; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Individual Reflective Report</h1>
+  <p style="font-size:12pt; font-weight:500; margin-top:4px;">Grand Plaza Hotel Management System</p>
+  <div class="meta">
+    <span><strong>Module:</strong> UFCF8S-30-2 Advanced Software Development, UWE Bristol</span><br/>
+    <span><strong>Student:</strong> Ahmed Aslan Ibrahim &nbsp;|&nbsp; <strong>ID:</strong> S2401265 &nbsp;|&nbsp; <strong>Date:</strong> 19 May 2026</span>
+  </div>
+</header>
+
+<h2>1. Personal Contribution</h2>
+<p>
+  I designed and implemented the Grand Plaza HMS in full, taking sole ownership of every layer of the stack. The system spans a .NET 10 / ASP.NET Core REST API structured in four Clean Architecture layers (Domain, Application, Infrastructure, API), an Angular 21 single-page application using standalone components and signal-based reactivity, a PostgreSQL 18.3 database managed by EF Core migrations, and a Docker Compose environment that starts the complete system with a single command.
+</p>
+<p>
+  On the backend I designed the domain model from scratch — thirteen EF Core entities covering hotels, rooms, bookings, payments, invoices, ancillary services, and a multi-role user hierarchy — and wrote the business logic for pricing, cancellation fees, and password policy as standalone, testable policy classes. Ninety-nine xUnit unit tests cover all three policy classes, the authentication service, and the booking management service; repositories are mocked throughout so tests run without a database.
+</p>
+<p>
+  On the frontend I built the complete Angular application: public pages (landing, hotel listing, hotel detail, room search, room detail), a four-role authenticated dashboard (Guest, FrontDeskStaff, HotelManager, Admin), an embedded multi-step booking wizard, role-based lazy-loaded feature modules, and a bespoke design system — Azure Shores — defined entirely through CSS custom properties. I also designed and seeded seven hotels and thirty-seven rooms with realistic images sourced from Unsplash.
+</p>
+
+<h2>2. Technical Challenges and How I Resolved Them</h2>
+
+<h3>Clean Architecture boundary enforcement</h3>
+<p>
+  The Clean Architecture pattern requires that the Domain layer has no outward dependencies, yet EF Core navigation properties tend to pull infrastructure concerns inward. I resolved this by defining all repository interfaces in the Domain layer and all EF Core <code>DbSet</code> configurations in <code>HmsDbContext</code> within Infrastructure, with AutoMapper profiles in the Application layer translating between domain entities and DTOs. This kept the domain completely framework-free and enabled the mock-based unit testing strategy.
+</p>
+
+<h3>JWT in an HttpOnly cookie alongside a JS-readable session</h3>
+<p>
+  A requirement for security was to store the JWT in an HttpOnly cookie (inaccessible to JavaScript) while still letting Angular know the user's role and permissions. The solution was a dual-channel approach: the backend sets the cookie <em>and</em> returns a JSON <code>LoginResponseDto</code> body containing the session properties (role, userId, fullName, canManageMedia). Angular stores this body in <code>sessionStorage</code> via <code>TokenService</code> and exposes it as Angular computed signals. This preserved the XSS protection of HttpOnly cookies while giving the frontend the data it needs for route guards and conditional rendering.
+</p>
+
+<h3>Delegated media permissions without role escalation</h3>
+<p>
+  The requirement to let specific FrontDeskStaff edit room images without granting them full admin rights could not be satisfied by the existing role enum alone. I introduced a <code>CanManageMedia</code> boolean on <code>StaffUser</code>, included it as a conditional JWT claim (present only when true), and added an Admin-only PATCH endpoint to toggle it per staff member. The Angular auth service reads the claim from the login response and exposes it as a <code>canManageMedia()</code> signal. This avoided role proliferation and followed the principle of least privilege.
+</p>
+
+<h3>EF Core model snapshot consistency</h3>
+<p>
+  Adding the <code>CanManageMedia</code> column surfaced an EF Core edge case: the migration correctly set <code>DEFAULT FALSE</code> in SQL but the model snapshot did not include the <code>HasDefaultValue(false)</code> fluent API call, causing a <code>PendingModelChangesWarning</code> on startup. The fix required adding an explicit <code>HasDefaultValue(false)</code> call in <code>OnModelCreating</code> to match what the snapshot expected. This taught me the importance of keeping fluent API configuration and migration snapshots in lock-step.
+</p>
+
+<h2>3. Reflection on Learning</h2>
+<p>
+  Building this system consolidated and extended my understanding in three main areas.
+</p>
+<p>
+  <strong>Object-oriented design at scale.</strong> The project put SOLID principles into practice beyond the theoretical. The Dependency Inversion Principle was enforced architecturally: high-level modules (Application services) depend only on interfaces defined in the Domain; all concrete implementations (EF Core repositories, JWT generator, BCrypt hasher) live in Infrastructure. This meant I could write 99 unit tests that mock every external dependency without ever touching a database, a file system, or the clock.
+</p>
+<p>
+  <strong>Angular signals and reactive patterns.</strong> Angular 21's signal-based reactivity model — <code>signal()</code>, <code>computed()</code>, <code>toSignal()</code> — is a significant departure from the RxJS-only patterns I had used previously. Learning to derive UI state from signals rather than BehaviourSubjects made the component templates simpler and change detection substantially faster, but required rethinking how to propagate state across components (answer: shared services holding signals, not event emitters).
+</p>
+<p>
+  <strong>CSS architecture for design systems.</strong> Building Azure Shores taught me that a design system is not just a palette — it is a contract. Every component must reference only the semantic tokens (<code>--fg</code>, <code>--surface</code>, <code>--brand</code>) rather than raw colour values. When I audited the codebase late in the project and found Tailwind <code>zinc-*</code> classes mixed with token-based styles, the inconsistency was immediately visible as a maintenance risk. I replaced all hardcoded colours with tokens in a single focused commit, which was only possible because the token contract was well-defined from the start.
+</p>
+
+<h2>4. Emerging Technologies</h2>
+<p>
+  Two technology choices in this project represent relatively recent advances worth reflecting on.
+</p>
+<p>
+  <strong>.NET 10 and C# 13.</strong> .NET 10 (preview at time of writing) ships with primary constructors for all class types, collection expressions, and faster Span-based string operations. I used primary constructors throughout the Clean Architecture layers to reduce boilerplate: service constructors declare their dependencies inline rather than as separate field assignments. The performance improvements in the ASP.NET Core request pipeline (reduced allocations, faster JSON serialisation via <code>System.Text.Json</code> source generators) are particularly relevant to a high-throughput booking API.
+</p>
+<p>
+  <strong>Angular 21 signals.</strong> Signals represent a fundamental shift in Angular's reactivity model away from Zone.js-based change detection toward a pull-based fine-grained reactivity graph similar to Solid.js. This enables <code>ChangeDetectionStrategy.OnPush</code> components with true signal-driven updates, removing the need to mark views dirty manually. The interop layer (<code>toSignal</code>, <code>takeUntilDestroyed</code>) allows gradual migration from RxJS without rewriting existing services, which I leveraged for services that still use HTTP observables internally but expose their state as signals at the component boundary.
+</p>
+
+<h2>5. Conclusion</h2>
+<p>
+  Building the Grand Plaza HMS end-to-end as a solo project required sustained application of advanced software engineering principles: Clean Architecture, TDD, iterative delivery, and a coherent design system. The most valuable lesson was that architectural discipline — enforced through dependency direction, interface-first design, and token-based styling — pays off in direct proportion to the complexity of the system. Every time a requirement changed (the vocabulary rebrand, the delegated media permission, the alignment audit), the change was localised to a single layer with no ripple effects, which would not have been possible without that foundation.
+</p>
+
+<div class="word-count">Word count: approx. 980</div>
+
+</body>
+</html>

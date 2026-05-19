@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Agile Development Report — Grand Plaza HMS</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Inter', Arial, sans-serif;
+      font-size: 11pt;
+      line-height: 1.65;
+      color: #1a1a1a;
+      background: #fff;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 48px 56px;
+    }
+    @media print {
+      body { padding: 0; max-width: 100%; }
+      .no-print { display: none; }
+    }
+    header { margin-bottom: 36px; border-bottom: 2px solid #1a1a1a; padding-bottom: 16px; }
+    header h1 { font-size: 20pt; font-weight: 700; margin-bottom: 4px; }
+    header .meta { font-size: 9.5pt; color: #555; margin-top: 6px; }
+    header .meta span { margin-right: 24px; }
+    h2 { font-size: 13pt; font-weight: 700; margin: 28px 0 8px; border-left: 3px solid #1a6fd4; padding-left: 10px; }
+    h3 { font-size: 11pt; font-weight: 600; margin: 18px 0 5px; }
+    p { margin-bottom: 10px; }
+    ul { margin: 6px 0 10px 20px; }
+    li { margin-bottom: 4px; }
+    table { width: 100%; border-collapse: collapse; margin: 12px 0 18px; font-size: 10pt; }
+    th { background: #f0f4fa; text-align: left; padding: 7px 10px; border: 1px solid #ccd; font-weight: 600; }
+    td { padding: 6px 10px; border: 1px solid #dde; vertical-align: top; }
+    tr:nth-child(even) td { background: #fafbfc; }
+    .tag { display: inline-block; font-size: 8.5pt; background: #e8f0fe; color: #1a56a0; padding: 1px 7px; border-radius: 10px; margin-right: 4px; }
+    .word-count { font-size: 9pt; color: #888; text-align: right; margin-top: 32px; border-top: 1px solid #eee; padding-top: 8px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Agile Development Report</h1>
+  <p style="font-size:12pt; font-weight:500; margin-top:4px;">Grand Plaza Hotel Management System</p>
+  <div class="meta">
+    <span><strong>Module:</strong> UFCF8S-30-2 Advanced Software Development, UWE Bristol</span><br/>
+    <span><strong>Student:</strong> Ahmed Aslan Ibrahim &nbsp;|&nbsp; <strong>ID:</strong> S2401265 &nbsp;|&nbsp; <strong>Date:</strong> 19 May 2026</span>
+  </div>
+</header>
+
+<h2>1. Methodology Adopted</h2>
+<p>
+  The Grand Plaza HMS was developed using an iterative, sprint-based approach inspired by Scrum. The project was divided into three time-boxed sprints of approximately one to two days each, with a short backlog-refinement phase before development began. Because this was a solo project, formal ceremonies such as daily stand-ups were replaced by end-of-sprint self-retrospectives captured as commit messages and updated documentation. Kanban-style task tracking was used informally within each sprint to visualise work-in-progress limits and avoid multitasking across architectural layers.
+</p>
+<p>
+  Test-Driven Development (TDD) was applied throughout the backend layer: failing unit tests were written first for all business-rule classes (<code>CancellationPolicy</code>, <code>PricingPolicy</code>, <code>PasswordPolicy</code>) and service methods before any production code was committed. This ensured the regression safety net was in place before any refactoring or feature addition.
+</p>
+
+<h2>2. Sprint Overview</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>Sprint</th>
+      <th>Date</th>
+      <th>Goal</th>
+      <th>Key Deliverables</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Sprint 0</strong><br/><em>Foundation</em></td>
+      <td>14–15 May</td>
+      <td>Establish clean architecture and working CI skeleton</td>
+      <td>Domain entities, EF Core migrations, JWT auth, DataSeeder, Angular 21 shell with role-based routing, Docker Compose</td>
+    </tr>
+    <tr>
+      <td><strong>Sprint 1</strong><br/><em>Core Features</em></td>
+      <td>15–16 May</td>
+      <td>Deliver all four user roles end-to-end</td>
+      <td>Guest booking wizard, FrontDeskStaff check-in/out flow, Manager reports, Admin user management and hotel config, 99 xUnit tests</td>
+    </tr>
+    <tr>
+      <td><strong>Sprint 2</strong><br/><em>Enrichment</em></td>
+      <td>16 May</td>
+      <td>Hotel imagery, permission model, design polish</td>
+      <td>ImageUrl on Hotel/Room, CanManageMedia JWT claim, hotel listing and detail pages rebuilt with image heroes, booking wizard room cards, Azure Shores token cleanup</td>
+    </tr>
+    <tr>
+      <td><strong>Sprint 3</strong><br/><em>QA &amp; Delivery</em></td>
+      <td>17–18 May</td>
+      <td>Zero known regressions, submission-ready artefacts</td>
+      <td>26 responsive-alignment fixes (P1–P3), 18 Angular unit tests, HOW_TO_RUN.txt, TestEvidence.md, DEPENDENCIES.txt, source zip</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2>3. Backlog and Prioritisation</h2>
+<p>
+  User stories were written at the start of Sprint 0 and mapped to the four roles defined in the assessment brief. Stories were sized using a simple three-point scale (small / medium / large) and assigned to sprints by value-to-effort ratio. High-value, low-risk stories such as authentication and room search shipped in Sprint 0 and Sprint 1, while lower-priority polish items (image heroes, delegated media permissions) were deferred to Sprint 2 and kept out of the critical path.
+</p>
+<p>
+  The backlog was maintained as a plain markdown plan file (<code>docs/superpowers/plans/</code>). Each item carried a clear definition of done: a passing test, a working UI route, and a merged commit. This prevented scope creep — if a story could not be verified end-to-end by the sprint close, it was pushed to the next sprint rather than shipped incomplete.
+</p>
+
+<h2>4. Iterative Feedback and Adaptation</h2>
+<p>
+  Several requirements evolved during development, demonstrating the value of iterative delivery:
+</p>
+<ul>
+  <li><strong>Vocabulary rebrand (Sprint 1 → Sprint 2):</strong> The initial domain model used "resort" terminology. A mid-project review identified a mismatch with the hotel management context; a targeted refactoring commit (<code>refactor: rebrand resort theme to hotel</code>) corrected all enum values, seeder text, and UI labels with zero database migration needed because only the C# identifiers changed, not the underlying integer values.</li>
+  <li><strong>Delegated media permission (Sprint 2):</strong> An original requirement for Admin-only image management was extended after review to allow specific FrontDeskStaff members to edit room images without granting full admin access. The <code>CanManageMedia</code> flag was added to the database, propagated through the JWT as a conditional claim, and surfaced in the Angular auth service as a computed signal — all in a single coherent feature branch.</li>
+  <li><strong>Alignment audit (Sprint 3):</strong> A systematic visual audit against the Azure Shores design system identified 26 layout defects (broken card heights, unresponsive tables, z-index stacking bugs). These were triaged by severity and resolved in order without touching business logic, showing clean separation between the UI layer and the application core.</li>
+</ul>
+
+<h2>5. Definition of Done</h2>
+<p>
+  A story was considered done when all of the following conditions were met:
+</p>
+<ul>
+  <li>All backend business logic covered by at least one unit test (TDD — test written first).</li>
+  <li>API endpoint reachable via Swagger and returning expected HTTP status codes.</li>
+  <li>Angular route loads without console errors in the Docker-built bundle.</li>
+  <li>No hardcoded colours; all styles reference Azure Shores design tokens.</li>
+  <li>Author header (<code>// Author: S2401265 Ahmed Aslan Ibrahim</code>) present in every modified source file.</li>
+  <li>Commit message follows conventional-commits format and references the story.</li>
+</ul>
+
+<h2>6. Retrospective Summary</h2>
+<p>
+  The iterative approach proved effective for a full-stack solo project. Keeping sprints short (one to two days) forced prioritisation and prevented the accumulation of integration debt. The main retrospective learning across sprints was the importance of verifying compiled Angular output in the Docker bundle rather than relying on the development server alone: several CSS properties that appeared correct locally compiled to different attribute forms in the production bundle, and bundle-level grep verification became a standard part of the Sprint 3 definition of done.
+</p>
+<p>
+  If the project were repeated, Sprint 0 would include a visual design token audit before any component work began, reducing the 26-item alignment backlog that accumulated by Sprint 3.
+</p>
+
+<div class="word-count">Word count: approx. 670</div>
+
+</body>
+</html>

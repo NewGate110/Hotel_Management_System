@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -71,7 +72,7 @@ import { ShellFooterComponent } from '../footer/shell-footer.component';
                 <span class="material-icons-outlined">menu</span>
               </button>
             }
-            <div class="min-w-0">
+            <div class="min-w-0" style="overflow: hidden;">
               <app-breadcrumb [items]="breadcrumbs()" />
             </div>
           </div>
@@ -105,9 +106,10 @@ import { ShellFooterComponent } from '../footer/shell-footer.component';
       </div>
       @if (notifOpen()) {
         <div
-          class="fixed inset-0 z-40 bg-black/40"
+          class="fixed inset-0 bg-black/40"
           role="presentation"
           (click)="notifOpen.set(false)"
+          style="z-index: 49;"
         ></div>
         <aside
           class="fixed right-0 top-0 z-50 flex h-full w-full max-w-sm flex-col"

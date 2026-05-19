@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import type { UserRole } from '../constants/roles';
 
 export interface GuestUserDto {
