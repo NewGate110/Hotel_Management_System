@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { Injectable, inject, type Type } from '@angular/core';
 import { MatDialog, type MatDialogConfig } from '@angular/material/dialog';
 import type { Observable } from 'rxjs';

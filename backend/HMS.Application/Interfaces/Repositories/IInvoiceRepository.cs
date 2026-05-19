@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using HMS.Domain.Entities;
 
 namespace HMS.Application.Interfaces.Repositories;

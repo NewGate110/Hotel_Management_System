@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 /**
  * authInterceptor — attaches withCredentials: true to every API request so the
  * browser automatically includes the HttpOnly 'hms.auth' cookie.  No token is

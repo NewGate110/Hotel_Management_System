@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 /**
  * PasswordRecoveryService — thin wrapper around AuthApiService for the
  * forgot-password / reset-password flows.

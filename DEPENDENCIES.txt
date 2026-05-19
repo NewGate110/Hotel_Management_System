@@ -1,0 +1,84 @@
+DEPENDENCIES — Grand Plaza Hotel Management System
+Module: UFCF8S-30-2 Advanced Software Development, UWE Bristol
+Author: S2401265 Ahmed Aslan Ibrahim
+======================================================================
+
+RUNTIME REQUIREMENTS
+--------------------
+Docker Desktop        (recommended — single-command startup)
+  OR:
+  Node.js             v24.15.0
+  npm                 v11.12.1
+  .NET SDK            10.0.202
+  PostgreSQL          18.3
+
+======================================================================
+BACKEND — NuGet Packages (.NET 10)
+======================================================================
+
+HMS.API
+  Microsoft.AspNetCore.Authentication.JwtBearer   10.0.0
+  Microsoft.AspNetCore.OpenApi                    10.0.6
+  Microsoft.EntityFrameworkCore.Design            10.0.7
+  Swashbuckle.AspNetCore                          10.1.7
+
+HMS.Infrastructure
+  BCrypt.Net-Next                                 4.0.3
+  Npgsql.EntityFrameworkCore.PostgreSQL           10.0.1
+  System.IdentityModel.Tokens.Jwt                 8.9.0
+
+HMS.Application
+  AutoMapper                                      (transitive via Infrastructure)
+  Microsoft.EntityFrameworkCore                   (transitive)
+
+HMS.Tests
+  coverlet.collector                              6.0.4
+  Microsoft.NET.Test.Sdk                          17.14.1
+  Moq                                             4.20.72
+  xunit                                           2.9.3
+  xunit.runner.visualstudio                       3.1.4
+
+Restore command: cd HMS/backend && dotnet restore
+
+======================================================================
+FRONTEND — npm Packages (Node 24 / Angular 21)
+======================================================================
+
+Runtime dependencies (package.json → dependencies):
+  @angular/animations                             ^21.2.10
+  @angular/cdk                                    ^21.2.10
+  @angular/common                                 ^21.2.10
+  @angular/compiler                               ^21.2.10
+  @angular/core                                   ^21.2.10
+  @angular/forms                                  ^21.2.10
+  @angular/material                               ^21.2.10
+  @angular/platform-browser                       ^21.2.10
+  @angular/router                                 ^21.2.10
+  chart.js                                        ^4.5.1
+  ng2-charts                                      ^10.0.0
+  rxjs                                            ~7.8.0
+  tslib                                           ^2.3.0
+
+Development dependencies (package.json → devDependencies):
+  @angular/build                                  ^21.2.8
+  @angular/cli                                    ^21.2.8
+  @angular/compiler-cli                           ^21.2.10
+  @tailwindcss/postcss                            ^4.3.0
+  jsdom                                           ^28.0.0
+  postcss                                         ^8.5.14
+  prettier                                        ^3.8.1
+  tailwindcss                                     ^4.3.0
+  typescript                                      ~5.9.2
+  vitest                                          ^4.0.8
+
+Install command: cd HMS/frontend && npm install
+
+======================================================================
+STARTING THE SYSTEM
+======================================================================
+
+Recommended (Docker):
+  cd HMS
+  docker-compose up -d
+
+See HOW_TO_RUN.txt for full instructions including demo credentials.

@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms';
@@ -175,7 +176,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                 <!-- Booking wizard (Guest) -->
 
                 <!-- Step indicators -->
-                <div class="mb-5 flex items-center" role="list" aria-label="Booking steps">
+                <div class="mb-5 flex items-center flex-wrap gap-y-2" role="list" aria-label="Booking steps">
                   @for (s of [1, 2, 3]; track s) {
                     <div class="flex items-center" role="listitem">
                       <div
@@ -187,7 +188,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                       >
                         {{ s }}
                       </div>
-                      <span class="ml-1 hidden text-xs text-zinc-400 sm:inline">
+                      <span class="ml-1 hidden text-xs text-zinc-400 sm:inline" style="white-space: nowrap;">
                         @if (s === 1) {
                           Dates
                         } @else if (s === 2) {
@@ -271,13 +272,13 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                       } @else if (availableRooms().length === 0) {
                         <p class="text-xs" style="color: var(--fg-3);">No rooms available for these dates.</p>
                       } @else {
-                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;">
+                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; align-items: stretch;">
                           @for (ar of availableRooms(); track ar.id) {
                             <div
                               role="radio"
                               [attr.aria-checked]="selectedRoomId() === ar.id"
                               tabindex="0"
-                              style="border-radius: var(--r-lg); overflow: hidden; cursor: pointer; transition: box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);"
+                              style="border-radius: var(--r-lg); overflow: hidden; cursor: pointer; transition: box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); display: flex; flex-direction: column;"
                               [style.border]="selectedRoomId() === ar.id ? '2px solid var(--brand)' : '2px solid var(--border)'"
                               [style.boxShadow]="selectedRoomId() === ar.id ? 'var(--shadow-md)' : 'none'"
                               (click)="selectRoom(ar.id)"
@@ -295,7 +296,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                                 }
                               </div>
                               <!-- Info -->
-                              <div style="padding: 10px 12px 12px; background: var(--surface);">
+                              <div style="padding: 10px 12px 12px; background: var(--surface); flex: 1; display: flex; flex-direction: column;">
                                 <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
                                   <span style="font-family: var(--font-display); font-size: var(--fs-sm); font-weight: 400; color: var(--fg);">{{ ar.type }}</span>
                                   <span style="font-family: var(--font-display); font-size: var(--fs-base); font-weight: 400; color: var(--fg); font-variant-numeric: tabular-nums;">&#36;{{ ar.priceOffPeak }}<span style="font-family: var(--font-sans); font-size: 10px; color: var(--fg-3);">/night</span></span>
@@ -357,7 +358,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                     <div class="space-y-2">
                       @for (svc of services(); track svc.id) {
                         <div
-                          class="flex items-center justify-between rounded-xl border border-zinc-100 bg-zinc-50 p-3"
+                          class="flex items-start justify-between rounded-xl border border-zinc-100 bg-zinc-50 p-3"
                         >
                           <div class="min-w-0 flex-1 pr-3">
                             <p class="text-sm font-medium text-zinc-800">{{ svc.name }}</p>

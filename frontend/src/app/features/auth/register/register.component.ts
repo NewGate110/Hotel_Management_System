@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -43,7 +44,7 @@ import { MSG } from '../../../core/i18n/ui-messages';
         <div style="width: 100%; max-width: 440px;">
           <h1 style="font-family: var(--font-display); font-size: 36px; font-weight: 300; letter-spacing: -0.02em; color: var(--fg); margin: 0;">{{ msg.registerTitle }}</h1>
 
-          <form style="margin-top: 32px; display: grid; gap: 16px; grid-template-columns: 1fr 1fr;" [formGroup]="form" (ngSubmit)="submit()">
+          <form style="margin-top: 32px; display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));" [formGroup]="form" (ngSubmit)="submit()">
             <mat-form-field appearance="outline" class="w-full" style="grid-column: 1 / -1;">
               <mat-label>Email</mat-label>
               <input matInput type="email" formControlName="email" autocomplete="email" />

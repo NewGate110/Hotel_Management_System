@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using HMS.Domain.Entities;
 using HMS.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -263,7 +263,7 @@ public static class DataSeeder
                     FloorNumber  = 5,
                     Status       = RoomStatus.Available,
                     Description  = "Presidential villa spanning the entire private island tip, with personal chef, infinity pool, and 360° ocean panorama.",
-                    ImageUrl     = "https://images.unsplash.com/photo-1642125749606-19099bf48c0b?w=800&q=80&fit=crop"
+                    ImageUrl     = "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&q=80&fit=crop"
                 },
             });
         }

@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import {
   ChangeDetectionStrategy,
   Component,
@@ -89,7 +90,7 @@ function toYmd(d: Date): string {
             </mat-select>
           </mat-form-field>
           <!-- Search button -->
-          <div style="display: flex; align-items: center; padding-top: 4px;">
+          <div style="display: flex; align-items: flex-end; padding-bottom: 1px;">
             <button
               type="button"
               (click)="search()"
@@ -150,14 +151,14 @@ function toYmd(d: Date): string {
               </div>
               <a routerLink="/rooms/search" class="btn btn-secondary btn-sm">Advanced search</a>
             </div>
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;" class="results-grid">
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; align-items: stretch;" class="results-grid">
               @for (room of results(); track room.roomId) {
-                <div class="room-card card-surface" style="overflow: hidden; transition: box-shadow var(--dur-slow) var(--ease-glide);">
+                <div class="room-card card-surface" style="overflow: hidden; transition: box-shadow var(--dur-slow) var(--ease-glide); display: flex; flex-direction: column; height: 100%;">
                   <div style="padding: 20px 22px 12px;">
                     <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
-                      <div>
+                      <div style="min-width: 0; flex: 1;">
                         <span class="badge badge-info">{{ room.type | formatType }}</span>
-                        <p style="margin: 8px 0 0; font-size: var(--fs-sm); color: var(--fg-2);">{{ room.hotelName }}</p>
+                        <p style="margin: 8px 0 0; font-size: var(--fs-sm); color: var(--fg-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{ room.hotelName }}</p>
                         <p style="font-size: var(--fs-xs); color: var(--fg-3);">{{ room.city }}, {{ room.country }}</p>
                       </div>
                       <div style="text-align: right; flex-shrink: 0;">
@@ -168,7 +169,7 @@ function toYmd(d: Date): string {
                   </div>
                   <p style="padding: 0 22px; font-size: 13px; line-height: 1.55; color: var(--fg-3); overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;">{{ room.description }}</p>
                   <div class="rule" style="margin: 16px 0 0;"></div>
-                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 22px;">
+                  <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 22px; margin-top: auto;">
                     <div style="display: flex; align-items: center; gap: 12px; font-size: var(--fs-xs); color: var(--fg-3);">
                       <span style="display: flex; align-items: center; gap: 4px;">
                         <span class="material-icons-outlined" style="font-size: 14px;">person</span>
@@ -239,9 +240,9 @@ function toYmd(d: Date): string {
         <h2 style="font-family: var(--font-display); font-size: var(--fs-4xl); font-weight: 400; letter-spacing: var(--ls-tight); color: var(--fg); text-align: center; margin: 12px 0 0; text-wrap: balance;">
           The day unstructures itself.
         </h2>
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-top: 64px;" class="experiences-grid">
+        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-top: 64px; align-items: stretch;" class="experiences-grid">
           @for (exp of experiences; track exp.label) {
-            <div>
+            <div style="height: 100%;">
               <span class="material-icons-outlined" style="font-size: 32px; color: var(--brand);" aria-hidden="true">{{ exp.icon }}</span>
               <h4 style="font-family: var(--font-display); font-size: var(--fs-xl); font-weight: 400; color: var(--fg); margin: 20px 0 8px;">{{ exp.label }}</h4>
               <p style="font-size: var(--fs-sm); color: var(--fg-2); line-height: 1.6;">{{ exp.blurb }}</p>
@@ -271,7 +272,7 @@ function toYmd(d: Date): string {
           Every room a world of its own
         </h2>
         <div style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; grid-template-rows: auto auto;" class="gallery-grid">
-          <a routerLink="/rooms/search" class="gallery-card" style="grid-row: span 2; position: relative; overflow: hidden; border-radius: var(--r-xl); min-height: 460px; display: block; text-decoration: none;">
+          <a routerLink="/rooms/search" class="gallery-card" style="grid-row: span 2; position: relative; overflow: hidden; border-radius: var(--r-xl); height: 456px; display: block; text-decoration: none;">
             <img src="https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=900&q=80" alt="Overwater Bungalow" style="width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-glide) var(--ease-glide);" class="gallery-img" />
             <div style="position: absolute; inset: 0; background: linear-gradient(to top, rgba(8,24,32,0.82) 0%, rgba(8,24,32,0.1) 50%, transparent 100%);"></div>
             <div style="position: absolute; bottom: 0; left: 0; padding: 28px;">
@@ -396,7 +397,7 @@ function toYmd(d: Date): string {
     <!-- ─── FOOTER ─── -->
     <footer style="background: var(--sand-900); padding: 96px 0 0;">
       <div class="container-wide">
-        <div style="display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 64px; border-bottom: 1px solid rgba(212,200,179,0.15);" class="footer-grid">
+        <div style="display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 48px; padding-bottom: 64px; border-bottom: 1px solid rgba(212,200,179,0.15);" class="footer-grid">
           <div>
             <a routerLink="/" aria-label="Grand Plaza — home">
               <img src="/logo.png" alt="" aria-hidden="true" style="width: 200px; filter: invert(0.92) brightness(1.1);" />

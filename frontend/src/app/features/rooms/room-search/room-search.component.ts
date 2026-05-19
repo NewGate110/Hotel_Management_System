@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
@@ -113,7 +114,7 @@ function toYmd(d: Date): string {
               <mat-label>Max price ($/night)</mat-label>
               <input matInput type="number" formControlName="maxPrice" min="0" placeholder="No limit" />
             </mat-form-field>
-            <div style="display: flex; align-items: center; padding-top: 4px;">
+            <div style="display: flex; align-items: flex-end; padding-bottom: 1px;">
               <button
                 type="button"
                 (click)="search()"

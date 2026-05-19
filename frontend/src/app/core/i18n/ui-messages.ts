@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 /** Central copy keys — swap for $localize or ngx-translate later. */
 export const MSG = {
   auth: {

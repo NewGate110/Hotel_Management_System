@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { Pipe, PipeTransform } from '@angular/core';
 
 /** Converts PascalCase room types to spaced words: "DeluxeSuite" → "Deluxe Suite". */

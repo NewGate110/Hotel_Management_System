@@ -1,4 +1,4 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using System.Security.Cryptography;
 using HMS.Application.BusinessRules;
 using HMS.Application.DTOs.Auth;

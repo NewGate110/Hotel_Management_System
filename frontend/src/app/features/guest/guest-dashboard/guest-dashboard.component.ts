@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { SlicePipe } from '@angular/common';
 import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
@@ -51,7 +52,7 @@ import { AppBadgeComponent } from '../../../shared/ui/app-badge/app-badge.compon
       </div>
 
       <!-- KPI grid -->
-      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;" class="guest-kpi-grid">
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: stretch;" class="guest-kpi-grid">
         <app-stat-card label="Upcoming stays" [value]="upcoming().toString()" hint="Confirmed forward" />
         <app-stat-card label="Total spend" [value]="stats() ? '$' + stats()!.totalSpend.toFixed(0) : '—'" hint="All completed stays" />
         <app-stat-card label="Past stays" [value]="past().toString()" hint="Checked out" />

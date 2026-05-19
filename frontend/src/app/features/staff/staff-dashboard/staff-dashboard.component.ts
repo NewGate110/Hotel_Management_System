@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { SlicePipe } from '@angular/common';
 import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
@@ -31,7 +32,7 @@ import { AppLoaderComponent } from '../../../shared/ui/app-loader/app-loader.com
   template: `
     <div class="space-y-6">
       <h1 class="text-2xl font-semibold text-zinc-900">Front desk overview</h1>
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <app-stat-card label="Arrivals today" [value]="arrivals().toString()" />
         <app-stat-card label="Departures today" [value]="departures().toString()" />
         <app-stat-card label="Occupied rooms" [value]="occupied().toString()" />

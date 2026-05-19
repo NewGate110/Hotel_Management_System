@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 /**
  * InactivityService — auto-logs out the user after 15 minutes of inactivity.
  *

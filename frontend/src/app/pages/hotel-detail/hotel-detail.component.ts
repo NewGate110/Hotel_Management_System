@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import {
   ChangeDetectionStrategy,
   Component,
@@ -84,10 +85,10 @@ import type { RoomDto } from '../../core/models/room.models';
         } @else if (rooms().length === 0) {
           <app-empty-state icon="bed" title="No rooms available" hint="Check back soon for availability." />
         } @else {
-          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; align-items: stretch;">
             @for (room of rooms(); track room.id) {
               <article
-                style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow var(--dur-base) var(--ease-out);"
+                style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); transition: box-shadow var(--dur-base) var(--ease-out); display: flex; flex-direction: column;"
                 (mouseenter)="$any($event.currentTarget).style.boxShadow='var(--shadow-md)'"
                 (mouseleave)="$any($event.currentTarget).style.boxShadow='var(--shadow-sm)'"
               >
@@ -114,7 +115,7 @@ import type { RoomDto } from '../../core/models/room.models';
                 </div>
 
                 <!-- Room info -->
-                <div style="padding: 16px 18px 18px;">
+                <div style="padding: 16px 18px 18px; flex: 1; display: flex; flex-direction: column;">
                   <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 6px;">
                     <h3 style="font-family: var(--font-display); font-size: var(--fs-base); font-weight: 400; color: var(--fg); margin: 0; letter-spacing: -0.01em;">{{ room.type }}</h3>
                     <span style="font-family: var(--font-display); font-size: var(--fs-lg); font-weight: 400; color: var(--fg); font-variant-numeric: tabular-nums;">&#36;{{ room.priceOffPeak }}<span style="font-family: var(--font-sans); font-size: 11px; color: var(--fg-3); font-weight: 400;">/night</span></span>
@@ -134,7 +135,7 @@ import type { RoomDto } from '../../core/models/room.models';
                   </p>
                   <a
                     [routerLink]="['/rooms', room.id]"
-                    style="display: block; width: 100%; padding: 9px 0; background: var(--sand-900); color: var(--sand-50); text-align: center; border-radius: var(--r-md); font-size: var(--fs-sm); font-weight: 600; text-decoration: none; transition: background var(--dur-fast) var(--ease-out);"
+                    style="display: block; width: 100%; padding: 9px 0; margin-top: auto; background: var(--sand-900); color: var(--sand-50); text-align: center; border-radius: var(--r-md); font-size: var(--fs-sm); font-weight: 600; text-decoration: none; transition: background var(--dur-fast) var(--ease-out);"
                     (mouseenter)="$any($event.currentTarget).style.background='var(--sand-800)'"
                     (mouseleave)="$any($event.currentTarget).style.background='var(--sand-900)'"
                   >

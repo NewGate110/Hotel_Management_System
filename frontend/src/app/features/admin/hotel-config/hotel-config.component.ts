@@ -140,11 +140,11 @@ interface RoomPricingRow {
                 <table style="width: 100%; font-size: var(--fs-sm); border-collapse: collapse;">
                   <thead>
                     <tr style="border-bottom: 1px solid var(--border); text-align: left;">
-                      <th style="padding: 8px 16px 8px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Room</th>
-                      <th style="padding: 8px 16px 8px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Type</th>
-                      <th style="padding: 8px 16px 8px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Off-peak ($/night)</th>
-                      <th style="padding: 8px 16px 8px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Peak ($/night)</th>
-                      <th style="padding: 8px 0;"></th>
+                      <th style="padding: 10px 16px 10px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Room</th>
+                      <th style="padding: 10px 16px 10px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Type</th>
+                      <th style="padding: 10px 16px 10px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Off-peak ($/night)</th>
+                      <th style="padding: 10px 16px 10px 0; font-size: 11px; letter-spacing: var(--ls-wider); text-transform: uppercase; color: var(--fg-3); font-weight: 500;">Peak ($/night)</th>
+                      <th style="padding: 10px 0;"></th>
                     </tr>
                   </thead>
                   <tbody>

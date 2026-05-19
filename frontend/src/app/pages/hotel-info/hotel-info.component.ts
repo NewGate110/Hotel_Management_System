@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import {
   ChangeDetectionStrategy,
   Component,
@@ -35,10 +36,10 @@ import type { HotelSummaryDto } from '../../core/models/hotel.models';
       </div>
     } @else {
       <div style="max-width: var(--container); margin: 0 auto; padding: 0 24px 96px;">
-        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px;">
+        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px; align-items: stretch;">
           @for (hotel of hotels(); track hotel.id) {
             <article
-              style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); cursor: pointer; transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out);"
+              style="background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-lg); overflow: hidden; box-shadow: var(--shadow-sm); cursor: pointer; transition: box-shadow var(--dur-base) var(--ease-out), transform var(--dur-base) var(--ease-out); display: flex; flex-direction: column;"
               (click)="viewHotel(hotel.id)"
               (mouseenter)="$any($event.currentTarget).style.boxShadow='var(--shadow-md)'; $any($event.currentTarget).style.transform='translateY(-2px)'"
               (mouseleave)="$any($event.currentTarget).style.boxShadow='var(--shadow-sm)'; $any($event.currentTarget).style.transform='translateY(0)'"
@@ -60,7 +61,7 @@ import type { HotelSummaryDto } from '../../core/models/hotel.models';
               </div>
 
               <!-- Card body -->
-              <div style="padding: 20px 22px 22px;">
+              <div style="padding: 20px 22px 22px; flex: 1; display: flex; flex-direction: column;">
                 <h2 style="font-family: var(--font-display); font-size: var(--fs-lg); font-weight: 400; color: var(--fg); margin: 0 0 6px; letter-spacing: var(--ls-tight); line-height: 1.25;">
                   {{ hotel.name }}
                 </h2>
@@ -68,7 +69,7 @@ import type { HotelSummaryDto } from '../../core/models/hotel.models';
                   <span class="material-icons-outlined" style="font-size: 14px;">location_on</span>
                   {{ hotel.city }}, {{ hotel.country }}
                 </p>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--border);">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-top: 14px; border-top: 1px solid var(--border); margin-top: auto;">
                   <span style="font-size: var(--fs-xs); font-weight: 500; color: var(--fg-3); text-transform: uppercase; letter-spacing: 0.1em;">
                     Grand Plaza Collection
                   </span>

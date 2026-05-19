@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import type { Routes } from '@angular/router';
 
 export const ADMIN_ROUTES: Routes = [

@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { MatSelectModule } from '@angular/material/select';
 import { HotelsApiService } from '../../../core/services/hotels-api.service';
@@ -23,15 +24,16 @@ import { AppButtonComponent } from '../../../shared/ui/app-button/app-button.com
       @if (loading()) {
         <app-loader caption="Loading rooms…" />
       } @else {
-        <div class="grid gap-4 lg:grid-cols-3 xl:grid-cols-6">
+        <div class="grid gap-4 md:grid-cols-4 lg:grid-cols-3 xl:grid-cols-6">
           @for (st of ROOM_STATUSES; track st) {
             <app-card [title]="st">
               <div class="mt-3 space-y-2">
                 @for (r of roomRows(st); track r.id) {
                   <div
                     class="flex items-center justify-between rounded-lg border border-zinc-200/80 bg-zinc-50 px-2 py-2 text-xs"
+                    style="gap: 8px;"
                   >
-                    <span class="font-medium">{{ r.roomNumber }}</span>
+                    <span class="font-medium" style="min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1;">{{ r.roomNumber }}</span>
                     <select
                       class="rounded border border-zinc-200 bg-white px-1 py-0.5 text-xs text-zinc-700"
                       [value]="r.status"

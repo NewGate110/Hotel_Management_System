@@ -1,9 +1,10 @@
-// Author: Salaams
+// Author: S2401265 Ahmed Aslan Ibrahim
 using AutoMapper;
 using HMS.Application.DTOs.Hotels;
 using HMS.Application.DTOs.Rooms;
 using HMS.Application.Interfaces.Repositories;
 using HMS.Application.Interfaces.Services;
+using HMS.Domain.Entities;
 
 namespace HMS.Application.Services;
 
@@ -62,6 +63,23 @@ public class HotelService : IHotelService
             ?? throw new KeyNotFoundException($"Hotel {hotelId} not found.");
         hotel.ImageUrl = imageUrl;
         await _hotels.UpdateAsync(hotel);
+        return _mapper.Map<HotelDto>(hotel);
+    }
+
+    public async Task<HotelDto> CreateHotelAsync(CreateHotelDto dto)
+    {
+        var hotel = new Hotel
+        {
+            Name     = dto.Name.Trim(),
+            City     = dto.City.Trim(),
+            Country  = dto.Country.Trim(),
+            Address  = dto.Address.Trim(),
+            Phone    = dto.Phone.Trim(),
+            Email    = dto.Email.Trim(),
+            ImageUrl = dto.ImageUrl?.Trim(),
+            IsActive = true,
+        };
+        await _hotels.AddAsync(hotel);
         return _mapper.Map<HotelDto>(hotel);
     }
 }

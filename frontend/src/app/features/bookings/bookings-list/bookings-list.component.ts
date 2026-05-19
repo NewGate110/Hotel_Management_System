@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { SlicePipe } from '@angular/common';
 import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
 import {
@@ -87,7 +88,7 @@ export interface EditBookingDialogData {
                     class="accent-sky-600"
                     [checked]="selectedRoomIds().has(room.id)"
                     (change)="toggleRoom(room.id)" />
-                  <span class="text-sm text-zinc-800">
+                  <span class="text-sm text-zinc-800" style="min-width: 0; overflow: hidden; text-overflow: ellipsis;">
                     Room {{ room.roomNumber }} · {{ room.type }} · Cap {{ room.capacity }}
                     · <strong>{{ '$' + room.priceOffPeak }}/night</strong>
                   </span>

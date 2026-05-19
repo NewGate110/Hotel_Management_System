@@ -1,3 +1,4 @@
+// Author: S2401265 Ahmed Aslan Ibrahim
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
 import { AppAvatarComponent } from '../app-avatar/app-avatar.component';
 import { AppBreadcrumbComponent, type BreadcrumbItem } from '../app-breadcrumb/app-breadcrumb.component';
