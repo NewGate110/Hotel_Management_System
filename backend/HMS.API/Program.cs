@@ -5,6 +5,7 @@ using HMS.Infrastructure;
 using HMS.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi;
 
 // Npgsql v6+ requires UTC DateTimes for timestamptz columns.
 // This switch lets Unspecified-kind DateTimes (e.g. from query strings) pass through.
@@ -79,7 +80,23 @@ builder.Services.AddAuthorization();
 // ── Application services ───────────────────────────────────────────────────
 builder.Services.AddControllers();
 builder.Services.AddOpenApi();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name         = "Authorization",
+        Type         = SecuritySchemeType.Http,
+        Scheme       = "bearer",
+        BearerFormat = "JWT",
+        In           = ParameterLocation.Header,
+        Description  = "Enter your JWT token. It will be sent as: Authorization: Bearer <token>"
+    });
+
+    options.AddSecurityRequirement(doc => new OpenApiSecurityRequirement
+    {
+        { new OpenApiSecuritySchemeReference("Bearer", doc), [] }
+    });
+});
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -93,7 +110,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/openapi/v1.json", "HMS API V1");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "HMS API V1");
     });
 }
 else
