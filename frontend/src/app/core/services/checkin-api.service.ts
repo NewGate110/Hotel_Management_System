@@ -10,6 +10,14 @@ export class CheckInApiService {
   private readonly http = inject(HttpClient);
   private readonly base = `${environment.apiRoot}/CheckIn`;
 
+  getArrivals(): Observable<BookingDto[]> {
+    return this.http.get<BookingDto[]>(`${this.base}/arrivals`);
+  }
+
+  getDepartures(): Observable<BookingDto[]> {
+    return this.http.get<BookingDto[]>(`${this.base}/departures`);
+  }
+
   checkIn(bookingId: number): Observable<BookingDto> {
     return this.http.post<BookingDto>(`${this.base}/${bookingId}`, {});
   }

@@ -3,8 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
 import type { Observable } from 'rxjs';
 import { environment } from '../../../environments/environment';
-import type { HotelDto, HotelSummaryDto, UpdateHotelDto } from '../models/hotel.models';
-import type { RoomDto, UpdateRoomPricingDto } from '../models/room.models';
+import type { CreateHotelDto, HotelDto, HotelSummaryDto, UpdateHotelDto } from '../models/hotel.models';
+import type { CreateRoomDto, RoomDto, UpdateRoomPricingDto } from '../models/room.models';
 import type { CreateStaffDto, GuestListDto, StaffUserDto, UpdateStaffDto } from '../models/user.models';
 
 export interface AuditLogDto {
@@ -28,8 +28,24 @@ export class AdminApiService {
     return this.http.get<HotelSummaryDto[]>(`${this.base}/hotels`);
   }
 
+  createHotel(dto: CreateHotelDto): Observable<HotelDto> {
+    return this.http.post<HotelDto>(`${this.base}/hotels`, dto);
+  }
+
   updateHotel(id: number, dto: UpdateHotelDto): Observable<HotelDto> {
     return this.http.put<HotelDto>(`${this.base}/hotels/${id}`, dto);
+  }
+
+  deleteHotel(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/hotels/${id}`);
+  }
+
+  createRoom(hotelId: number, dto: CreateRoomDto): Observable<RoomDto> {
+    return this.http.post<RoomDto>(`${this.base}/hotels/${hotelId}/rooms`, dto);
+  }
+
+  deleteRoom(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.base}/rooms/${id}`);
   }
 
   updateRoomPricing(id: number, dto: UpdateRoomPricingDto): Observable<RoomDto> {

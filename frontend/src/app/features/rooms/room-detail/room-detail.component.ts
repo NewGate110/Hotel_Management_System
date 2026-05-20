@@ -65,7 +65,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
         />
       </div>
     }
-    <div class="mx-auto max-w-6xl px-4 py-12 text-zinc-900">
+    <div class="mx-auto max-w-6xl px-4 py-12 text-[var(--fg)]">
       @if (loading()) {
         <app-loader />
       } @else if (room()) {
@@ -75,7 +75,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
           <div class="space-y-6">
             <div class="flex flex-wrap items-start justify-between gap-4">
               <div>
-                <p class="text-sm text-zinc-500">{{ r.hotelName }}</p>
+                <p class="text-sm text-[var(--fg-3)]">{{ r.hotelName }}</p>
                 <h1 class="text-3xl font-semibold tracking-tight">Room {{ r.roomNumber }}</h1>
                 <div class="mt-2 flex flex-wrap gap-2">
                   <app-badge tone="info">{{ r.type | formatType }}</app-badge>
@@ -88,24 +88,24 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
             </div>
 
             <app-card title="Overview">
-              <p class="text-sm leading-relaxed text-zinc-600">
+              <p class="text-sm leading-relaxed text-[var(--fg-2)]">
                 {{ r.description || 'Premium room with curated amenities.' }}
               </p>
               <dl class="mt-4 grid gap-3 text-sm sm:grid-cols-2">
                 <div>
-                  <dt class="text-zinc-500">Capacity</dt>
+                  <dt class="text-[var(--fg-3)]">Capacity</dt>
                   <dd class="font-medium">{{ r.capacity }} guests</dd>
                 </div>
                 <div>
-                  <dt class="text-zinc-500">Floor</dt>
+                  <dt class="text-[var(--fg-3)]">Floor</dt>
                   <dd class="font-medium">{{ r.floorNumber }}</dd>
                 </div>
                 <div>
-                  <dt class="text-zinc-500">Off-peak from</dt>
+                  <dt class="text-[var(--fg-3)]">Off-peak from</dt>
                   <dd class="font-medium">&#36;{{ r.priceOffPeak }}</dd>
                 </div>
                 <div>
-                  <dt class="text-zinc-500">Peak from</dt>
+                  <dt class="text-[var(--fg-3)]">Peak from</dt>
                   <dd class="font-medium">&#36;{{ r.pricePeak }}</dd>
                 </div>
               </dl>
@@ -114,11 +114,11 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
 
           <!-- ── RIGHT: Booking panel ── -->
           <div class="mt-8 lg:mt-0 lg:sticky lg:top-8">
-            <div class="rounded-2xl border border-zinc-200 bg-white p-6 shadow-sm">
+            <div class="rounded-2xl border border-[var(--border)] bg-white p-6 shadow-sm">
               @if (!auth.isAuthenticated()) {
                 <!-- Unauthenticated -->
-                <p class="text-base font-semibold text-zinc-800">Ready to book?</p>
-                <p class="mt-1 text-sm text-zinc-500">Sign in to start your reservation.</p>
+                <p class="text-base font-semibold text-[var(--fg)]">Ready to book?</p>
+                <p class="mt-1 text-sm text-[var(--fg-3)]">Sign in to start your reservation.</p>
                 <a
                   [routerLink]="['/login']"
                   [queryParams]="{ returnUrl: '/rooms/' + r.id }"
@@ -128,9 +128,9 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                 </a>
               } @else if (auth.role() !== 'Guest') {
                 <!-- Staff / admin -->
-                <div class="flex items-start gap-2 text-sm text-zinc-500">
+                <div class="flex items-start gap-2 text-sm text-[var(--fg-3)]">
                   <span
-                    class="material-icons-outlined mt-0.5 text-base text-amber-400"
+                    class="material-icons-outlined mt-0.5 text-base text-[var(--clay-400)]"
                     aria-hidden="true"
                     >info</span
                   >
@@ -142,28 +142,28 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                 <div class="space-y-4">
                   <div class="flex items-center gap-3">
                     <div
-                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-100"
+                      class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[var(--glass-100)]"
                     >
                       <span
-                        class="material-icons-outlined text-xl text-emerald-600"
+                        class="material-icons-outlined text-xl text-[var(--glass-600)]"
                         aria-hidden="true"
                         >check</span
                       >
                     </div>
                     <div>
-                      <p class="font-semibold text-zinc-800">Booking confirmed!</p>
-                      <p class="text-xs text-zinc-400">Reference #{{ b.id }}</p>
+                      <p class="font-semibold text-[var(--fg)]">Booking confirmed!</p>
+                      <p class="text-xs text-[var(--fg-3)]">Reference #{{ b.id }}</p>
                     </div>
                   </div>
-                  <div class="rounded-xl bg-zinc-50 p-4 text-sm space-y-2">
-                    <div class="flex justify-between text-zinc-600">
+                  <div class="rounded-xl bg-[var(--sand-100)] p-4 text-sm space-y-2">
+                    <div class="flex justify-between text-[var(--fg-2)]">
                       <span>Check-in</span><span class="font-medium">{{ b.checkInDate }}</span>
                     </div>
-                    <div class="flex justify-between text-zinc-600">
+                    <div class="flex justify-between text-[var(--fg-2)]">
                       <span>Check-out</span><span class="font-medium">{{ b.checkOutDate }}</span>
                     </div>
                     <div
-                      class="flex justify-between border-t border-zinc-100 pt-2 font-semibold text-zinc-900"
+                      class="flex justify-between border-t border-[var(--border)] pt-2 font-semibold text-[var(--fg)]"
                     >
                       <span>Total</span><span>&#36;{{ b.totalAmount }}</span>
                     </div>
@@ -182,13 +182,13 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                       <div
                         class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full text-xs font-bold transition-colors"
                         [ngClass]="
-                          step() >= s ? 'bg-zinc-900 text-white' : 'bg-zinc-100 text-zinc-400'
+                          step() >= s ? 'bg-[var(--fg)] text-white' : 'bg-[var(--sand-100)] text-[var(--fg-3)]'
                         "
                         [attr.aria-current]="step() === s ? 'step' : null"
                       >
                         {{ s }}
                       </div>
-                      <span class="ml-1 hidden text-xs text-zinc-400 sm:inline" style="white-space: nowrap;">
+                      <span class="ml-1 hidden text-xs text-[var(--fg-3)] sm:inline" style="white-space: nowrap;">
                         @if (s === 1) {
                           Dates
                         } @else if (s === 2) {
@@ -198,7 +198,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                         }
                       </span>
                       @if (s < 3) {
-                        <div class="mx-2 h-px w-5 shrink-0 bg-zinc-200"></div>
+                        <div class="mx-2 h-px w-5 shrink-0 bg-[var(--sand-200)]"></div>
                       }
                     </div>
                   }
@@ -206,10 +206,10 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
 
                 <!-- ── Step 1: Dates ── -->
                 @if (step() === 1) {
-                  <p class="mb-3 text-sm font-semibold text-zinc-700">Select your dates</p>
+                  <p class="mb-3 text-sm font-semibold text-[var(--fg-2)]">Select your dates</p>
 
                   @if (availabilityLoading()) {
-                    <p class="mb-2 text-xs text-zinc-400">Loading availability…</p>
+                    <p class="mb-2 text-xs text-[var(--fg-3)]">Loading availability…</p>
                   }
 
                   <mat-form-field appearance="outline" class="w-full">
@@ -239,108 +239,122 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
 
                   <!-- Guest count -->
                   <div class="mt-3">
-                    <label class="mb-1 block text-xs font-medium text-zinc-600">
+                    <label class="mb-1 block text-xs font-medium text-[var(--fg-2)]">
                       Guests
-                      <span class="font-normal text-zinc-400">(max {{ r.capacity }})</span>
+                      <span class="font-normal text-[var(--fg-3)]">(max {{ r.capacity }})</span>
                     </label>
                     <div class="flex items-center gap-3">
                       <button
                         type="button"
                         (click)="guestCount.update(n => Math.max(1, n - 1))"
                         [disabled]="guestCount() <= 1"
-                        class="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 text-zinc-600 transition hover:bg-zinc-100 disabled:opacity-40"
+                        class="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--fg-2)] transition hover:bg-[var(--sand-100)] disabled:opacity-40"
                         aria-label="Decrease guest count"
                       >−</button>
-                      <span class="w-6 text-center text-sm font-semibold text-zinc-800">{{ guestCount() }}</span>
+                      <span class="w-6 text-center text-sm font-semibold text-[var(--fg)]">{{ guestCount() }}</span>
                       <button
                         type="button"
                         (click)="guestCount.update(n => Math.min(r.capacity, n + 1))"
                         [disabled]="guestCount() >= r.capacity"
-                        class="flex h-8 w-8 items-center justify-center rounded-lg border border-zinc-200 text-zinc-600 transition hover:bg-zinc-100 disabled:opacity-40"
+                        class="flex h-8 w-8 items-center justify-center rounded-lg border border-[var(--border)] text-[var(--fg-2)] transition hover:bg-[var(--sand-100)] disabled:opacity-40"
                         aria-label="Increase guest count"
                       >+</button>
                     </div>
                   </div>
 
-                  <!-- Room selection grid -->
+                  <!-- Room availability / selection -->
                   @if (checkIn() && checkOut() && nights() > 0) {
                     <div class="mt-4">
-                      <p class="mb-2 text-xs font-semibold" style="color: var(--fg-2);">Select a room</p>
-
                       @if (availableRoomsLoading()) {
-                        <p class="text-xs" style="color: var(--fg-3);">Loading available rooms…</p>
+                        <p class="text-xs" style="color: var(--fg-3);">Checking availability…</p>
                       } @else if (availableRooms().length === 0) {
-                        <p class="text-xs" style="color: var(--fg-3);">No rooms available for these dates.</p>
-                      } @else {
-                        <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; align-items: stretch;">
-                          @for (ar of availableRooms(); track ar.id) {
-                            <div
-                              role="radio"
-                              [attr.aria-checked]="selectedRoomId() === ar.id"
-                              tabindex="0"
-                              style="border-radius: var(--r-lg); overflow: hidden; cursor: pointer; transition: box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); display: flex; flex-direction: column;"
-                              [style.border]="selectedRoomId() === ar.id ? '2px solid var(--brand)' : '2px solid var(--border)'"
-                              [style.boxShadow]="selectedRoomId() === ar.id ? 'var(--shadow-md)' : 'none'"
-                              (click)="selectRoom(ar.id)"
-                              (keydown.space)="selectRoom(ar.id)"
-                              (keydown.enter)="selectRoom(ar.id)"
-                            >
-                              <!-- Image -->
-                              <div style="height: 110px; overflow: hidden; background: var(--sand-100);">
-                                @if (ar.imageUrl) {
-                                  <img [src]="ar.imageUrl" [alt]="ar.type" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
-                                } @else {
-                                  <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
-                                    <span class="material-icons-outlined" style="font-size: 32px; color: var(--sand-300);">bed</span>
-                                  </div>
-                                }
-                              </div>
-                              <!-- Info -->
-                              <div style="padding: 10px 12px 12px; background: var(--surface); flex: 1; display: flex; flex-direction: column;">
-                                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-                                  <span style="font-family: var(--font-display); font-size: var(--fs-sm); font-weight: 400; color: var(--fg);">{{ ar.type }}</span>
-                                  <span style="font-family: var(--font-display); font-size: var(--fs-base); font-weight: 400; color: var(--fg); font-variant-numeric: tabular-nums;">&#36;{{ ar.priceOffPeak }}<span style="font-family: var(--font-sans); font-size: 10px; color: var(--fg-3);">/night</span></span>
-                                </div>
-                                <span style="font-size: 11px; color: var(--fg-3); display: flex; align-items: center; gap: 4px;">
-                                  <span class="material-icons-outlined" style="font-size: 12px;">person</span>
-                                  Up to {{ ar.capacity }} guests
-                                </span>
-                                @if (selectedRoomId() === ar.id) {
-                                  <div style="margin-top: 6px; display: flex; align-items: center; gap: 4px; color: var(--brand); font-size: 11px; font-weight: 600;">
-                                    <span class="material-icons-outlined" style="font-size: 14px;">check_circle</span>
-                                    Selected
-                                  </div>
-                                }
-                              </div>
-                            </div>
-                          }
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: var(--r-md); background: var(--clay-100); font-size: var(--fs-xs); color: var(--clay-700);">
+                          <span class="material-icons-outlined" style="font-size: 15px;">event_busy</span>
+                          This room is not available for the selected dates.
                         </div>
+                      } @else {
+                        <!-- Current room is available -->
+                        <div style="display: flex; align-items: center; gap: 8px; padding: 10px 12px; border-radius: var(--r-md); background: var(--glass-100); font-size: var(--fs-xs); color: var(--glass-700); margin-bottom: 10px;">
+                          <span class="material-icons-outlined" style="font-size: 15px;">check_circle</span>
+                          This room is available for your dates.
+                        </div>
+
+                        <!-- Show grid only when there are other rooms to choose from -->
+                        @if (availableRooms().length > 1) {
+                          <details style="margin-top: 4px;">
+                            <summary style="font-size: var(--fs-xs); font-weight: 600; color: var(--brand); cursor: pointer; list-style: none; display: flex; align-items: center; gap: 4px; user-select: none;">
+                              <span class="material-icons-outlined" style="font-size: 14px;">swap_horiz</span>
+                              Switch to a different room
+                            </summary>
+                            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; align-items: stretch; margin-top: 10px;">
+                              @for (ar of availableRooms(); track ar.id) {
+                                <div
+                                  role="radio"
+                                  [attr.aria-checked]="selectedRoomId() === ar.id"
+                                  tabindex="0"
+                                  style="border-radius: var(--r-lg); overflow: hidden; cursor: pointer; transition: box-shadow var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out); display: flex; flex-direction: column;"
+                                  [style.border]="selectedRoomId() === ar.id ? '2px solid var(--brand)' : '2px solid var(--border)'"
+                                  [style.boxShadow]="selectedRoomId() === ar.id ? 'var(--shadow-md)' : 'none'"
+                                  (click)="selectRoom(ar.id)"
+                                  (keydown.space)="selectRoom(ar.id)"
+                                  (keydown.enter)="selectRoom(ar.id)"
+                                >
+                                  <div style="height: 110px; overflow: hidden; background: var(--sand-100);">
+                                    @if (ar.imageUrl) {
+                                      <img [src]="ar.imageUrl" [alt]="ar.type" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy" />
+                                    } @else {
+                                      <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;">
+                                        <span class="material-icons-outlined" style="font-size: 32px; color: var(--sand-300);">bed</span>
+                                      </div>
+                                    }
+                                  </div>
+                                  <div style="padding: 10px 12px 12px; background: var(--surface); flex: 1; display: flex; flex-direction: column;">
+                                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                                      <span style="font-family: var(--font-display); font-size: var(--fs-sm); font-weight: 400; color: var(--fg);">{{ ar.type }}</span>
+                                      <span style="font-family: var(--font-display); font-size: var(--fs-base); font-weight: 400; color: var(--fg); font-variant-numeric: tabular-nums;">&#36;{{ ar.priceOffPeak }}<span style="font-family: var(--font-sans); font-size: 10px; color: var(--fg-3);">/night</span></span>
+                                    </div>
+                                    <span style="font-size: 11px; color: var(--fg-3); display: flex; align-items: center; gap: 4px;">
+                                      <span class="material-icons-outlined" style="font-size: 12px;">person</span>
+                                      Up to {{ ar.capacity }} guests
+                                    </span>
+                                    @if (selectedRoomId() === ar.id) {
+                                      <div style="margin-top: 6px; display: flex; align-items: center; gap: 4px; color: var(--brand); font-size: 11px; font-weight: 600;">
+                                        <span class="material-icons-outlined" style="font-size: 14px;">check_circle</span>
+                                        Selected
+                                      </div>
+                                    }
+                                  </div>
+                                </div>
+                              }
+                            </div>
+                          </details>
+                        }
                       }
                     </div>
                   }
 
                   @if (nights() > 0 && selectedRoomId()) {
-                    <div class="mt-3 rounded-xl bg-zinc-50 px-3 py-2.5 text-sm">
-                      <div class="flex justify-between text-zinc-600">
+                    <div class="mt-3 rounded-xl bg-[var(--sand-100)] px-3 py-2.5 text-sm">
+                      <div class="flex justify-between text-[var(--fg-2)]">
                         <span
                           >&#36;{{ selectedRoomPrice() }} × {{ nights() }} night{{
                             nights() === 1 ? '' : 's'
                           }}</span
                         >
-                        <span class="font-semibold text-zinc-900">&#36;{{ roomTotal() }}</span>
+                        <span class="font-semibold text-[var(--fg)]">&#36;{{ roomTotal() }}</span>
                       </div>
                     </div>
                   }
 
                   @if (dateRangeError()) {
-                    <p class="mt-2 text-xs text-red-500" role="alert">{{ dateRangeError() }}</p>
+                    <p class="mt-2 text-xs text-[var(--clay-500)]" role="alert">{{ dateRangeError() }}</p>
                   }
 
                   <button
                     type="button"
                     (click)="goToStep2()"
                     [disabled]="!checkIn() || !checkOut() || !selectedRoomId()"
-                    class="mt-4 w-full rounded-xl bg-zinc-900 px-4 py-3 text-sm font-bold text-white transition-all hover:bg-zinc-700 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
+                    class="mt-4 w-full rounded-xl bg-[var(--fg)] px-4 py-3 text-sm font-bold text-white transition-all hover:bg-[var(--sand-800)] active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                   >
                     Continue
                   </button>
@@ -348,21 +362,21 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
 
                 <!-- ── Step 2: Add-ons ── -->
                 @if (step() === 2) {
-                  <p class="mb-3 text-sm font-semibold text-zinc-700">
-                    Add-on services <span class="font-normal text-zinc-400">(optional)</span>
+                  <p class="mb-3 text-sm font-semibold text-[var(--fg-2)]">
+                    Add-on services <span class="font-normal text-[var(--fg-3)]">(optional)</span>
                   </p>
 
                   @if (services().length === 0) {
-                    <p class="text-sm text-zinc-400">No add-on services available.</p>
+                    <p class="text-sm text-[var(--fg-3)]">No add-on services available.</p>
                   } @else {
                     <div class="space-y-2">
                       @for (svc of services(); track svc.id) {
                         <div
-                          class="flex items-start justify-between rounded-xl border border-zinc-100 bg-zinc-50 p-3"
+                          class="flex items-start justify-between rounded-xl border border-[var(--border)] bg-[var(--sand-100)] p-3"
                         >
                           <div class="min-w-0 flex-1 pr-3">
-                            <p class="text-sm font-medium text-zinc-800">{{ svc.name }}</p>
-                            <p class="mt-0.5 text-xs text-zinc-400">
+                            <p class="text-sm font-medium text-[var(--fg)]">{{ svc.name }}</p>
+                            <p class="mt-0.5 text-xs text-[var(--fg-3)]">
                               &#36;{{ svc.fee }} / {{ svc.unit }}
                             </p>
                           </div>
@@ -371,20 +385,20 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                               type="button"
                               (click)="setServiceQty(svc.id, getServiceQty(svc.id) - 1)"
                               [disabled]="getServiceQty(svc.id) === 0"
-                              class="flex h-7 w-7 items-center justify-center rounded-lg border border-zinc-200 text-sm text-zinc-600 transition hover:bg-zinc-100 disabled:opacity-40"
+                              class="flex h-7 w-7 items-center justify-center rounded-lg border border-[var(--border)] text-sm text-[var(--fg-2)] transition hover:bg-[var(--sand-100)] disabled:opacity-40"
                               [attr.aria-label]="'Decrease ' + svc.name"
                             >
                               −
                             </button>
                             <span
-                              class="w-5 text-center text-sm font-semibold text-zinc-800"
+                              class="w-5 text-center text-sm font-semibold text-[var(--fg)]"
                               [attr.aria-label]="svc.name + ' quantity'"
                               >{{ getServiceQty(svc.id) }}</span
                             >
                             <button
                               type="button"
                               (click)="setServiceQty(svc.id, getServiceQty(svc.id) + 1)"
-                              class="flex h-7 w-7 items-center justify-center rounded-lg border border-zinc-200 text-sm text-zinc-600 transition hover:bg-zinc-100"
+                              class="flex h-7 w-7 items-center justify-center rounded-lg border border-[var(--border)] text-sm text-[var(--fg-2)] transition hover:bg-[var(--sand-100)]"
                               [attr.aria-label]="'Increase ' + svc.name"
                             >
                               +
@@ -399,14 +413,14 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                     <button
                       type="button"
                       (click)="back()"
-                      class="flex-1 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50"
+                      class="flex-1 rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold text-[var(--fg-2)] transition hover:bg-[var(--sand-100)]"
                     >
                       Back
                     </button>
                     <button
                       type="button"
                       (click)="goToStep3()"
-                      class="flex-1 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-zinc-700 active:scale-[0.98]"
+                      class="flex-1 rounded-xl bg-[var(--fg)] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--sand-800)] active:scale-[0.98]"
                     >
                       Continue
                     </button>
@@ -415,37 +429,37 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
 
                 <!-- ── Step 3: Review & Confirm ── -->
                 @if (step() === 3) {
-                  <p class="mb-3 text-sm font-semibold text-zinc-700">Review your booking</p>
+                  <p class="mb-3 text-sm font-semibold text-[var(--fg-2)]">Review your booking</p>
 
-                  <div class="rounded-xl bg-zinc-50 p-4 text-sm space-y-2">
-                    <div class="flex justify-between text-zinc-600">
+                  <div class="rounded-xl bg-[var(--sand-100)] p-4 text-sm space-y-2">
+                    <div class="flex justify-between text-[var(--fg-2)]">
                       <span>Room</span>
                       <span class="font-medium">{{ selectedRoom()?.roomNumber ?? r.roomNumber }} · {{ (selectedRoom()?.type ?? r.type) | formatType }}</span>
                     </div>
-                    <div class="flex justify-between text-zinc-600">
+                    <div class="flex justify-between text-[var(--fg-2)]">
                       <span>Guests</span>
                       <span class="font-medium">{{ guestCount() }}</span>
                     </div>
-                    <div class="flex justify-between text-zinc-600">
+                    <div class="flex justify-between text-[var(--fg-2)]">
                       <span>Check-in</span>
                       <span class="font-medium">{{ formatDateDisplay(checkIn()) }}</span>
                     </div>
-                    <div class="flex justify-between text-zinc-600">
+                    <div class="flex justify-between text-[var(--fg-2)]">
                       <span>Check-out</span>
                       <span class="font-medium">{{ formatDateDisplay(checkOut()) }}</span>
                     </div>
-                    <div class="flex justify-between text-zinc-600">
+                    <div class="flex justify-between text-[var(--fg-2)]">
                       <span>{{ nights() }} night{{ nights() === 1 ? '' : 's' }}</span>
                       <span class="font-medium">&#36;{{ roomTotal() }}</span>
                     </div>
                     @if (servicesTotal() > 0) {
-                      <div class="flex justify-between text-zinc-600">
+                      <div class="flex justify-between text-[var(--fg-2)]">
                         <span>Add-ons</span>
                         <span class="font-medium">&#36;{{ servicesTotal() }}</span>
                       </div>
                     }
                     <div
-                      class="flex justify-between border-t border-zinc-200 pt-2 font-semibold text-zinc-900"
+                      class="flex justify-between border-t border-[var(--border)] pt-2 font-semibold text-[var(--fg)]"
                     >
                       <span>Total</span>
                       <span>&#36;{{ grandTotal() }}</span>
@@ -453,7 +467,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                   </div>
 
                   @if (submitError()) {
-                    <p class="mt-2 text-xs text-red-500" role="alert">{{ submitError() }}</p>
+                    <p class="mt-2 text-xs text-[var(--clay-500)]" role="alert">{{ submitError() }}</p>
                   }
 
                   <div class="mt-4 flex gap-2">
@@ -461,7 +475,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                       type="button"
                       (click)="back()"
                       [disabled]="submitting()"
-                      class="flex-1 rounded-xl border border-zinc-200 px-4 py-2.5 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 disabled:opacity-50"
+                      class="flex-1 rounded-xl border border-[var(--border)] px-4 py-2.5 text-sm font-semibold text-[var(--fg-2)] transition hover:bg-[var(--sand-100)] disabled:opacity-50"
                     >
                       Back
                     </button>
@@ -469,7 +483,7 @@ import { RoomImageEditorComponent } from '../../admin/room-image-editor/room-ima
                       type="button"
                       (click)="confirm()"
                       [disabled]="submitting()"
-                      class="flex-1 rounded-xl bg-zinc-900 px-4 py-2.5 text-sm font-bold text-white transition hover:bg-zinc-700 active:scale-[0.98] disabled:opacity-50"
+                      class="flex-1 rounded-xl bg-[var(--fg)] px-4 py-2.5 text-sm font-bold text-white transition hover:bg-[var(--sand-800)] active:scale-[0.98] disabled:opacity-50"
                     >
                       @if (submitting()) {
                         Booking…

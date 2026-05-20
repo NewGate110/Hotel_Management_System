@@ -3,6 +3,7 @@ using AutoMapper;
 using HMS.Application.DTOs.Rooms;
 using HMS.Application.Interfaces.Repositories;
 using HMS.Application.Interfaces.Services;
+using HMS.Domain.Entities;
 using HMS.Domain.Enums;
 
 namespace HMS.Application.Services;
@@ -10,11 +11,13 @@ namespace HMS.Application.Services;
 public class RoomService : IRoomService
 {
     private readonly IRoomRepository _rooms;
+    private readonly IHotelRepository _hotels;
     private readonly IMapper _mapper;
 
-    public RoomService(IRoomRepository rooms, IMapper mapper)
+    public RoomService(IRoomRepository rooms, IHotelRepository hotels, IMapper mapper)
     {
         _rooms  = rooms;
+        _hotels = hotels;
         _mapper = mapper;
     }
 
@@ -92,5 +95,44 @@ public class RoomService : IRoomService
         room.ImageUrl = dto.ImageUrl;
         await _rooms.UpdateAsync(room);
         return _mapper.Map<RoomDto>(room);
+    }
+
+    public async Task<RoomDto> UpdateRoomStatusAsync(int roomId, RoomStatus status)
+    {
+        var room = await _rooms.GetByIdAsync(roomId)
+            ?? throw new KeyNotFoundException($"Room {roomId} not found.");
+        room.Status = status;
+        await _rooms.UpdateAsync(room);
+        return _mapper.Map<RoomDto>(room);
+    }
+
+    public async Task<RoomDto> CreateRoomAsync(int hotelId, CreateRoomDto dto)
+    {
+        _ = await _hotels.GetByIdAsync(hotelId)
+            ?? throw new KeyNotFoundException($"Hotel {hotelId} not found.");
+
+        var room = new Room
+        {
+            HotelId      = hotelId,
+            RoomNumber   = dto.RoomNumber.Trim(),
+            Type         = dto.Type,
+            Capacity     = dto.Capacity,
+            PriceOffPeak = dto.PriceOffPeak,
+            PricePeak    = dto.PricePeak,
+            Description  = dto.Description.Trim(),
+            ImageUrl     = dto.ImageUrl?.Trim(),
+            FloorNumber  = dto.FloorNumber,
+            Status       = RoomStatus.Available,
+        };
+
+        var created = await _rooms.AddAsync(room);
+        return _mapper.Map<RoomDto>(created);
+    }
+
+    public async Task DeleteRoomAsync(int id)
+    {
+        if (await _rooms.HasActiveOrFutureBookingsAsync(id))
+            throw new InvalidOperationException("Room has active or future bookings.");
+        await _rooms.DeleteAsync(id);
     }
 }

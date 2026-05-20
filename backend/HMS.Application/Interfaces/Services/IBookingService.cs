@@ -8,6 +8,8 @@ public interface IBookingService
     Task<BookingDto?> GetBookingByIdAsync(int id);
     Task<IEnumerable<BookingDto>> GetBookingsByGuestAsync(int guestId);
     Task<IEnumerable<BookingDto>> GetBookingsByHotelAsync(int hotelId);
+    Task<IEnumerable<BookingDto>> GetTodayArrivalsAsync();
+    Task<IEnumerable<BookingDto>> GetCheckedInAsync();
     Task<BookingDto> CreateBookingAsync(int guestId, CreateBookingDto dto);
     Task<BookingDto> UpdateBookingAsync(int bookingId, UpdateBookingDto dto, int requestingUserId);
     Task<BookingDto> AddServiceAsync(int bookingId, AddBookingServiceDto dto, int requestingUserId);

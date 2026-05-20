@@ -10,4 +10,5 @@ public interface IHotelRepository
     Task<Hotel?> GetByIdWithRoomsAsync(int id);
     Task UpdateAsync(Hotel hotel);
     Task<Hotel> AddAsync(Hotel hotel);
+    Task SoftDeleteAsync(int id);
 }

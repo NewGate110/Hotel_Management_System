@@ -30,7 +30,7 @@ interface InvoiceRow {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-4">
-      <h1 class="text-2xl font-semibold text-zinc-900">Billing &amp; Invoices</h1>
+      <h1 class="text-2xl font-semibold text-[var(--fg)]">Billing &amp; Invoices</h1>
 
       @if (loading()) {
         <app-loader caption="Loading invoices…" />
@@ -68,8 +68,8 @@ interface InvoiceRow {
                   <span
                     class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium"
                     [class]="r.isPaid
-                      ? 'bg-green-100 text-green-800'
-                      : 'bg-amber-100 text-amber-800'"
+                      ? 'bg-[var(--glass-100)] text-[var(--glass-700)]'
+                      : 'bg-[var(--clay-100)] text-[var(--clay-700)]'"
                   >
                     {{ r.isPaid ? 'Paid' : 'Outstanding' }}
                   </span>

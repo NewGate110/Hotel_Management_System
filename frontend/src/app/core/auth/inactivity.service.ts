@@ -37,13 +37,13 @@ const ACTIVITY_EVENTS: ReadonlyArray<keyof DocumentEventMap> = [
   template: `
     <div class="p-6 max-w-sm text-center">
       <div class="flex justify-center mb-4">
-        <span class="material-icons-outlined text-5xl text-amber-500">timer</span>
+        <span class="material-icons-outlined text-5xl text-[var(--clay-500)]">timer</span>
       </div>
-      <h2 class="text-lg font-semibold text-zinc-900 mb-2">Still there?</h2>
-      <p class="text-sm text-zinc-600 mb-1">
+      <h2 class="text-lg font-semibold text-[var(--fg)] mb-2">Still there?</h2>
+      <p class="text-sm text-[var(--fg-2)] mb-1">
         You will be signed out due to inactivity in
       </p>
-      <p class="text-3xl font-bold text-amber-600 mb-6 tabular-nums">
+      <p class="text-3xl font-bold text-[var(--clay-600)] mb-6 tabular-nums">
         {{ minutesPart() }}:{{ secondsPart() }}
       </p>
       <button mat-flat-button color="primary" class="w-full" mat-dialog-close="stay">

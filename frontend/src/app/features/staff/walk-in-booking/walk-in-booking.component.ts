@@ -42,21 +42,21 @@ type Step = 'guest' | 'room' | 'confirm';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="max-w-2xl mx-auto space-y-6">
-      <h1 class="text-2xl font-semibold text-zinc-900">Walk-In Booking</h1>
+      <h1 class="text-2xl font-semibold text-[var(--fg)]">Walk-In Booking</h1>
 
       <!-- Step indicator -->
       <div class="flex items-center gap-2 text-sm">
         <span [class]="stepClass('guest')">1. Select Guest</span>
-        <span class="text-zinc-300">›</span>
+        <span class="text-[var(--fg-3)]">›</span>
         <span [class]="stepClass('room')">2. Choose Room</span>
-        <span class="text-zinc-300">›</span>
+        <span class="text-[var(--fg-3)]">›</span>
         <span [class]="stepClass('confirm')">3. Confirm</span>
       </div>
 
       <!-- ── Step 1: Guest Search ───────────────────────────────────────────── -->
       @if (step() === 'guest') {
-        <div class="rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm space-y-4">
-          <h2 class="text-base font-semibold text-zinc-800">Find or confirm guest</h2>
+        <div class="rounded-2xl border border-[var(--border)] bg-white p-6 shadow-sm space-y-4">
+          <h2 class="text-base font-semibold text-[var(--fg)]">Find or confirm guest</h2>
 
           <mat-form-field class="w-full">
             <mat-label>Search by name or email</mat-label>
@@ -70,27 +70,27 @@ type Step = 'guest' | 'room' | 'confirm';
             <div class="space-y-1.5">
               @for (g of searchResults(); track g.id) {
                 <button
-                  class="w-full flex items-center justify-between rounded-xl border border-zinc-100 px-4 py-3 text-left hover:border-sky-300 hover:bg-sky-50 transition-colors"
-                  [class.border-sky-400]="selectedGuest()?.id === g.id"
-                  [class.bg-sky-50]="selectedGuest()?.id === g.id"
+                  class="w-full flex items-center justify-between rounded-xl border border-[var(--border)] px-4 py-3 text-left hover:border-[var(--azure-300)] hover:bg-[var(--azure-50)] transition-colors"
+                  [class.border-[var(--azure-400)]]="selectedGuest()?.id === g.id"
+                  [class.bg-[var(--azure-50)]]="selectedGuest()?.id === g.id"
                   (click)="selectGuest(g)">
                   <div>
-                    <p class="text-sm font-medium text-zinc-900">{{ g.fullName }}</p>
-                    <p class="text-xs text-zinc-500">{{ g.email }}
+                    <p class="text-sm font-medium text-[var(--fg)]">{{ g.fullName }}</p>
+                    <p class="text-xs text-[var(--fg-3)]">{{ g.email }}
                       @if (g.phone) { · {{ g.phone }} }
                     </p>
                   </div>
                   <div class="flex items-center gap-2">
-                    <span class="text-xs text-zinc-400">{{ g.totalBookings }} booking{{ g.totalBookings === 1 ? '' : 's' }}</span>
+                    <span class="text-xs text-[var(--fg-3)]">{{ g.totalBookings }} booking{{ g.totalBookings === 1 ? '' : 's' }}</span>
                     @if (selectedGuest()?.id === g.id) {
-                      <span class="material-icons-outlined text-sky-600 text-[18px]">check_circle</span>
+                      <span class="material-icons-outlined text-[var(--azure-600)] text-[18px]">check_circle</span>
                     }
                   </div>
                 </button>
               }
             </div>
           } @else if (searchCtrl.value && searchCtrl.value.length >= 2 && !searchLoading()) {
-            <p class="text-sm text-zinc-500">No guests found matching "{{ searchCtrl.value }}".</p>
+            <p class="text-sm text-[var(--fg-3)]">No guests found matching "{{ searchCtrl.value }}".</p>
           }
 
           <div class="flex justify-end pt-2">
@@ -105,9 +105,9 @@ type Step = 'guest' | 'room' | 'confirm';
 
       <!-- ── Step 2: Room Selection ─────────────────────────────────────────── -->
       @if (step() === 'room') {
-        <div class="rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm space-y-4">
-          <h2 class="text-base font-semibold text-zinc-800">
-            Booking for <span class="text-sky-700">{{ selectedGuest()?.fullName }}</span>
+        <div class="rounded-2xl border border-[var(--border)] bg-white p-6 shadow-sm space-y-4">
+          <h2 class="text-base font-semibold text-[var(--fg)]">
+            Booking for <span class="text-[var(--azure-700)]">{{ selectedGuest()?.fullName }}</span>
           </h2>
 
           <form [formGroup]="roomForm" class="flex flex-col gap-4">
@@ -146,34 +146,34 @@ type Step = 'guest' | 'room' | 'confirm';
               <app-loader />
             } @else if (availableRooms().length > 0) {
               <div>
-                <p class="text-sm font-medium text-zinc-700 mb-2">Available rooms</p>
+                <p class="text-sm font-medium text-[var(--fg-2)] mb-2">Available rooms</p>
                 <div class="space-y-1.5 max-h-60 overflow-y-auto">
                   @for (r of availableRooms(); track r.id) {
                     <button type="button"
                       class="w-full flex items-center justify-between rounded-xl border px-4 py-3 text-left transition-colors"
                       [ngClass]="selectedRoomId() === r.id
-                        ? 'border-sky-400 bg-sky-50'
-                        : 'border-zinc-100 hover:border-sky-300'"
+                        ? 'border-[var(--azure-400)] bg-[var(--azure-50)]'
+                        : 'border-[var(--border)] hover:border-[var(--azure-300)]'"
                       (click)="selectedRoomId.set(r.id)">
                       <div>
-                        <p class="text-sm font-semibold text-zinc-800">
+                        <p class="text-sm font-semibold text-[var(--fg)]">
                           Room {{ r.roomNumber }} — {{ r.type }}
                         </p>
-                        <p class="text-xs text-zinc-500">
+                        <p class="text-xs text-[var(--fg-3)]">
                           Capacity {{ r.capacity }}
                           · Floor {{ r.floorNumber }}
                         </p>
                       </div>
-                      <span class="text-sm font-bold text-zinc-900">{{ '$' + r.priceOffPeak }}<span class="text-xs font-normal text-zinc-400">/night</span></span>
+                      <span class="text-sm font-bold text-[var(--fg)]">{{ '$' + r.priceOffPeak }}<span class="text-xs font-normal text-[var(--fg-3)]">/night</span></span>
                     </button>
                   }
                 </div>
                 @if (noRoomSelected()) {
-                  <p class="text-xs text-rose-500 mt-1">Please select a room.</p>
+                  <p class="text-xs text-[var(--clay-500)] mt-1">Please select a room.</p>
                 }
               </div>
             } @else if (datesReady()) {
-              <p class="text-sm text-zinc-500">No rooms available for the selected dates.</p>
+              <p class="text-sm text-[var(--fg-3)]">No rooms available for the selected dates.</p>
             }
 
             <!-- Notes -->
@@ -196,50 +196,50 @@ type Step = 'guest' | 'room' | 'confirm';
 
       <!-- ── Step 3: Confirm ────────────────────────────────────────────────── -->
       @if (step() === 'confirm') {
-        <div class="rounded-2xl border border-zinc-100 bg-white p-6 shadow-sm space-y-4">
-          <h2 class="text-base font-semibold text-zinc-800">Confirm Walk-In Booking</h2>
+        <div class="rounded-2xl border border-[var(--border)] bg-white p-6 shadow-sm space-y-4">
+          <h2 class="text-base font-semibold text-[var(--fg)]">Confirm Walk-In Booking</h2>
 
           <dl class="divide-y divide-zinc-50 text-sm">
             <div class="flex justify-between py-2">
-              <dt class="text-zinc-500">Guest</dt>
-              <dd class="font-medium text-zinc-900">{{ selectedGuest()?.fullName }}</dd>
+              <dt class="text-[var(--fg-3)]">Guest</dt>
+              <dd class="font-medium text-[var(--fg)]">{{ selectedGuest()?.fullName }}</dd>
             </div>
             <div class="flex justify-between py-2">
-              <dt class="text-zinc-500">Email</dt>
-              <dd class="text-zinc-700">{{ selectedGuest()?.email }}</dd>
+              <dt class="text-[var(--fg-3)]">Email</dt>
+              <dd class="text-[var(--fg-2)]">{{ selectedGuest()?.email }}</dd>
             </div>
             <div class="flex justify-between py-2">
-              <dt class="text-zinc-500">Room</dt>
-              <dd class="font-medium text-zinc-900">
+              <dt class="text-[var(--fg-3)]">Room</dt>
+              <dd class="font-medium text-[var(--fg)]">
                 @if (selectedRoom()) {
                   Room {{ selectedRoom()!.roomNumber }} — {{ selectedRoom()!.type }}
                 }
               </dd>
             </div>
             <div class="flex justify-between py-2">
-              <dt class="text-zinc-500">Check-in</dt>
-              <dd class="text-zinc-700">{{ roomForm.value.checkInDate }}</dd>
+              <dt class="text-[var(--fg-3)]">Check-in</dt>
+              <dd class="text-[var(--fg-2)]">{{ roomForm.value.checkInDate }}</dd>
             </div>
             <div class="flex justify-between py-2">
-              <dt class="text-zinc-500">Check-out</dt>
-              <dd class="text-zinc-700">{{ roomForm.value.checkOutDate }}</dd>
+              <dt class="text-[var(--fg-3)]">Check-out</dt>
+              <dd class="text-[var(--fg-2)]">{{ roomForm.value.checkOutDate }}</dd>
             </div>
             <div class="flex justify-between py-2">
-              <dt class="text-zinc-500">Nights</dt>
-              <dd class="text-zinc-700">{{ nightCount() }}</dd>
+              <dt class="text-[var(--fg-3)]">Nights</dt>
+              <dd class="text-[var(--fg-2)]">{{ nightCount() }}</dd>
             </div>
             <div class="flex justify-between py-2">
-              <dt class="text-zinc-500">Guests</dt>
-              <dd class="text-zinc-700">{{ roomForm.value.guestCount }}</dd>
+              <dt class="text-[var(--fg-3)]">Guests</dt>
+              <dd class="text-[var(--fg-2)]">{{ roomForm.value.guestCount }}</dd>
             </div>
             <div class="flex justify-between py-2">
-              <dt class="text-zinc-500">Est. Total</dt>
-              <dd class="text-base font-bold text-zinc-900">{{ '$' + estimatedTotal() }}</dd>
+              <dt class="text-[var(--fg-3)]">Est. Total</dt>
+              <dd class="text-base font-bold text-[var(--fg)]">{{ '$' + estimatedTotal() }}</dd>
             </div>
           </dl>
 
           @if (roomForm.value.notes) {
-            <p class="text-sm text-zinc-500 italic">"{{ roomForm.value.notes }}"</p>
+            <p class="text-sm text-[var(--fg-3)] italic">"{{ roomForm.value.notes }}"</p>
           }
 
           <div class="flex justify-between pt-2">
@@ -406,10 +406,10 @@ export class WalkInBookingComponent {
 
   stepClass(s: Step): string {
     const cur = this.step();
-    if (s === cur) return 'font-semibold text-sky-700';
+    if (s === cur) return 'font-semibold text-[var(--azure-700)]';
     const order: Step[] = ['guest', 'room', 'confirm'];
     return order.indexOf(s) < order.indexOf(cur)
-      ? 'text-emerald-600'
-      : 'text-zinc-400';
+      ? 'text-[var(--glass-600)]'
+      : 'text-[var(--fg-3)]';
   }
 }

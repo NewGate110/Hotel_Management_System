@@ -39,7 +39,7 @@ import { toYmd } from '../../../shared/utils/date.utils';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="mx-auto max-w-3xl space-y-4">
-      <h1 class="text-2xl font-semibold text-zinc-900">Booking wizard</h1>
+      <h1 class="text-2xl font-semibold text-[var(--fg)]">Booking wizard</h1>
       <mat-stepper linear #stepper>
         <mat-step [stepControl]="searchForm" label="Stay">
           <form [formGroup]="searchForm" class="grid gap-4 py-4 md:grid-cols-2">
@@ -86,7 +86,7 @@ import { toYmd } from '../../../shared/utils/date.utils';
               }
             </mat-form-field>
             <div class="md:col-span-2">
-              <button mat-flat-button class="!bg-zinc-900 !text-white" type="button" matStepperNext [disabled]="roomsLoading()" (click)="loadRooms()">
+              <button mat-flat-button class="!bg-[var(--fg)] !text-white" type="button" matStepperNext [disabled]="roomsLoading()" (click)="loadRooms()">
                 Find rooms
               </button>
             </div>
@@ -94,7 +94,7 @@ import { toYmd } from '../../../shared/utils/date.utils';
         </mat-step>
         <mat-step label="Room">
           @if (roomsLoading()) {
-            <p class="py-6 text-sm text-zinc-500">Loading availability…</p>
+            <p class="py-6 text-sm text-[var(--fg-3)]">Loading availability…</p>
           } @else {
             <mat-radio-group class="flex flex-col gap-2 py-4" [formControl]="roomCtrl">
               @for (r of rooms(); track r.id) {
@@ -105,7 +105,7 @@ import { toYmd } from '../../../shared/utils/date.utils';
             </mat-radio-group>
             <div class="mt-4 flex justify-between">
               <button mat-button matStepperPrevious type="button">Back</button>
-              <button mat-flat-button class="!bg-zinc-900 !text-white" matStepperNext type="button" [disabled]="!roomCtrl.value">
+              <button mat-flat-button class="!bg-[var(--fg)] !text-white" matStepperNext type="button" [disabled]="!roomCtrl.value">
                 Continue
               </button>
             </div>
@@ -119,24 +119,24 @@ import { toYmd } from '../../../shared/utils/date.utils';
           </div>
           <div class="flex justify-between">
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-flat-button class="!bg-zinc-900 !text-white" matStepperNext type="button">Review</button>
+            <button mat-flat-button class="!bg-[var(--fg)] !text-white" matStepperNext type="button">Review</button>
           </div>
         </mat-step>
         <mat-step label="Confirm">
           @if (roomCtrl.value; as pr) {
-            <div class="space-y-2 py-4 text-sm text-zinc-700">
+            <div class="space-y-2 py-4 text-sm text-[var(--fg-2)]">
               <p><strong>Hotel:</strong> {{ pr.hotelName }}</p>
               <p><strong>Room:</strong> {{ pr.roomNumber }} ({{ pr.type }})</p>
               <p>
                 <strong>Dates:</strong> {{ ymd(searchForm.value.checkIn) }} → {{ ymd(searchForm.value.checkOut) }}
               </p>
               <p><strong>Add-ons:</strong> {{ addOnSummary() }}</p>
-              <p class="text-xs text-zinc-500">Payment capture is simulated until PSP integration.</p>
+              <p class="text-xs text-[var(--fg-3)]">Payment capture is simulated until PSP integration.</p>
             </div>
           }
           <div class="flex justify-between">
             <button mat-button matStepperPrevious type="button">Back</button>
-            <button mat-flat-button class="!bg-zinc-900 !text-white" type="button" [disabled]="submitting()" (click)="confirm()">
+            <button mat-flat-button class="!bg-[var(--fg)] !text-white" type="button" [disabled]="submitting()" (click)="confirm()">
               Confirm booking
             </button>
           </div>

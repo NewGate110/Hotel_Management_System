@@ -12,4 +12,5 @@ public interface IHotelService
     Task<HotelDto> UpdateHotelAsync(int id, UpdateHotelDto dto);
     Task<HotelDto> UpdateHotelImageAsync(int hotelId, string? imageUrl);
     Task<HotelDto> CreateHotelAsync(CreateHotelDto dto);
+    Task DeleteHotelAsync(int id);
 }

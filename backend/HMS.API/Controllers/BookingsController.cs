@@ -1,5 +1,4 @@
 // Author: S2401265 Ahmed Aslan Ibrahim
-using System.Security.Claims;
 using HMS.Application.DTOs.Bookings;
 using HMS.Application.DTOs.Invoices;
 using HMS.Application.DTOs.Payments;
@@ -13,7 +12,7 @@ namespace HMS.API.Controllers;
 [Route("api/[controller]")]
 [Produces("application/json")]
 [Authorize]
-public class BookingsController : ControllerBase
+public class BookingsController : HmsControllerBase
 {
     private readonly IBookingService _bookingService;
     private readonly IPaymentService _paymentService;
@@ -33,9 +32,7 @@ public class BookingsController : ControllerBase
     {
         var booking = await _bookingService.GetBookingByIdAsync(id);
         if (booking is null) return NotFound($"Booking {id} not found.");
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        if (callerRole == "Guest" && booking.GuestId != callerId) return Forbid();
+        if (EnforceGuestOwnership(booking.GuestId) is { } deny) return deny;
         return Ok(booking);
     }
 
@@ -45,9 +42,7 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<BookingDto>>> GetByGuest(int guestId)
     {
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        if (callerRole == "Guest" && callerId != guestId) return Forbid();
+        if (EnforceGuestOwnership(guestId) is { } deny) return deny;
         var bookings = await _bookingService.GetBookingsByGuestAsync(guestId);
         return Ok(bookings);
     }
@@ -74,10 +69,7 @@ public class BookingsController : ControllerBase
     public async Task<ActionResult<BookingDto>> Create(int guestId, [FromBody] CreateBookingDto dto)
     {
         // Guests can only create bookings for themselves; staff can book on behalf of any guest
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var id) ? id : 0;
-        if (callerRole == "Guest" && callerId != guestId)
-            return Forbid();
+        if (EnforceGuestOwnership(guestId) is { } deny) return deny;
 
         try
         {
@@ -98,10 +90,8 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BookingDto>> Update(int id, [FromBody] UpdateBookingDto dto)
     {
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        // Pass callerId for Guests so service can verify ownership; 0 for staff/admin = bypass
-        var requestingUserId = callerRole == "Guest" ? callerId : 0;
+        // Pass CallerId for Guests so the service verifies ownership; 0 for staff/admin = bypass
+        var requestingUserId = IsGuest ? CallerId : 0;
         try
         {
             var booking = await _bookingService.UpdateBookingAsync(id, dto, requestingUserId);
@@ -120,11 +110,7 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BookingDto>> Cancel(int id)
     {
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        // Pass the real caller ID for guests so the service can verify ownership;
-        // pass 0 for staff/admin to skip the ownership check.
-        var requestingUserId = callerRole == "Guest" ? callerId : 0;
+        var requestingUserId = IsGuest ? CallerId : 0;
         try
         {
             var booking = await _bookingService.CancelBookingAsync(id, requestingUserId);
@@ -146,9 +132,7 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BookingDto>> AddService(int id, [FromBody] AddBookingServiceDto dto)
     {
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        var requestingUserId = callerRole == "Guest" ? callerId : 0;
+        var requestingUserId = IsGuest ? CallerId : 0;
         try
         {
             var booking = await _bookingService.AddServiceAsync(id, dto, requestingUserId);
@@ -169,9 +153,7 @@ public class BookingsController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<BookingDto>> RemoveService(int id, int serviceId)
     {
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        var requestingUserId = callerRole == "Guest" ? callerId : 0;
+        var requestingUserId = IsGuest ? CallerId : 0;
         try
         {
             var booking = await _bookingService.RemoveServiceAsync(id, serviceId, requestingUserId);
@@ -191,9 +173,7 @@ public class BookingsController : ControllerBase
     {
         var booking = await _bookingService.GetBookingByIdAsync(id);
         if (booking is null) return NotFound($"Booking {id} not found.");
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        if (callerRole == "Guest" && booking.GuestId != callerId) return Forbid();
+        if (EnforceGuestOwnership(booking.GuestId) is { } deny) return deny;
         var payments = await _paymentService.GetPaymentsByBookingAsync(id);
         return Ok(payments);
     }
@@ -207,9 +187,7 @@ public class BookingsController : ControllerBase
     {
         var booking = await _bookingService.GetBookingByIdAsync(id);
         if (booking is null) return NotFound($"Booking {id} not found.");
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        if (callerRole == "Guest" && booking.GuestId != callerId) return Forbid();
+        if (EnforceGuestOwnership(booking.GuestId) is { } deny) return deny;
         var invoice = await _paymentService.GetInvoiceByBookingAsync(id);
         return invoice is null ? NotFound($"No invoice found for booking {id}.") : Ok(invoice);
     }

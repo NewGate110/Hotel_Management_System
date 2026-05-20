@@ -112,14 +112,14 @@ interface DemoUser { role: string; name: string; email: string; password: string
             aria-modal="true"
             aria-label="Select a demo account"
           >
-            <div class="flex items-center justify-between border-b border-zinc-100 px-4 py-3">
-              <span class="text-[11px] font-bold uppercase tracking-widest text-zinc-400">
+            <div class="flex items-center justify-between border-b border-[var(--border)] px-4 py-3">
+              <span class="text-[11px] font-bold uppercase tracking-widest text-[var(--fg-3)]">
                 Demo accounts
               </span>
               <button
                 type="button"
                 (click)="demoOpen.set(false)"
-                class="rounded-md p-0.5 text-zinc-400 transition hover:bg-zinc-100 hover:text-zinc-600"
+                class="rounded-md p-0.5 text-[var(--fg-3)] transition hover:bg-[var(--sand-100)] hover:text-[var(--fg-2)]"
                 aria-label="Close demo panel"
               >
                 <span class="material-icons-outlined text-[18px]" aria-hidden="true">close</span>
@@ -131,7 +131,7 @@ interface DemoUser { role: string; name: string; email: string; password: string
                 <button
                   type="button"
                   (click)="fillDemo(u)"
-                  class="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-zinc-50 active:bg-zinc-100"
+                  class="flex w-full items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-[var(--sand-100)] active:bg-[var(--sand-200)]"
                   role="listitem"
                   [attr.aria-label]="'Sign in as ' + u.name + ' (' + u.role + ')'"
                 >
@@ -140,8 +140,8 @@ interface DemoUser { role: string; name: string; email: string; password: string
                     [ngClass]="roleBadgeClass(u.role)"
                   >{{ u.role }}</span>
                   <div class="min-w-0">
-                    <p class="truncate text-sm font-medium text-zinc-800">{{ u.name }}</p>
-                    <p class="truncate text-[11px] text-zinc-400">{{ u.email }}</p>
+                    <p class="truncate text-sm font-medium text-[var(--fg)]">{{ u.name }}</p>
+                    <p class="truncate text-[11px] text-[var(--fg-3)]">{{ u.email }}</p>
                   </div>
                 </button>
               }
@@ -155,9 +155,9 @@ interface DemoUser { role: string; name: string; email: string; password: string
           (click)="demoOpen.update(v => !v)"
           [attr.aria-expanded]="demoOpen()"
           aria-haspopup="dialog"
-          class="flex items-center gap-1.5 rounded-full border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold text-zinc-500 shadow-md transition hover:border-zinc-300 hover:bg-zinc-50 hover:text-zinc-800"
+          class="flex items-center gap-1.5 rounded-full border border-[var(--border)] bg-white px-4 py-2 text-xs font-semibold text-[var(--fg-3)] shadow-md transition hover:border-[var(--border-strong)] hover:bg-[var(--sand-100)] hover:text-[var(--fg)]"
         >
-          <span class="material-icons-outlined text-[16px] text-zinc-400" aria-hidden="true">science</span>
+          <span class="material-icons-outlined text-[16px] text-[var(--fg-3)]" aria-hidden="true">science</span>
           Demo users
         </button>
       </div>

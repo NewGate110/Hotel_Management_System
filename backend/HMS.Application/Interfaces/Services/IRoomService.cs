@@ -15,4 +15,7 @@ public interface IRoomService
     Task<IEnumerable<DateRangeDto>> GetUnavailableDatesAsync(int roomId);
     Task<RoomDto> UpdateRoomPricingAsync(int roomId, UpdateRoomPricingDto dto);
     Task<RoomDto> UpdateRoomImageAsync(int roomId, UpdateImageDto dto);
+    Task<RoomDto> UpdateRoomStatusAsync(int roomId, RoomStatus status);
+    Task<RoomDto> CreateRoomAsync(int hotelId, CreateRoomDto dto);
+    Task DeleteRoomAsync(int id);
 }

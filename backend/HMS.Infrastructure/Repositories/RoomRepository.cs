@@ -112,4 +112,28 @@ public class RoomRepository : IRoomRepository
         _db.Rooms.Update(room);
         await _db.SaveChangesAsync();
     }
+
+    public async Task<Room> AddAsync(Room room)
+    {
+        _db.Rooms.Add(room);
+        await _db.SaveChangesAsync();
+        return room;
+    }
+
+    public async Task DeleteAsync(int id)
+    {
+        var room = await _db.Rooms.FindAsync(id)
+            ?? throw new KeyNotFoundException($"Room {id} not found.");
+        _db.Rooms.Remove(room);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task<bool> HasActiveOrFutureBookingsAsync(int roomId)
+    {
+        var now = DateTime.UtcNow;
+        return await _db.BookingRooms
+            .Where(br => br.RoomId == roomId)
+            .AnyAsync(br => br.Booking.CheckOutDate > now
+                         && br.Booking.Status != BookingStatus.Cancelled);
+    }
 }

@@ -63,6 +63,18 @@ public class BookingManagementService : IBookingService
         return _mapper.Map<IEnumerable<BookingDto>>(bookings);
     }
 
+    public async Task<IEnumerable<BookingDto>> GetTodayArrivalsAsync()
+    {
+        var bookings = await _bookings.GetTodayArrivalsAsync();
+        return _mapper.Map<IEnumerable<BookingDto>>(bookings);
+    }
+
+    public async Task<IEnumerable<BookingDto>> GetCheckedInAsync()
+    {
+        var bookings = await _bookings.GetCheckedInAsync();
+        return _mapper.Map<IEnumerable<BookingDto>>(bookings);
+    }
+
     // ── Create ────────────────────────────────────────────────────────────────
 
     /// <summary>

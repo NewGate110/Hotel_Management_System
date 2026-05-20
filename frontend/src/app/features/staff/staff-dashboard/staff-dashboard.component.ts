@@ -31,7 +31,7 @@ import { AppLoaderComponent } from '../../../shared/ui/app-loader/app-loader.com
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-6">
-      <h1 class="text-2xl font-semibold text-zinc-900">Front desk overview</h1>
+      <h1 class="text-2xl font-semibold text-[var(--fg)]">Front desk overview</h1>
       <div class="grid items-stretch gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <app-stat-card label="Arrivals today" [value]="arrivals().toString()" />
         <app-stat-card label="Departures today" [value]="departures().toString()" />

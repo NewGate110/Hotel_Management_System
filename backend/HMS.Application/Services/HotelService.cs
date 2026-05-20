@@ -82,4 +82,6 @@ public class HotelService : IHotelService
         await _hotels.AddAsync(hotel);
         return _mapper.Map<HotelDto>(hotel);
     }
+
+    public async Task DeleteHotelAsync(int id) => await _hotels.SoftDeleteAsync(id);
 }
