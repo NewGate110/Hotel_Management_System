@@ -45,13 +45,11 @@ export interface SidebarNavItem {
       <nav class="flex-1 overflow-y-auto p-2" style="display: flex; flex-direction: column; gap: 2px;" aria-label="Primary">
         @for (item of items(); track item.link.join('/')) {
           <a
-            class="flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors"
-            style="border-radius: var(--r-sm); color: var(--sand-300); text-decoration: none;"
+            class="sidebar-link flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors"
+            style="border-radius: var(--r-sm); text-decoration: none;"
             [routerLink]="item.link"
             routerLinkActive="sidebar-link-active"
             [routerLinkActiveOptions]="{ exact: item.link.length <= 1 }"
-            (mouseenter)="onLinkHover($event, true)"
-            (mouseleave)="onLinkHover($event, false)"
           >
             <span class="material-icons-outlined" style="font-size: 18px; width: 18px; height: 18px;" aria-hidden="true">{{ item.icon }}</span>
             @if (!collapsed()) {
@@ -82,6 +80,13 @@ export interface SidebarNavItem {
     </aside>
 
     <style>
+      .sidebar-link {
+        color: var(--sand-300);
+      }
+      .sidebar-link:hover {
+        background: rgba(250,247,242,0.06);
+        color: var(--sand-100);
+      }
       .sidebar-link-active {
         background: rgba(250,247,242,0.08) !important;
         color: var(--sand-50) !important;
@@ -93,13 +98,6 @@ export class AppSidebarComponent {
   items = input<SidebarNavItem[]>([]);
   collapsed = input(false);
   toggleCollapse = output<void>();
-
-  onLinkHover(event: MouseEvent, entering: boolean): void {
-    const el = event.currentTarget as HTMLElement;
-    if (el.classList.contains('sidebar-link-active')) return;
-    el.style.background = entering ? 'rgba(250,247,242,0.06)' : '';
-    el.style.color = entering ? 'var(--sand-100)' : 'var(--sand-300)';
-  }
 
   onCollapseHover(event: MouseEvent, entering: boolean): void {
     const el = event.currentTarget as HTMLElement;
