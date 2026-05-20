@@ -1,5 +1,5 @@
 @startuml HMS_Seq_CheckIn
-' Author: Aslan
+' Author: S2401265 Ahmed Aslan Ibrahim
 ' Sequence Diagram 2: Front Desk Staff Performs Guest Check-in
 
 skinparam sequenceArrowThickness 2
@@ -18,79 +18,78 @@ title Front Desk Staff Performs Guest Check-in
 
 actor "Front Desk\nStaff" as S
 participant "Angular\nFrontend" as UI
-participant "Check-in\nController" as CC
-participant "Booking\nService" as BS
-participant "Room\nService" as RS
-participant "Payment\nService" as PS
+participant "CheckInController\n/api/checkin" as CC
+participant "BookingManagement\nService" as BS
 database "PostgreSQL\nDatabase" as DB
 
-== Retrieve Booking ==
+== View Today's Arrivals ==
 
-S -> UI : Search booking by reference\nor guest name
+S -> UI : Open arrivals board
 activate UI
 
-UI -> CC : GET /api/bookings/{reference}
+UI -> CC : GET /api/checkin/arrivals
 activate CC
-CC -> BS : GetBookingByReference(reference)
+CC -> BS : GetTodayArrivalsAsync()
 activate BS
-BS -> DB : SELECT Booking JOIN Guest JOIN Rooms
+BS -> DB : SELECT Bookings WHERE status = Confirmed\nAND checkInDate = today
+activate DB
+DB --> BS : List<BookingDto>
+deactivate DB
+BS --> CC : List<BookingDto>
+deactivate BS
+CC --> UI : 200 OK – List<BookingDto>
+deactivate CC
+
+UI --> S : Display arrivals list\n(guest name, room, booking reference)
+
+== Select Booking & Verify Guest ==
+
+S -> UI : Select guest booking from list
+UI --> S : Display booking details\n(guest, rooms, services, guest count)
+
+S -> UI : Verify guest photo ID\nand confirm identity
+
+== Perform Check-in ==
+
+S -> UI : Click "Check In"
+UI -> CC : POST /api/checkin/{bookingId}
+activate CC
+
+CC -> BS : CheckInAsync(bookingId, staffId)
+activate BS
+
+BS -> DB : SELECT Booking with rooms
 activate DB
 DB --> BS : BookingDetailDto
 deactivate DB
-BS --> CC : BookingDetailDto
-deactivate BS
-CC --> UI : 200 OK – BookingDetailDto
-deactivate CC
 
-UI --> S : Display booking details\n(guest, rooms, services, amount due)
-
-== Verify Guest Identity ==
-
-S -> UI : Confirm guest identity\n(photo ID verified)
-
-== Pre-authorise Payment ==
-
-UI -> CC : POST /api/checkin/pre-authorise\n{bookingId, paymentMethod}
-activate CC
-CC -> PS : PreAuthoriseCard(bookingId, estimatedTotal)
-activate PS
-PS -> DB : INSERT Payment (status=Authorised, type=PreAuth)
-activate DB
-DB --> PS : paymentId
-deactivate DB
-PS --> CC : PreAuthResult {success, authCode}
-deactivate PS
-
-alt Pre-auth Successful
-  CC -> BS : UpdateBookingStatus(bookingId, CheckedIn)
-  activate BS
+alt Booking is Confirmed and today is check-in date
   BS -> DB : UPDATE Booking status = CheckedIn
   activate DB
   DB --> BS : OK
   deactivate DB
-  deactivate BS
 
-  CC -> RS : AssignRoomToGuest(roomId, guestId)
-  activate RS
-  RS -> DB : UPDATE Room status = Occupied
+  BS -> DB : UPDATE Room status = Occupied\n(for each room in booking)
   activate DB
-  DB --> RS : OK
-  deactivate DB
-  RS --> CC : OK
-  deactivate RS
-
-  CC -> DB : INSERT AuditLog\n(CheckInPerformed, staffId, bookingId)
-  activate DB
-  DB --> CC : OK
+  DB --> BS : OK
   deactivate DB
 
-  CC --> UI : 200 OK – CheckInConfirmationDto
-  UI --> S : Check-in complete\nPrint key card / room number
-else Pre-auth Failed
-  CC --> UI : 402 Payment Required
-  UI --> S : Pre-auth failed –\nask guest for alternative payment
+  BS -> DB : INSERT AuditLog\n(CheckInPerformed, staffId, bookingId)
+  activate DB
+  DB --> BS : OK
+  deactivate DB
+
+  BS --> CC : BookingDto {status: CheckedIn}
+  CC --> UI : 200 OK – BookingDto
+  UI --> S : Check-in complete\nShow room number(s) to assign key
+
+else Booking not in Confirmed status
+  BS --> CC : 400 Bad Request
+  CC --> UI : 400 – Cannot check in\n(wrong status or wrong date)
+  UI --> S : Error message shown
 end
 
+deactivate BS
 deactivate CC
 deactivate UI
 

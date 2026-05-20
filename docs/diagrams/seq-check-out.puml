@@ -1,5 +1,5 @@
 @startuml HMS_Seq_CheckOut
-' Author: Aslan
+' Author: S2401265 Ahmed Aslan Ibrahim
 ' Sequence Diagram 3: Front Desk Staff Processes Guest Check-out and Billing
 
 skinparam sequenceArrowThickness 2
@@ -18,99 +18,83 @@ title Front Desk Staff Processes Guest Check-out & Billing
 
 actor "Front Desk\nStaff" as S
 participant "Angular\nFrontend" as UI
-participant "Check-out\nController" as CC
-participant "Booking\nService" as BS
-participant "Billing\nService" as BLS
-participant "Payment\nService" as PS
-participant "Invoice\nService" as IS
+participant "CheckInController\n/api/checkin" as CC
+participant "BookingManagement\nService" as BS
 database "PostgreSQL\nDatabase" as DB
 
-== Retrieve Active Booking ==
+== View Today's Departures ==
 
-S -> UI : Search guest by name\nor room number
+S -> UI : Open departures board
 activate UI
 
-UI -> CC : GET /api/checkin/active/{roomId}
+UI -> CC : GET /api/checkin/departures
 activate CC
-CC -> BS : GetActiveBookingForRoom(roomId)
+CC -> BS : GetCheckedInAsync()
 activate BS
-BS -> DB : SELECT Booking WHERE status=CheckedIn\nAND roomId = :roomId
+BS -> DB : SELECT Bookings WHERE status = CheckedIn\nAND checkOutDate <= today
 activate DB
-DB --> BS : BookingDetailDto
+DB --> BS : List<BookingDto>
 deactivate DB
-BS --> CC : BookingDetailDto
+BS --> CC : List<BookingDto>
 deactivate BS
-CC --> UI : 200 OK – BookingDetailDto
+CC --> UI : 200 OK – List<BookingDto>
 deactivate CC
 
-UI --> S : Display booking:\nnights stayed, booked services
+UI --> S : Display departures list
 
-== Calculate Final Bill ==
+== Select Booking & Review Stay ==
 
-UI -> CC : POST /api/checkout/calculate\n{bookingId}
+S -> UI : Select guest from departures
+UI --> S : Display stay summary:\nnights, rooms, ancillary services
+
+== Process Check-out ==
+
+S -> UI : Click "Check Out"
+UI -> CC : POST /api/checkin/{bookingId}/checkout
 activate CC
 
-CC -> BLS : CalculateFinalBill(bookingId)
-activate BLS
-BLS -> DB : SELECT BookingRooms, BookingServices\nfor bookingId
-activate DB
-DB --> BLS : rooms + services
-deactivate DB
-BLS -> BLS : Sum room charges (priceAtBooking × nights)\n+ ancillary service fees
-BLS --> CC : FinalBillDto {lineItems, subtotal, tax, total}
-deactivate BLS
-
-CC --> UI : 200 OK – FinalBillDto
-UI --> S : Display itemised bill\n(rooms, services, taxes)
-
-== Process Final Payment ==
-
-S -> UI : Confirm bill and capture payment
-UI -> CC : POST /api/checkout/confirm\n{bookingId, captureExistingPreAuth: true}
-activate CC
-
-CC -> PS : CapturePayment(bookingId, finalAmount)
-activate PS
-PS -> DB : UPDATE Payment (Authorised → Captured)\nwith final amount
-activate DB
-DB --> PS : OK
-deactivate DB
-PS --> CC : CaptureResult {success, receiptRef}
-deactivate PS
-
-== Generate Invoice & Update State ==
-
-CC -> IS : GenerateInvoice(bookingId)
-activate IS
-IS -> DB : INSERT Invoice + InvoiceLineItems
-activate DB
-DB --> IS : invoiceId
-deactivate DB
-IS --> CC : InvoiceDto {invoiceNumber, pdfUrl}
-deactivate IS
-
-CC -> BS : UpdateBookingStatus(bookingId, CheckedOut)
+CC -> BS : CheckOutAsync(bookingId, staffId)
 activate BS
-BS -> DB : UPDATE Booking status = CheckedOut
+
+BS -> DB : SELECT Booking JOIN BookingRooms\nJOIN BookingServices JOIN Room
+activate DB
+DB --> BS : Full booking detail
+deactivate DB
+
+BS -> BS : Apply PricingPolicy:\nsum room charges (priceAtBooking × nights)\n+ sum ancillary service fees\n+ tax calculation
+
+BS -> DB : INSERT Invoice\n{invoiceNumber, subtotal, taxAmount, totalAmount}
+activate DB
+DB --> BS : invoiceId
+deactivate DB
+
+BS -> DB : INSERT InvoiceLineItems\n(one per room + one per service)
 activate DB
 DB --> BS : OK
 deactivate DB
+
+BS -> DB : UPDATE Booking status = CheckedOut\nAND totalAmount = finalAmount
+activate DB
+DB --> BS : OK
+deactivate DB
+
+BS -> DB : UPDATE Room status = Cleaning\n(for each room in booking)
+activate DB
+DB --> BS : OK
+deactivate DB
+
+BS -> DB : INSERT AuditLog\n(CheckOutProcessed, staffId, bookingId)
+activate DB
+DB --> BS : OK
+deactivate DB
+
+BS --> CC : BookingDto {status: CheckedOut, invoice: {invoiceNumber, totalAmount}}
 deactivate BS
 
-CC -> DB : UPDATE Room status = Cleaning
-activate DB
-DB --> CC : OK
-deactivate DB
-
-CC -> DB : INSERT AuditLog\n(CheckOutProcessed, staffId, bookingId)
-activate DB
-DB --> CC : OK
-deactivate DB
-
-CC --> UI : 200 OK – CheckOutConfirmationDto\n{invoiceNumber, pdfUrl}
-UI --> S : Check-out complete\nOffer invoice print/email to guest
-
+CC --> UI : 200 OK – BookingDto
 deactivate CC
+
+UI --> S : Check-out complete\nDisplay itemised invoice\nOffer to print or email to guest
 deactivate UI
 
 @enduml

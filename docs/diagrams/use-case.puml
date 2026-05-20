@@ -1,5 +1,5 @@
 @startuml HMS_UseCaseDiagram
-' Author: Aslan
+' Author: S2401265 Ahmed Aslan Ibrahim
 
 skinparam actorStyle awesome
 skinparam packageStyle rectangle
@@ -26,49 +26,53 @@ rectangle "Hotel Management System" {
   ' ── Authentication (shared) ──
   usecase "Login"                         as UC_Login
   usecase "Logout"                        as UC_Logout
+  usecase "Change Password"               as UC_ChangePw
+  usecase "Forgot Password"               as UC_ForgotPw
   usecase "Reset Password"                as UC_ResetPw
 
   ' ── Guest use cases ──
   package "Guest Features" {
-    usecase "Search Rooms"                as UC_Search
+    usecase "Search Rooms\n(by hotel, type, price, dates)" as UC_Search
     usecase "View Room Details & Prices"  as UC_RoomDetail
-    usecase "Check Availability"          as UC_Avail
     usecase "Make Booking"                as UC_Book
-    usecase "View Booking"                as UC_ViewBook
+    usecase "View / Manage Bookings"      as UC_ViewBook
     usecase "Cancel Booking"              as UC_Cancel
-    usecase "Request Ancillary Services"  as UC_Services
+    usecase "Add Ancillary Services"      as UC_Services
     usecase "View Booking History"        as UC_History
-    usecase "Download Invoice"            as UC_Invoice
+    usecase "View Invoice"                as UC_Invoice
     usecase "Manage Profile"              as UC_Profile
+    usecase "Submit Contact Enquiry"      as UC_Contact
   }
 
   ' ── Front Desk Staff use cases ──
   package "Front Desk Features" {
-    usecase "Manage Guest Booking\n(Create / Update / Cancel)" as UC_ManageBook
+    usecase "View Today's Arrivals"       as UC_Arrivals
+    usecase "View Today's Departures"     as UC_Departures
+    usecase "Create Walk-in Booking"      as UC_WalkIn
     usecase "Perform Guest Check-in"      as UC_Checkin
     usecase "Perform Guest Check-out"     as UC_Checkout
-    usecase "Manage Room Status"          as UC_RoomStatus
-    usecase "Process Payment"             as UC_Payment
-    usecase "Generate Bill"               as UC_Bill
-    usecase "Process Guest Service\nRequests" as UC_SvcReq
+    usecase "Update Room Status"          as UC_RoomStatus
+    usecase "Search Guests"               as UC_GuestSearch
+    usecase "Edit Room Images\n(canManageMedia)" as UC_RoomImg
   }
 
   ' ── Hotel Manager use cases ──
   package "Manager Features" {
-    usecase "View Occupancy Dashboard"    as UC_Dashboard
-    usecase "Generate Occupancy Report"   as UC_OccRpt
-    usecase "Generate Revenue Report"     as UC_RevRpt
-    usecase "View Guest Demographics"     as UC_Demo
-    usecase "Manage Room Rates"           as UC_Rates
-    usecase "Manage Room Availability"    as UC_RoomAvail
-    usecase "Manage Staff Accounts"       as UC_StaffAcc
+    usecase "View Occupancy Report"       as UC_OccRpt
+    usecase "View Revenue Report"         as UC_RevRpt
+    usecase "View Staff Performance"      as UC_StaffPerf
+    usecase "Edit Room Images"            as UC_MgrRoomImg
   }
 
   ' ── Admin use cases ──
   package "Admin Features" {
-    usecase "Manage All User Accounts"    as UC_UserAcc
-    usecase "Add / Edit Hotel Location"   as UC_Hotel
-    usecase "Configure System Settings"   as UC_Settings
+    usecase "Manage All User Accounts\n(activate / deactivate / unlock)" as UC_UserAcc
+    usecase "Manage Staff Accounts\n(create / update)" as UC_StaffAcc
+    usecase "Toggle Staff Media Permission" as UC_MediaPerm
+    usecase "Add / Edit Hotel"            as UC_Hotel
+    usecase "Manage Room Pricing"         as UC_Pricing
+    usecase "Edit Hotel Images"           as UC_HotelImg
+    usecase "View Audit Logs"             as UC_Audit
   }
 
 }
@@ -76,10 +80,10 @@ rectangle "Hotel Management System" {
 ' ── Guest associations ──
 G --> UC_Login
 G --> UC_Logout
-G --> UC_ResetPw
+G --> UC_ChangePw
+G --> UC_ForgotPw
 G --> UC_Search
 G --> UC_RoomDetail
-G --> UC_Avail
 G --> UC_Book
 G --> UC_ViewBook
 G --> UC_Cancel
@@ -87,48 +91,55 @@ G --> UC_Services
 G --> UC_History
 G --> UC_Invoice
 G --> UC_Profile
+G --> UC_Contact
 
-' ── Search includes availability check ──
-UC_Search ..> UC_Avail  : <<include>>
-UC_Book   ..> UC_Payment : <<include>>
-UC_Book   ..> UC_Services : <<extend>>
+' ── Forgot password includes reset ──
+UC_ForgotPw ..> UC_ResetPw : <<include>>
+
+' ── Booking includes services ──
+UC_Book ..> UC_Services : <<extend>>
+UC_ViewBook ..> UC_Cancel : <<extend>>
 
 ' ── Front Desk Staff associations ──
 S --> UC_Login
 S --> UC_Logout
-S --> UC_ManageBook
+S --> UC_ChangePw
+S --> UC_Arrivals
+S --> UC_Departures
+S --> UC_WalkIn
 S --> UC_Checkin
 S --> UC_Checkout
 S --> UC_RoomStatus
-S --> UC_Payment
-S --> UC_Bill
-S --> UC_SvcReq
+S --> UC_GuestSearch
+S --> UC_RoomImg
 S --> UC_Search
 
-UC_Checkout ..> UC_Bill    : <<include>>
-UC_Checkout ..> UC_Payment : <<include>>
-UC_Checkin  ..> UC_ManageBook : <<include>>
+UC_Checkin  ..> UC_Arrivals   : <<include>>
+UC_Checkout ..> UC_Departures : <<include>>
 
 ' ── Hotel Manager associations ──
 M --> UC_Login
 M --> UC_Logout
-M --> UC_Dashboard
+M --> UC_ChangePw
 M --> UC_OccRpt
 M --> UC_RevRpt
-M --> UC_Demo
-M --> UC_Rates
-M --> UC_RoomAvail
-M --> UC_StaffAcc
+M --> UC_StaffPerf
+M --> UC_MgrRoomImg
 
 ' ── Admin associations ──
 A --> UC_Login
 A --> UC_Logout
+A --> UC_ChangePw
 A --> UC_UserAcc
-A --> UC_Hotel
-A --> UC_Settings
 A --> UC_StaffAcc
+A --> UC_MediaPerm
+A --> UC_Hotel
+A --> UC_Pricing
+A --> UC_HotelImg
+A --> UC_MgrRoomImg
+A --> UC_Audit
 
-' Admin extends Manager privileges
+' Admin can do everything a Manager can
 A --|> M
 
 @enduml

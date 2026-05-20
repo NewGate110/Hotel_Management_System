@@ -1,5 +1,5 @@
 @startuml HMS_ClassDiagram
-' Author: Aslan
+' Author: S2401265 Ahmed Aslan Ibrahim
 
 skinparam classAttributeIconSize 0
 skinparam class {
@@ -22,7 +22,11 @@ enum RoomType {
   StandardDouble
   DeluxeKing
   FamilySuite
-  Penthouse
+  BeachVilla
+  WaterVilla
+  OverwaterBungalow
+  HoneymoonVilla
+  PresidentialVilla
 }
 
 enum RoomStatus {
@@ -72,6 +76,7 @@ abstract class User {
   - email : string
   - passwordHash : string
   - role : UserRole
+  - isActive : bool
   - failedLoginAttempts : int
   - isLocked : bool
   - lockedUntil : DateTime?
@@ -100,12 +105,23 @@ class StaffUser {
   - lastName : string
   - employeeId : string
   - department : string
+  - canManageMedia : bool
   --
   + GetFullName() : string
 }
 
+class PasswordResetToken {
+  - id : int
+  - userId : int
+  - tokenHash : string
+  - expiresAt : DateTime
+  - isUsed : bool
+  - createdAt : DateTime
+}
+
 User <|-- GuestUser
 User <|-- StaffUser
+User "1" -- "many" PasswordResetToken : owns
 
 ' ═══════════════════════════════════════
 ' HOTEL & ROOM
@@ -119,6 +135,7 @@ class Hotel {
   - address : string
   - phone : string
   - email : string
+  - imageUrl : string?
   - isActive : bool
   --
   + GetAvailableRooms(checkIn : DateTime, checkOut : DateTime) : List<Room>
@@ -135,6 +152,7 @@ class Room {
   - pricePeak : decimal
   - status : RoomStatus
   - description : string
+  - imageUrl : string?
   - floorNumber : int
   --
   + IsAvailable(checkIn : DateTime, checkOut : DateTime) : bool
@@ -157,6 +175,7 @@ class Booking {
   - status : BookingStatus
   - totalAmount : decimal
   - cancellationFee : decimal
+  - guestCount : int
   - notes : string
   - createdAt : DateTime
   - createdByStaffId : int?
@@ -242,7 +261,6 @@ class Invoice {
   --
   + Generate() : void
   + GetLineItems() : List<InvoiceLineItem>
-  + ToPdf() : byte[]
 }
 
 class InvoiceLineItem {
@@ -255,7 +273,7 @@ class InvoiceLineItem {
 }
 
 Booking "1" *-- "many" Payment : paid via
-Booking "1" *-- "1" Invoice : produces
+Booking "1" *-- "0..1" Invoice : produces
 Invoice "1" *-- "many" InvoiceLineItem : contains
 
 ' ═══════════════════════════════════════
