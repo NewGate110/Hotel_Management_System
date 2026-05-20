@@ -37,4 +37,12 @@ public class HotelRepository : IHotelRepository
         await _db.SaveChangesAsync();
         return hotel;
     }
+
+    public async Task SoftDeleteAsync(int id)
+    {
+        var hotel = await _db.Hotels.FindAsync(id)
+            ?? throw new KeyNotFoundException($"Hotel {id} not found.");
+        hotel.IsActive = false;
+        await _db.SaveChangesAsync();
+    }
 }

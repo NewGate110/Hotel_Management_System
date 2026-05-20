@@ -1,6 +1,7 @@
 // Author: S2401265 Ahmed Aslan Ibrahim
 using HMS.Application.Interfaces.Repositories;
 using HMS.Domain.Entities;
+using HMS.Domain.Enums;
 using HMS.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -54,6 +55,28 @@ public class BookingRepository : IBookingRepository
 
     public async Task<IEnumerable<Booking>> GetAllAsync() =>
         await _db.Bookings.ToListAsync();
+
+    public async Task<IEnumerable<Booking>> GetTodayArrivalsAsync()
+    {
+        var today = DateTime.UtcNow.Date;
+        return await _db.Bookings
+            .Include(b => b.Guest)
+            .Include(b => b.Hotel)
+            .Include(b => b.BookingRooms).ThenInclude(br => br.Room)
+            .Where(b => b.Status == BookingStatus.Confirmed
+                     && b.CheckInDate.Date == today)
+            .OrderBy(b => b.CheckInDate)
+            .ToListAsync();
+    }
+
+    public async Task<IEnumerable<Booking>> GetCheckedInAsync() =>
+        await _db.Bookings
+            .Include(b => b.Guest)
+            .Include(b => b.Hotel)
+            .Include(b => b.BookingRooms).ThenInclude(br => br.Room)
+            .Where(b => b.Status == BookingStatus.CheckedIn)
+            .OrderBy(b => b.CheckOutDate)
+            .ToListAsync();
 
     public async Task AddAsync(Booking booking)
     {

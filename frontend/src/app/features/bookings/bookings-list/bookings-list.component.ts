@@ -75,20 +75,20 @@ export interface EditBookingDialogData {
         </mat-form-field>
 
         <div>
-          <p class="text-sm font-medium text-zinc-700 mb-2">Select rooms</p>
+          <p class="text-sm font-medium text-[var(--fg-2)] mb-2">Select rooms</p>
           @if (loadingRooms()) {
             <app-loader />
           } @else if (availableRooms().length === 0) {
-            <p class="text-sm text-zinc-500">No rooms available for the selected dates.</p>
+            <p class="text-sm text-[var(--fg-3)]">No rooms available for the selected dates.</p>
           } @else {
-            <div class="space-y-1.5 max-h-48 overflow-y-auto border border-zinc-100 rounded-lg p-2">
+            <div class="space-y-1.5 max-h-48 overflow-y-auto border border-[var(--border)] rounded-lg p-2">
               @for (room of availableRooms(); track room.id) {
-                <label class="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1.5 hover:bg-zinc-50">
+                <label class="flex items-center gap-2 cursor-pointer rounded-md px-2 py-1.5 hover:bg-[var(--sand-100)]">
                   <input type="checkbox"
-                    class="accent-sky-600"
+                    class="accent-[var(--azure-600)]"
                     [checked]="selectedRoomIds().has(room.id)"
                     (change)="toggleRoom(room.id)" />
-                  <span class="text-sm text-zinc-800" style="min-width: 0; overflow: hidden; text-overflow: ellipsis;">
+                  <span class="text-sm text-[var(--fg)]" style="min-width: 0; overflow: hidden; text-overflow: ellipsis;">
                     Room {{ room.roomNumber }} · {{ room.type }} · Cap {{ room.capacity }}
                     · <strong>{{ '$' + room.priceOffPeak }}/night</strong>
                   </span>
@@ -97,7 +97,7 @@ export interface EditBookingDialogData {
             </div>
           }
           @if (noRoomSelected()) {
-            <p class="text-xs text-rose-500 mt-1">Select at least one room.</p>
+            <p class="text-xs text-[var(--clay-500)] mt-1">Select at least one room.</p>
           }
         </div>
 
@@ -284,39 +284,39 @@ export class AddServiceDialogComponent {
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-6">
-      <h1 class="text-2xl font-semibold text-zinc-900">Bookings</h1>
+      <h1 class="text-2xl font-semibold text-[var(--fg)]">Bookings</h1>
 
       @if (loading()) {
         <app-loader />
       } @else if (rows().length === 0) {
-        <div class="rounded-2xl border border-zinc-100 bg-white p-10 text-center shadow-sm">
-          <span class="material-icons-outlined text-4xl text-zinc-300" aria-hidden="true">hotel</span>
-          <p class="mt-3 text-sm font-medium text-zinc-500">No bookings yet</p>
+        <div class="rounded-2xl border border-[var(--border)] bg-white p-10 text-center shadow-sm">
+          <span class="material-icons-outlined text-4xl text-[var(--fg-3)]" aria-hidden="true">hotel</span>
+          <p class="mt-3 text-sm font-medium text-[var(--fg-3)]">No bookings yet</p>
         </div>
       } @else {
         <div class="space-y-3">
           @for (b of rows(); track b.id) {
-            <div class="rounded-2xl border border-zinc-100 bg-white p-5 shadow-sm">
+            <div class="rounded-2xl border border-[var(--border)] bg-white p-5 shadow-sm">
               <!-- Header row -->
               <div class="flex flex-wrap items-start justify-between gap-3">
                 <div class="min-w-0">
                   <div class="flex flex-wrap items-center gap-2">
-                    <span class="text-xs font-mono text-zinc-400">#{{ b.id }}</span>
+                    <span class="text-xs font-mono text-[var(--fg-3)]">#{{ b.id }}</span>
                     @if (b.rooms.length > 0) {
-                      <span class="text-sm font-semibold text-zinc-800">
+                      <span class="text-sm font-semibold text-[var(--fg)]">
                         Room {{ b.rooms[0].roomNumber }}
-                        <span class="font-normal text-zinc-400">·</span>
+                        <span class="font-normal text-[var(--fg-3)]">·</span>
                         {{ b.rooms[0].type | formatType }}
                       </span>
                     } @else {
-                      <span class="text-sm font-semibold text-zinc-800">Room pending</span>
+                      <span class="text-sm font-semibold text-[var(--fg)]">Room pending</span>
                     }
                   </div>
-                  <p class="mt-0.5 text-xs text-zinc-500">
+                  <p class="mt-0.5 text-xs text-[var(--fg-3)]">
                     {{ b.hotelName || 'Hotel' }}
-                    <span class="mx-1 text-zinc-300">·</span>
+                    <span class="mx-1 text-[var(--fg-3)]">·</span>
                     {{ b.guestName || 'Guest' }}
-                    <span class="mx-1 text-zinc-300">·</span>
+                    <span class="mx-1 text-[var(--fg-3)]">·</span>
                     {{ b.guestCount }} {{ b.guestCount === 1 ? 'guest' : 'guests' }}
                   </p>
                 </div>
@@ -329,28 +329,28 @@ export class AddServiceDialogComponent {
                   <!-- Edit booking — Pending or Confirmed only -->
                   @if (b.status === 'Pending' || b.status === 'Confirmed') {
                     <button mat-icon-button matTooltip="Edit booking" (click)="openEdit(b)">
-                      <mat-icon class="text-sky-600">edit</mat-icon>
+                      <mat-icon class="text-[var(--azure-600)]">edit</mat-icon>
                     </button>
                   }
 
                   <!-- Add service — Confirmed only -->
                   @if (b.status === 'Confirmed') {
                     <button mat-icon-button matTooltip="Add service" (click)="openAddService(b)">
-                      <mat-icon class="text-emerald-600">add_circle</mat-icon>
+                      <mat-icon class="text-[var(--glass-600)]">add_circle</mat-icon>
                     </button>
                   }
                 </div>
               </div>
 
               <!-- Dates -->
-              <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-zinc-600">
+              <div class="mt-3 flex flex-wrap items-center gap-3 text-sm text-[var(--fg-2)]">
                 <div class="flex items-center gap-1">
-                  <span class="material-icons-outlined text-[16px] text-zinc-400" aria-hidden="true">login</span>
+                  <span class="material-icons-outlined text-[16px] text-[var(--fg-3)]" aria-hidden="true">login</span>
                   <span>{{ b.checkInDate | slice: 0 : 10 }}</span>
                 </div>
-                <span class="text-zinc-300">→</span>
+                <span class="text-[var(--fg-3)]">→</span>
                 <div class="flex items-center gap-1">
-                  <span class="material-icons-outlined text-[16px] text-zinc-400" aria-hidden="true">logout</span>
+                  <span class="material-icons-outlined text-[16px] text-[var(--fg-3)]" aria-hidden="true">logout</span>
                   <span>{{ b.checkOutDate | slice: 0 : 10 }}</span>
                 </div>
               </div>
@@ -359,13 +359,13 @@ export class AddServiceDialogComponent {
               @if (b.services.length > 0) {
                 <div class="mt-3 flex flex-wrap gap-1.5">
                   @for (svc of b.services; track svc.serviceId) {
-                    <span class="inline-flex items-center gap-1 rounded-lg bg-zinc-50 border border-zinc-100 pl-2 pr-1 py-0.5 text-xs text-zinc-600">
+                    <span class="inline-flex items-center gap-1 rounded-lg bg-[var(--sand-100)] border border-[var(--border)] pl-2 pr-1 py-0.5 text-xs text-[var(--fg-2)]">
                       {{ svc.serviceName }} × {{ svc.quantity }}
                       @if (svc.totalFee) {
-                        <span class="text-zinc-400">- &#36;{{ svc.totalFee }}</span>
+                        <span class="text-[var(--fg-3)]">- &#36;{{ svc.totalFee }}</span>
                       }
                       @if (b.status === 'Confirmed') {
-                        <button class="ml-0.5 text-rose-400 hover:text-rose-600 transition-colors"
+                        <button class="ml-0.5 text-[var(--clay-500)] hover:text-[var(--clay-600)] transition-colors"
                           matTooltip="Remove service"
                           (click)="removeService(b, svc.serviceId)">
                           <mat-icon style="font-size:14px;width:14px;height:14px;">close</mat-icon>
@@ -377,8 +377,8 @@ export class AddServiceDialogComponent {
               }
 
               <!-- Total -->
-              <div class="mt-3 flex justify-end border-t border-zinc-50 pt-3">
-                <span class="text-sm font-semibold text-zinc-900">&#36;{{ b.totalAmount }}</span>
+              <div class="mt-3 flex justify-end border-t border-[var(--border)] pt-3">
+                <span class="text-sm font-semibold text-[var(--fg)]">&#36;{{ b.totalAmount }}</span>
               </div>
             </div>
           }
@@ -483,12 +483,12 @@ export class BookingsListComponent {
 
   statusClass(status: string): string {
     const map: Record<string, string> = {
-      Confirmed:  'bg-emerald-50 text-emerald-700',
-      Pending:    'bg-amber-50 text-amber-700',
-      CheckedIn:  'bg-sky-50 text-sky-700',
-      CheckedOut: 'bg-zinc-100 text-zinc-600',
-      Cancelled:  'bg-rose-50 text-rose-600',
+      Confirmed:  'bg-[var(--glass-50)] text-[var(--glass-600)]',
+      Pending:    'bg-[var(--clay-50)] text-[var(--clay-600)]',
+      CheckedIn:  'bg-[var(--azure-50)] text-[var(--azure-700)]',
+      CheckedOut: 'bg-[var(--sand-100)] text-[var(--fg-2)]',
+      Cancelled:  'bg-[var(--clay-50)] text-[var(--clay-600)]',
     };
-    return map[status] ?? 'bg-zinc-100 text-zinc-600';
+    return map[status] ?? 'bg-[var(--sand-100)] text-[var(--fg-2)]';
   }
 }

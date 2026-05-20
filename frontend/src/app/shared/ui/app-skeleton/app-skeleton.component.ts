@@ -7,7 +7,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div
-      class="animate-pulse rounded-lg bg-zinc-200/80"
+      class="animate-pulse rounded-lg bg-[var(--sand-200)]/80"
       [style.width]="width()"
       [style.height]="height()"
       role="presentation"

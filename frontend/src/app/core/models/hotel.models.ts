@@ -28,3 +28,13 @@ export interface UpdateHotelDto {
   email: string;
   isActive: boolean;
 }
+
+export interface CreateHotelDto {
+  name: string;
+  city: string;
+  country: string;
+  address: string;
+  phone: string;
+  email: string;
+  imageUrl?: string;
+}

@@ -21,15 +21,15 @@ function passwordsMatch(control: AbstractControl): { mismatch: true } | null {
   template: `
     <div class="flex min-h-[calc(100vh-68px)] items-center justify-center px-6 py-12">
       <div class="w-full max-w-sm">
-        <h1 class="text-2xl font-semibold tracking-tight text-zinc-900">Set new password</h1>
+        <h1 class="text-2xl font-semibold tracking-tight text-[var(--fg)]">Set new password</h1>
 
         @if (done()) {
-          <div class="mt-6 rounded-xl border border-green-200 bg-green-50 px-5 py-6 text-center">
-            <p class="text-sm font-medium text-green-800">Password updated successfully.</p>
-            <a routerLink="/login" class="mt-3 inline-block text-sm font-medium text-green-700 underline underline-offset-2">Sign in</a>
+          <div class="mt-6 rounded-xl border border-[var(--glass-200)] bg-[var(--glass-50)] px-5 py-6 text-center">
+            <p class="text-sm font-medium text-[var(--glass-700)]">Password updated successfully.</p>
+            <a routerLink="/login" class="mt-3 inline-block text-sm font-medium text-[var(--glass-600)] underline underline-offset-2">Sign in</a>
           </div>
         } @else if (!token()) {
-          <p class="mt-6 rounded-xl border border-rose-200 bg-rose-50 px-5 py-4 text-sm text-rose-700">
+          <p class="mt-6 rounded-xl border border-[var(--clay-200)] bg-[var(--clay-50)] px-5 py-4 text-sm text-[var(--clay-600)]">
             Invalid or missing reset link. Please request a new one from the
             <a routerLink="/forgot-password" class="font-medium underline underline-offset-2">forgot password</a> page.
           </p>
@@ -52,7 +52,7 @@ function passwordsMatch(control: AbstractControl): { mismatch: true } | null {
               }
             </mat-form-field>
             @if (error()) {
-              <p class="rounded-lg bg-rose-50 px-3 py-2 text-sm text-rose-700" role="alert">{{ error() }}</p>
+              <p class="rounded-lg bg-[var(--clay-50)] px-3 py-2 text-sm text-[var(--clay-600)]" role="alert">{{ error() }}</p>
             }
             <app-button variant="primary" class="w-full" [loading]="loading()" type="submit">
               Reset password

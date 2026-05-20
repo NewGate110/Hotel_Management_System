@@ -40,8 +40,8 @@ import { MSG } from '../../../core/i18n/ui-messages';
       <!-- Right: form -->
       <div class="flex flex-1 items-center justify-center px-6 py-12 lg:px-12">
         <div class="w-full max-w-sm">
-          <h1 class="text-2xl font-semibold tracking-tight text-zinc-900">{{ msg.forgotTitle }}</h1>
-          <p class="mt-1 text-sm text-zinc-500">
+          <h1 class="text-2xl font-semibold tracking-tight text-[var(--fg)]">{{ msg.forgotTitle }}</h1>
+          <p class="mt-1 text-sm text-[var(--fg-3)]">
             Enter the email address on your account and we will send reset instructions.
           </p>
 
@@ -58,19 +58,19 @@ import { MSG } from '../../../core/i18n/ui-messages';
               </form>
             } @else {
               <div class="space-y-3">
-                <div class="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3">
-                  <p class="text-sm text-emerald-800">
+                <div class="rounded-lg border border-[var(--glass-200)] bg-[var(--glass-50)] px-4 py-3">
+                  <p class="text-sm text-[var(--glass-700)]">
                     If an account exists for <strong>{{ emailSent() }}</strong>, a reset token has
                     been generated.
                   </p>
                 </div>
                 @if (devToken()) {
-                  <div class="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3">
-                    <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-amber-700">
+                  <div class="rounded-lg border border-[var(--clay-200)] bg-[var(--clay-50)] px-4 py-3">
+                    <p class="mb-1 text-xs font-semibold uppercase tracking-wide text-[var(--clay-600)]">
                       Dev mode — reset token
                     </p>
-                    <code class="block break-all text-xs text-amber-900">{{ devToken() }}</code>
-                    <p class="mt-2 text-xs text-amber-700">
+                    <code class="block break-all text-xs text-[var(--clay-700)]">{{ devToken() }}</code>
+                    <p class="mt-2 text-xs text-[var(--clay-600)]">
                       Copy this token and navigate to
                       <strong>/reset-password?token=&lt;paste here&gt;</strong>
                     </p>
@@ -80,10 +80,10 @@ import { MSG } from '../../../core/i18n/ui-messages';
             }
           </div>
 
-          <p class="mt-6 text-center text-sm text-zinc-500">
+          <p class="mt-6 text-center text-sm text-[var(--fg-3)]">
             <a
               routerLink="/login"
-              class="font-medium text-zinc-900 underline-offset-4 hover:underline"
+              class="font-medium text-[var(--fg)] underline-offset-4 hover:underline"
               >Back to sign in</a
             >
           </p>

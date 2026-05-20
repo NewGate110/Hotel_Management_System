@@ -706,6 +706,32 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover {
   text-decoration: line-through;
 }
 
+/* ── Material Stepper ── */
+.mat-step-icon {
+  background-color: var(--sand-300) !important;
+  color: var(--sand-50) !important;
+}
+.mat-step-icon-state-done,
+.mat-step-icon-state-edit {
+  background-color: var(--sand-700) !important;
+  color: var(--sand-50) !important;
+}
+.mat-step-icon-selected {
+  background-color: var(--sand-900) !important;
+  color: var(--sand-50) !important;
+}
+.mat-stepper-horizontal-line {
+  border-top-color: var(--border) !important;
+}
+.mat-step-label-selected {
+  color: var(--fg) !important;
+  font-weight: 600 !important;
+}
+.mat-step-label {
+  color: var(--fg-2) !important;
+  font-family: var(--font-sans) !important;
+}
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 8px; height: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg-sunk); }

@@ -38,3 +38,14 @@ export interface UpdateRoomPricingDto {
   priceOffPeak: number;
   pricePeak: number;
 }
+
+export interface CreateRoomDto {
+  roomNumber: string;
+  type: string;
+  capacity: number;
+  priceOffPeak: number;
+  pricePeak: number;
+  description: string;
+  imageUrl?: string;
+  floorNumber: number;
+}

@@ -2,6 +2,7 @@
 using HMS.Application.DTOs.Hotels;
 using HMS.Application.DTOs.Rooms;
 using HMS.Application.Interfaces.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HMS.API.Controllers;
@@ -12,8 +13,13 @@ namespace HMS.API.Controllers;
 public class HotelsController : ControllerBase
 {
     private readonly IHotelService _hotelService;
+    private readonly IRoomService  _roomService;
 
-    public HotelsController(IHotelService hotelService) => _hotelService = hotelService;
+    public HotelsController(IHotelService hotelService, IRoomService roomService)
+    {
+        _hotelService = hotelService;
+        _roomService  = roomService;
+    }
 
     /// <summary>Returns all active hotels.</summary>
     [HttpGet]
@@ -45,5 +51,20 @@ public class HotelsController : ControllerBase
 
         var rooms = await _hotelService.GetRoomsForHotelAsync(id);
         return Ok(rooms);
+    }
+
+    /// <summary>Updates the operational status of a room (staff/manager/admin only).</summary>
+    [HttpPatch("{id:int}/rooms/{roomId:int}/status")]
+    [Authorize(Roles = "FrontDeskStaff,HotelManager,Admin")]
+    [ProducesResponseType(typeof(RoomDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<RoomDto>> UpdateRoomStatus(int id, int roomId, [FromBody] UpdateRoomStatusDto dto)
+    {
+        try
+        {
+            var room = await _roomService.UpdateRoomStatusAsync(roomId, dto.Status);
+            return Ok(room);
+        }
+        catch (KeyNotFoundException) { return NotFound(); }
     }
 }

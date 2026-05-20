@@ -43,11 +43,11 @@ function toYmd(d: Date): string {
       <img
         src="https://images.unsplash.com/photo-1590490360182-c33d57733427?auto=format&fit=crop&w=2000&q=80"
         alt=""
-        style="pointer-events: none; position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;"
+        style="pointer-events: none; position: absolute; inset: -6px; width: calc(100% + 12px); height: calc(100% + 12px); object-fit: cover; filter: blur(5px);"
         loading="eager"
       />
       <div
-        style="pointer-events: none; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,36,48,0.25) 0%, rgba(14,36,48,0.05) 40%, rgba(14,36,48,0.75) 100%);"
+        style="pointer-events: none; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(14,36,48,0.35) 0%, rgba(14,36,48,0.45) 45%, rgba(14,36,48,0.85) 100%);"
         aria-hidden="true"
       ></div>
 

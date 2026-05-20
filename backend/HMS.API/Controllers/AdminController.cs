@@ -98,6 +98,41 @@ public class AdminController : ControllerBase
         catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
     }
 
+    /// <summary>Soft-deletes a hotel (sets IsActive = false).</summary>
+    [HttpDelete("hotels/{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> DeleteHotel(int id)
+    {
+        try   { await _hotelService.DeleteHotelAsync(id); return NoContent(); }
+        catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
+    }
+
+    /// <summary>Creates a new room inside the specified hotel.</summary>
+    [HttpPost("hotels/{hotelId:int}/rooms")]
+    [ProducesResponseType(typeof(RoomDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<ActionResult<RoomDto>> CreateRoom(int hotelId, [FromBody] CreateRoomDto dto)
+    {
+        if (!ModelState.IsValid)
+            return BadRequest(ModelState);
+        try   { return CreatedAtAction(nameof(GetHotels), await _roomService.CreateRoomAsync(hotelId, dto)); }
+        catch (KeyNotFoundException ex) { return NotFound(ex.Message); }
+    }
+
+    /// <summary>Hard-deletes a room. Returns 409 if active or future bookings exist.</summary>
+    [HttpDelete("rooms/{id:int}")]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status409Conflict)]
+    public async Task<IActionResult> DeleteRoom(int id)
+    {
+        try   { await _roomService.DeleteRoomAsync(id); return NoContent(); }
+        catch (KeyNotFoundException ex)        { return NotFound(ex.Message); }
+        catch (InvalidOperationException ex)   { return Conflict(new { message = ex.Message }); }
+    }
+
     /// <summary>Updates the hero image URL for a hotel.</summary>
     [Authorize(Roles = "Admin")]
     [HttpPut("hotels/{id:int}/image")]

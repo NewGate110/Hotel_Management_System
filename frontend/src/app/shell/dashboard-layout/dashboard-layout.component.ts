@@ -120,7 +120,7 @@ import { ShellFooterComponent } from '../footer/shell-footer.component';
             <h2 style="font-size: 14px; font-weight: 600; color: var(--fg); margin: 0;">Notifications</h2>
             <button
               type="button"
-              class="rounded p-1 text-zinc-500 hover:bg-zinc-100"
+              class="rounded p-1 text-[var(--fg-3)] hover:bg-[var(--sand-100)]"
               (click)="notifOpen.set(false)"
               aria-label="Close notifications"
             >
@@ -130,7 +130,7 @@ import { ShellFooterComponent } from '../footer/shell-footer.component';
           <mat-nav-list>
             <a mat-list-item>
               <span matListItemTitle class="text-sm">Front desk</span>
-              <span matListItemLine class="text-xs text-zinc-500">No critical alerts</span>
+              <span matListItemLine class="text-xs text-[var(--fg-3)]">No critical alerts</span>
             </a>
           </mat-nav-list>
         </aside>

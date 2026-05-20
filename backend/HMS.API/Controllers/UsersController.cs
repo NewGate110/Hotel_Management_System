@@ -1,5 +1,4 @@
 // Author: S2401265 Ahmed Aslan Ibrahim
-using System.Security.Claims;
 using HMS.Application.DTOs.Bookings;
 using HMS.Application.DTOs.Users;
 using HMS.Application.Interfaces.Services;
@@ -12,7 +11,7 @@ namespace HMS.API.Controllers;
 [Route("api/[controller]")]
 [Produces("application/json")]
 [Authorize]
-public class UsersController : ControllerBase
+public class UsersController : HmsControllerBase
 {
     private readonly IUserService _userService;
 
@@ -27,9 +26,7 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GuestUserDto>> GetGuest(int id)
     {
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        if (callerRole == "Guest" && callerId != id) return Forbid();
+        if (EnforceGuestOwnership(id) is { } deny) return deny;
         var guest = await _userService.GetGuestByIdAsync(id);
         return guest is null ? NotFound($"Guest {id} not found.") : Ok(guest);
     }
@@ -41,9 +38,7 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<ActionResult<GuestStatsDto>> GetGuestStats(int id)
     {
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        if (callerRole == "Guest" && callerId != id) return Forbid();
+        if (EnforceGuestOwnership(id) is { } deny) return deny;
         var stats = await _userService.GetGuestStatsAsync(id);
         return Ok(stats);
     }
@@ -56,9 +51,7 @@ public class UsersController : ControllerBase
     public async Task<ActionResult<GuestUserDto>> UpdateGuest(
         int id, [FromBody] UpdateGuestProfileDto dto)
     {
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        if (callerRole == "Guest" && callerId != id) return Forbid();
+        if (EnforceGuestOwnership(id) is { } deny) return deny;
         try
         {
             var guest = await _userService.UpdateGuestProfileAsync(id, dto);
@@ -73,9 +66,7 @@ public class UsersController : ControllerBase
     [ProducesResponseType(StatusCodes.Status403Forbidden)]
     public async Task<ActionResult<IEnumerable<BookingDto>>> GetGuestBookings(int id)
     {
-        var callerRole = User.FindFirst("role")?.Value ?? string.Empty;
-        var callerId   = int.TryParse(User.FindFirst("sub")?.Value, out var cid) ? cid : 0;
-        if (callerRole == "Guest" && callerId != id) return Forbid();
+        if (EnforceGuestOwnership(id) is { } deny) return deny;
         var bookings = await _userService.GetGuestBookingsAsync(id);
         return Ok(bookings);
     }

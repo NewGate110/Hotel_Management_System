@@ -31,7 +31,7 @@ import { NotificationService } from '../../../core/services/notification.service
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-4">
-      <h1 class="text-2xl font-semibold text-zinc-900">Audit logs</h1>
+      <h1 class="text-2xl font-semibold text-[var(--fg)]">Audit logs</h1>
 
       @if (loading()) {
         <app-loader caption="Loading audit logs…" />
@@ -50,7 +50,7 @@ import { NotificationService } from '../../../core/services/notification.service
             <table mat-table [dataSource]="filtered()" class="w-full">
               <ng-container matColumnDef="at">
                 <th mat-header-cell *matHeaderCellDef>When</th>
-                <td mat-cell *matCellDef="let r" class="text-sm text-zinc-600">
+                <td mat-cell *matCellDef="let r" class="text-sm text-[var(--fg-2)]">
                   {{ r.timestamp | date:'dd MMM yyyy, HH:mm' }}
                 </td>
               </ng-container>
@@ -64,7 +64,7 @@ import { NotificationService } from '../../../core/services/notification.service
               </ng-container>
               <ng-container matColumnDef="entity">
                 <th mat-header-cell *matHeaderCellDef>Entity</th>
-                <td mat-cell *matCellDef="let r" class="text-sm text-zinc-500">{{ r.entityType }}{{ r.entityId ? ' #' + r.entityId : '' }}</td>
+                <td mat-cell *matCellDef="let r" class="text-sm text-[var(--fg-3)]">{{ r.entityType }}{{ r.entityId ? ' #' + r.entityId : '' }}</td>
               </ng-container>
               <ng-container matColumnDef="detail">
                 <th mat-header-cell *matHeaderCellDef>Detail</th>

@@ -15,4 +15,7 @@ public interface IRoomRepository
         int? guests, RoomType? roomType, decimal? minPrice, decimal? maxPrice);
     Task<IEnumerable<(DateTime From, DateTime To)>> GetUnavailableDatesAsync(int roomId);
     Task UpdateAsync(Room room);
+    Task<Room> AddAsync(Room room);
+    Task DeleteAsync(int id);
+    Task<bool> HasActiveOrFutureBookingsAsync(int roomId);
 }

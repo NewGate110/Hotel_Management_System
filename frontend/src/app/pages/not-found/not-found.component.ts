@@ -10,13 +10,13 @@ import { AppButtonComponent } from '../../shared/ui/app-button/app-button.compon
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <main
-      class="flex min-h-screen flex-col items-center justify-center gap-4 bg-zinc-50 px-4 text-center"
+      class="flex min-h-screen flex-col items-center justify-center gap-4 bg-[var(--bg)] px-4 text-center"
     >
-      <p class="text-xs font-semibold uppercase tracking-widest text-zinc-400">
+      <p class="text-xs font-semibold uppercase tracking-widest text-[var(--fg-3)]">
         404
       </p>
-      <h1 class="text-2xl font-semibold text-zinc-900">Page not found</h1>
-      <p class="max-w-md text-sm text-zinc-600">
+      <h1 class="text-2xl font-semibold text-[var(--fg)]">Page not found</h1>
+      <p class="max-w-md text-sm text-[var(--fg-2)]">
         The page you requested does not exist or was moved.
       </p>
       <a routerLink="/">
