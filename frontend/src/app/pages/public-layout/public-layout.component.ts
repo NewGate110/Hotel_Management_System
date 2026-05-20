@@ -2,6 +2,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  ElementRef,
   HostListener,
   computed,
   inject,
@@ -115,25 +116,58 @@ import { roleDashboardPath } from '../../core/constants/roles';
                 >Dashboard</a
               >
 
-              <!-- Avatar chip -->
-              <button
-                type="button"
-                (click)="auth.logout()"
-                class="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-[13px] font-semibold transition-all duration-200"
-                [class]="
-                  isTransparent()
-                    ? 'bg-white/15 text-white hover:bg-white/25'
-                    : 'bg-[var(--sand-900)] !text-[var(--sand-50)] hover:bg-[var(--sand-800)]'
-                "
-                title="Sign out"
-              >
-                <span
-                  class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold"
-                  [class]="isTransparent() ? 'bg-white/30 text-white' : 'bg-white/20 text-white'"
-                  >{{ initials() }}</span
+              <!-- Avatar chip with dropdown -->
+              <div class="relative">
+                <button
+                  type="button"
+                  (click)="dropdownOpen.update((v) => !v)"
+                  class="flex items-center gap-2 rounded-full py-1 pl-1 pr-3 text-[13px] font-semibold transition-all duration-200"
+                  [class]="
+                    isTransparent()
+                      ? 'bg-white/15 text-white hover:bg-white/25'
+                      : 'bg-[var(--sand-900)] !text-[var(--sand-50)] hover:bg-[var(--sand-800)]'
+                  "
+                  [attr.aria-expanded]="dropdownOpen()"
+                  aria-haspopup="menu"
                 >
-                <span class="hidden sm:block">Sign out</span>
-              </button>
+                  <span
+                    class="flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold"
+                    [class]="isTransparent() ? 'bg-white/30 text-white' : 'bg-white/20 text-white'"
+                    >{{ initials() }}</span
+                  >
+                  <span class="hidden sm:block">{{ auth.fullName() || 'Account' }}</span>
+                  <span class="material-icons-outlined text-sm leading-none hidden sm:block">expand_more</span>
+                </button>
+
+                @if (dropdownOpen()) {
+                  <div
+                    class="absolute right-0 mt-2 w-44 rounded-xl border border-gray-200 bg-white shadow-lg overflow-hidden z-50"
+                    role="menu"
+                  >
+                    @if (isGuestRole()) {
+                      <a
+                        routerLink="/app/guest/profile"
+                        (click)="dropdownOpen.set(false)"
+                        class="flex items-center gap-2 px-4 py-2.5 text-[13px] font-medium transition-colors text-black hover:bg-gray-100"
+                        role="menuitem"
+                      >
+                        <span class="material-icons-outlined text-sm">person</span>
+                        Profile
+                      </a>
+                      <div class="mx-3 border-t border-gray-200"></div>
+                    }
+                    <button
+                      type="button"
+                      (click)="auth.logout(); dropdownOpen.set(false)"
+                      class="flex w-full items-center gap-2 px-4 py-2.5 text-[13px] font-medium transition-colors text-black hover:bg-gray-100"
+                      role="menuitem"
+                    >
+                      <span class="material-icons-outlined text-sm">logout</span>
+                      Sign out
+                    </button>
+                  </div>
+                }
+              </div>
             } @else {
               <!-- Guest: sign in + register -->
               <a
@@ -274,11 +308,15 @@ import { roleDashboardPath } from '../../core/constants/roles';
 })
 export class PublicLayoutComponent {
   private readonly router = inject(Router);
+  private readonly elRef = inject(ElementRef);
   readonly auth = inject(AuthService);
 
   readonly scrolled = signal(false);
   readonly mobileOpen = signal(false);
   readonly isHeroPage = signal(false);
+  readonly dropdownOpen = signal(false);
+
+  readonly isGuestRole = computed(() => this.auth.role() === 'Guest');
 
   readonly initials = computed(() => {
     const name = this.auth.fullName();
@@ -309,12 +347,20 @@ export class PublicLayoutComponent {
         this.isHeroPage.set(url === '/');
         this.scrolled.set(window.scrollY > 60);
         this.mobileOpen.set(false);
+        this.dropdownOpen.set(false);
       });
   }
 
   @HostListener('window:scroll')
   onScroll(): void {
     this.scrolled.set(window.scrollY > 60);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    if (this.dropdownOpen() && !this.elRef.nativeElement.contains(event.target)) {
+      this.dropdownOpen.set(false);
+    }
   }
 
   isTransparent(): boolean {
