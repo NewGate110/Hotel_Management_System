@@ -13,6 +13,31 @@ export interface SidebarNavItem {
   standalone: true,
   imports: [RouterLink, RouterLinkActive],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+    .sidebar-nav-link {
+      border-radius: var(--r-sm);
+      color: var(--sand-300);
+      text-decoration: none;
+    }
+    .sidebar-nav-link:hover {
+      background: rgba(250,247,242,0.06);
+      color: var(--sand-100);
+    }
+    .sidebar-nav-link.sidebar-link-active {
+      background: rgba(250,247,242,0.08);
+      color: var(--sand-50);
+    }
+    .sidebar-collapse-btn {
+      border-radius: var(--r-sm);
+      border: 1px solid rgba(212,200,179,0.18);
+      color: var(--sand-400);
+      background: transparent;
+    }
+    .sidebar-collapse-btn:hover {
+      background: rgba(250,247,242,0.06);
+      color: var(--sand-200);
+    }
+  `],
   template: `
     <aside
       class="flex h-full flex-col"
@@ -45,13 +70,10 @@ export interface SidebarNavItem {
       <nav class="flex-1 overflow-y-auto p-2" style="display: flex; flex-direction: column; gap: 2px;" aria-label="Primary">
         @for (item of items(); track item.link.join('/')) {
           <a
-            class="flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors"
-            style="border-radius: var(--r-sm); color: var(--sand-300); text-decoration: none;"
+            class="sidebar-nav-link flex items-center gap-3 px-3 py-2 text-sm font-medium transition-colors"
             [routerLink]="item.link"
             routerLinkActive="sidebar-link-active"
-            [routerLinkActiveOptions]="{ exact: item.link.length <= 1 }"
-            (mouseenter)="onLinkHover($event, true)"
-            (mouseleave)="onLinkHover($event, false)"
+            [routerLinkActiveOptions]="{ exact: true }"
           >
             <span class="material-icons-outlined" style="font-size: 18px; width: 18px; height: 18px;" aria-hidden="true">{{ item.icon }}</span>
             @if (!collapsed()) {
@@ -64,13 +86,10 @@ export interface SidebarNavItem {
       <!-- Collapse toggle -->
       <button
         type="button"
-        class="m-2 flex items-center justify-center gap-2 px-2 py-2 text-xs font-medium transition-colors"
-        style="border-radius: var(--r-sm); border: 1px solid rgba(212,200,179,0.18); color: var(--sand-400); background: transparent;"
+        class="sidebar-collapse-btn m-2 flex items-center justify-center gap-2 px-2 py-2 text-xs font-medium transition-colors"
         (click)="toggleCollapse.emit()"
         [attr.aria-expanded]="!collapsed()"
         [attr.aria-label]="collapsed() ? 'Expand sidebar' : 'Collapse sidebar'"
-        (mouseenter)="onCollapseHover($event, true)"
-        (mouseleave)="onCollapseHover($event, false)"
       >
         <span class="material-icons-outlined" style="font-size: 18px;" aria-hidden="true">
           {{ collapsed() ? 'chevron_right' : 'chevron_left' }}
@@ -80,29 +99,10 @@ export interface SidebarNavItem {
         }
       </button>
     </aside>
-
-    <style>
-      .sidebar-link-active {
-        background: rgba(250,247,242,0.08) !important;
-        color: var(--sand-50) !important;
-      }
-    </style>
   `,
 })
 export class AppSidebarComponent {
   items = input<SidebarNavItem[]>([]);
   collapsed = input(false);
   toggleCollapse = output<void>();
-
-  onLinkHover(event: MouseEvent, entering: boolean): void {
-    const el = event.currentTarget as HTMLElement;
-    if (el.classList.contains('sidebar-link-active')) return;
-    el.style.background = entering ? 'rgba(250,247,242,0.06)' : '';
-    el.style.color = entering ? 'var(--sand-100)' : 'var(--sand-300)';
-  }
-
-  onCollapseHover(event: MouseEvent, entering: boolean): void {
-    const el = event.currentTarget as HTMLElement;
-    el.style.background = entering ? 'rgba(250,247,242,0.06)' : 'transparent';
-  }
 }

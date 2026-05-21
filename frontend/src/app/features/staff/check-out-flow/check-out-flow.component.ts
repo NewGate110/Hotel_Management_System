@@ -146,7 +146,10 @@ import type { InvoiceDto } from '../../../core/models/invoice.models';
                   <button type="button" class="booking-card" (click)="selectGuest(b)">
                     <div class="avatar">{{ initials(b.guestName) }}</div>
                     <div class="flex-1 min-w-0">
-                      <p class="font-medium text-sm truncate" style="color: var(--fg)">{{ b.guestName }}</p>
+                      <div class="flex items-center gap-2">
+                        <p class="font-medium text-sm truncate" style="color: var(--fg)">{{ b.guestName }}</p>
+                        <span style="font-family: var(--font-mono); font-size: 11px; color: var(--fg-3);">#{{ b.id }}</span>
+                      </div>
                       <p class="text-xs mt-0.5 truncate" style="color: var(--fg-2)">
                         {{ b.hotelName }}
                         @if (b.rooms.length) { &nbsp;·&nbsp; Rooms {{ b.rooms.map(r => r.roomNumber).join(', ') }} }

@@ -31,7 +31,10 @@ import { NotificationService } from '../../../core/services/notification.service
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="space-y-4">
-      <h1 class="text-2xl font-semibold text-[var(--fg)]">Audit logs</h1>
+      <div style="padding-bottom: 24px; border-bottom: 1px solid var(--border); margin-bottom: 4px;">
+        <p class="eyebrow">Administration</p>
+        <h1 style="font-family: var(--font-display); font-size: var(--fs-3xl); font-weight: 300; letter-spacing: var(--ls-tight); color: var(--fg); margin: 8px 0 0;">Audit logs</h1>
+      </div>
 
       @if (loading()) {
         <app-loader caption="Loading audit logs…" />

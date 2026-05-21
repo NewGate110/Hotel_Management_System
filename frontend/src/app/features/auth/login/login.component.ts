@@ -175,8 +175,7 @@ export class LoginComponent {
   readonly error = signal<string | null>(null);
   readonly demoOpen = signal(false);
 
-  // Credentials come from environment.ts only — absent in environment.prod.ts
-  readonly isDemo = !environment.production;
+  readonly isDemo = environment.demoUsers.length > 0;
   readonly demoUsers: DemoUser[] = environment.demoUsers;
 
   readonly form = this.fb.nonNullable.group({

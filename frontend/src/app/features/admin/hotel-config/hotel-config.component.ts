@@ -330,6 +330,32 @@ interface RoomPricingRow {
               </div>
             </form>
 
+            <!-- Hotel image URL editor -->
+            <div style="margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
+              <p style="font-size: var(--fs-sm); font-weight: 500; color: var(--fg); margin: 0 0 10px;">Hotel image</p>
+              <div style="display: flex; gap: 10px; align-items: center;">
+                <input
+                  type="url"
+                  placeholder="https://images.unsplash.com/…"
+                  [value]="hotelImageUrl()"
+                  (input)="hotelImageUrl.set($any($event.target).value)"
+                  style="flex: 1; border-radius: var(--r-md); border: 1px solid var(--border); background: var(--surface); color: var(--fg); padding: 8px 12px; font-size: var(--fs-sm); outline: none;"
+                />
+                <app-button variant="secondary" type="button"
+                  [loading]="savingImage()"
+                  (click)="saveHotelImage()">
+                  <span class="material-icons-outlined" style="font-size: 15px;">image</span>
+                  Save image
+                </app-button>
+              </div>
+              @if (hotelImageUrl()) {
+                <img [src]="hotelImageUrl()" alt="Hotel preview"
+                  style="margin-top: 10px; height: 80px; border-radius: var(--r-md); object-fit: cover; max-width: 240px; border: 1px solid var(--border);"
+                  (error)="$any($event.target).style.display='none'"
+                />
+              }
+            </div>
+
             <div style="display: flex; justify-content: flex-end; align-items: center; margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border);">
               <app-button variant="primary" type="button"
                 [loading]="savingHotel()"
@@ -452,11 +478,13 @@ export class HotelConfigComponent {
   readonly loading         = signal(true);
   readonly loadingRooms    = signal(false);
   readonly savingHotel     = signal(false);
+  readonly savingImage     = signal(false);
   readonly deletingHotel   = signal(false);
   readonly deletingRoom    = signal<number | null>(null);
   readonly hotels          = signal<HotelDto[]>([]);
   readonly selectedHotelId = signal<number | null>(null);
   readonly pricingRows     = signal<RoomPricingRow[]>([]);
+  readonly hotelImageUrl   = signal('');
 
   readonly hotelForm = this.fb.nonNullable.group({
     name:     ['', Validators.required],
@@ -472,18 +500,12 @@ export class HotelConfigComponent {
     this.adminApi.getHotels().subscribe({
       next: (summaries) => {
         if (summaries.length === 0) { this.loading.set(false); return; }
-        const first = summaries[0];
-        this.hotelsApi.getById(first.id).subscribe({
-          next: () => {
-            this.hotels.set(summaries.map(s => ({
-              id: s.id, name: s.name, city: s.city, country: s.country,
-              address: '', phone: '', email: '', isActive: true,
-            })));
-            this.loading.set(false);
-            this.selectHotel(first.id);
-          },
-          error: () => this.loading.set(false),
-        });
+        this.hotels.set(summaries.map(s => ({
+          id: s.id, name: s.name, city: s.city, country: s.country,
+          address: '', phone: '', email: '', isActive: true,
+        })));
+        this.loading.set(false);
+        this.selectHotel(summaries[0]!.id);
       },
       error: () => this.loading.set(false),
     });
@@ -502,6 +524,7 @@ export class HotelConfigComponent {
       next: (hotel) => {
         this.hotels.update(list => list.map(h => h.id === id ? hotel : h));
         this.hotelForm.patchValue(hotel);
+        this.hotelImageUrl.set(hotel.imageUrl ?? '');
       },
     });
 
@@ -608,6 +631,24 @@ export class HotelConfigComponent {
           this.deletingRoom.set(null);
         },
       });
+    });
+  }
+
+  saveHotelImage(): void {
+    const id = this.selectedHotelId();
+    if (!id) return;
+    this.savingImage.set(true);
+    const url = this.hotelImageUrl().trim() || null;
+    this.adminApi.updateHotelImage(id, url).subscribe({
+      next: (updated) => {
+        this.hotels.update(list => list.map(h => h.id === id ? updated : h));
+        this.notify.success('Hotel image updated.');
+        this.savingImage.set(false);
+      },
+      error: () => {
+        this.notify.error('Failed to update hotel image.');
+        this.savingImage.set(false);
+      },
     });
   }
 

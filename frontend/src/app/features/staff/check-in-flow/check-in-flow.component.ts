@@ -10,6 +10,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 import { BookingsApiService } from '../../../core/services/bookings-api.service';
 import { CheckInApiService } from '../../../core/services/checkin-api.service';
+import { HotelsApiService } from '../../../core/services/hotels-api.service';
 import { NotificationService } from '../../../core/services/notification.service';
 import type { BookingDto } from '../../../core/models/booking.models';
 
@@ -138,7 +139,10 @@ import type { BookingDto } from '../../../core/models/booking.models';
                   <button type="button" class="booking-card" (click)="selectBooking(b)">
                     <div class="avatar">{{ initials(b.guestName) }}</div>
                     <div class="flex-1 min-w-0">
-                      <p class="font-medium text-sm truncate" style="color: var(--fg)">{{ b.guestName }}</p>
+                      <div class="flex items-center gap-2">
+                        <p class="font-medium text-sm truncate" style="color: var(--fg)">{{ b.guestName }}</p>
+                        <span style="font-family: var(--font-mono); font-size: 11px; color: var(--fg-3);">#{{ b.id }}</span>
+                      </div>
                       <p class="text-xs mt-0.5 truncate" style="color: var(--fg-2)">
                         {{ b.hotelName }}
                         @if (b.rooms.length) { &nbsp;·&nbsp; Rooms {{ b.rooms.map(r => r.roomNumber).join(', ') }} }
@@ -174,6 +178,35 @@ import type { BookingDto } from '../../../core/models/booking.models';
                 </form>
               </div>
             </details>
+
+            <!-- All confirmed bookings (not just today) -->
+            @if (allConfirmed().length > 0) {
+              <div>
+                <div style="height: 1px; background: var(--border); margin: 8px 0;"></div>
+                <p class="eyebrow" style="margin-bottom: 10px;">All confirmed bookings</p>
+                <div class="space-y-2">
+                  @for (b of allConfirmed(); track b.id) {
+                    <button type="button" class="booking-card" (click)="selectBooking(b)">
+                      <div class="avatar">{{ initials(b.guestName) }}</div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2">
+                          <p class="font-medium text-sm truncate" style="color: var(--fg)">{{ b.guestName }}</p>
+                          <span style="font-family: var(--font-mono); font-size: 11px; color: var(--fg-3);">#{{ b.id }}</span>
+                        </div>
+                        <p class="text-xs mt-0.5 truncate" style="color: var(--fg-2)">
+                          {{ b.hotelName }}
+                          @if (b.rooms.length) { &nbsp;·&nbsp; Rooms {{ b.rooms.map(r => r.roomNumber).join(', ') }} }
+                        </p>
+                      </div>
+                      <div class="text-right flex flex-col items-end gap-1">
+                        <p class="text-xs" style="color: var(--fg-3)">{{ b.checkInDate | date:'mediumDate' }}</p>
+                        <span class="guest-pill">{{ b.guestCount }} guest{{ b.guestCount !== 1 ? 's' : '' }}</span>
+                      </div>
+                    </button>
+                  }
+                </div>
+              </div>
+            }
 
           </div>
         </mat-step>
@@ -284,9 +317,11 @@ export class CheckInFlowComponent implements OnInit {
   private readonly fb          = inject(FormBuilder);
   private readonly bookingsApi = inject(BookingsApiService);
   private readonly checkInApi  = inject(CheckInApiService);
+  private readonly hotelsApi   = inject(HotelsApiService);
   private readonly notify      = inject(NotificationService);
 
   readonly arrivals        = signal<BookingDto[]>([]);
+  readonly allConfirmed    = signal<BookingDto[]>([]);
   readonly loadingArrivals = signal(true);
   readonly loadingManual   = signal(false);
   readonly booking         = signal<BookingDto | null>(null);
@@ -306,6 +341,22 @@ export class CheckInFlowComponent implements OnInit {
     this.checkInApi.getArrivals().subscribe({
       next:  (list) => { this.arrivals.set(list); this.loadingArrivals.set(false); },
       error: ()     => { this.loadingArrivals.set(false); },
+    });
+    this.hotelsApi.getAll().subscribe({
+      next: (hotels) => {
+        if (!hotels.length) return;
+        this.bookingsApi.getByHotel(hotels[0]!.id).subscribe({
+          next: (all) => {
+            const todayIds = new Set(this.arrivals().map(a => a.id));
+            this.allConfirmed.set(
+              all.filter(b => b.status === 'Confirmed' && !todayIds.has(b.id))
+                 .sort((a, b) => new Date(a.checkInDate).getTime() - new Date(b.checkInDate).getTime()),
+            );
+          },
+          error: () => {},
+        });
+      },
+      error: () => {},
     });
   }
 
@@ -365,8 +416,14 @@ export class CheckInFlowComponent implements OnInit {
     this.manualIdForm.reset({ bookingId: 0 });
     this.stepper.reset();
     this.checkInApi.getArrivals().subscribe({
-      next:  (list) => this.arrivals.set(list),
-      error: ()     => {},
+      next: (list) => {
+        this.arrivals.set(list);
+        const todayIds = new Set(list.map(a => a.id));
+        this.allConfirmed.update(prev =>
+          prev.filter(b => !todayIds.has(b.id) && b.id !== this.booking()?.id),
+        );
+      },
+      error: () => {},
     });
   }
 }

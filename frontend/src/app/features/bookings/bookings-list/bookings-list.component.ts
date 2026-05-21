@@ -1,5 +1,5 @@
 // Author: S2401265 Ahmed Aslan Ibrahim
-import { SlicePipe } from '@angular/common';
+import { CurrencyPipe, DatePipe, SlicePipe } from '@angular/common';
 import { FormatTypePipe } from '../../../shared/pipes/format-type.pipe';
 import {
   ChangeDetectionStrategy, Component, OnInit,
@@ -18,6 +18,7 @@ import type { AddBookingServiceDto, BookingDto, UpdateBookingDto } from '../../.
 import type { RoomDto } from '../../../core/models/room.models';
 import type { AncillaryServiceDto } from '../../../core/models/service.models';
 import { AppLoaderComponent } from '../../../shared/ui/app-loader/app-loader.component';
+import { AppButtonComponent } from '../../../shared/ui/app-button/app-button.component';
 
 // Angular Material
 import { MatButtonModule } from '@angular/material/button';
@@ -267,6 +268,47 @@ export class AddServiceDialogComponent {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+// Cancel-Booking Dialog
+// ─────────────────────────────────────────────────────────────────────────────
+export interface CancelBookingDialogData { booking: BookingDto; }
+
+@Component({
+  selector: 'app-cancel-booking-dialog',
+  standalone: true,
+  imports: [MatDialogModule, DatePipe, AppButtonComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  template: `
+    <h2 mat-dialog-title style="font-family: var(--font-display); font-weight: 300;">
+      Cancel booking #{{ data.booking.id }}
+    </h2>
+    <mat-dialog-content style="min-width: 380px; padding-top: 8px;">
+      <p style="font-size: var(--fs-sm); color: var(--fg-2); margin: 0 0 12px;">
+        {{ data.booking.checkInDate | date:'mediumDate' }} – {{ data.booking.checkOutDate | date:'mediumDate' }}
+      </p>
+      <p [style.color]="warn().free ? 'var(--glass-600)' : 'var(--clay-700)'"
+         style="font-size: var(--fs-sm); margin: 0;">
+        {{ warn().label }}
+      </p>
+    </mat-dialog-content>
+    <mat-dialog-actions align="end" style="gap: 8px; padding: 16px 24px;">
+      <app-button variant="ghost" (clicked)="ref.close(false)">Keep booking</app-button>
+      <app-button variant="accent" (clicked)="ref.close(true)">Confirm cancellation</app-button>
+    </mat-dialog-actions>
+  `,
+})
+export class CancelBookingDialogComponent {
+  readonly data: CancelBookingDialogData = inject(MAT_DIALOG_DATA);
+  readonly ref = inject(MatDialogRef<CancelBookingDialogComponent>);
+
+  warn(): { free: boolean; label: string } {
+    const hoursUntil = (new Date(this.data.booking.checkInDate).getTime() - Date.now()) / 3_600_000;
+    if (hoursUntil > 14 * 24) return { free: true,  label: 'Free cancellation — no charge applies.' };
+    if (hoursUntil > 72)      return { free: false, label: '50% of the first-night rate will be charged.' };
+    return { free: false, label: '100% of the first-night rate will be charged (within 72 hours of check-in).' };
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
 // Bookings List
 // ─────────────────────────────────────────────────────────────────────────────
 @Component({
@@ -280,6 +322,7 @@ export class AddServiceDialogComponent {
     MatIconModule,
     MatTooltipModule,
     MatDialogModule,
+    CancelBookingDialogComponent,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
@@ -337,6 +380,13 @@ export class AddServiceDialogComponent {
                   @if (b.status === 'Confirmed') {
                     <button mat-icon-button matTooltip="Add service" (click)="openAddService(b)">
                       <mat-icon class="text-[var(--glass-600)]">add_circle</mat-icon>
+                    </button>
+                  }
+
+                  <!-- Cancel booking — Pending or Confirmed only -->
+                  @if (b.status === 'Pending' || b.status === 'Confirmed') {
+                    <button mat-icon-button matTooltip="Cancel booking" (click)="openCancel(b)">
+                      <mat-icon class="text-[var(--clay-600)]">cancel</mat-icon>
                     </button>
                   }
                 </div>
@@ -465,6 +515,28 @@ export class BookingsListComponent {
     this.servicesApi.getAll().subscribe({
       next: (svcs) => { this.cachedServices = svcs; open(svcs); },
       error: () => this.notify.error('Could not load available services.'),
+    });
+  }
+
+  openCancel(booking: BookingDto): void {
+    this.dialog.open(CancelBookingDialogComponent, {
+      width: '420px',
+      data: { booking } satisfies CancelBookingDialogData,
+    }).afterClosed().subscribe((confirmed: boolean) => {
+      if (!confirmed) return;
+      this.bookingsApi.cancel(booking.id).subscribe({
+        next: (updated) => {
+          this.rows.update(list => list.map(b => b.id === updated.id ? updated : b));
+          const fee = updated.cancellationFee ?? 0;
+          this.notify.success(fee > 0
+            ? `Booking #${booking.id} cancelled. Fee charged: $${fee.toFixed(2)}.`
+            : `Booking #${booking.id} cancelled with no charge.`);
+        },
+        error: (err) => {
+          const msg = err?.error ?? 'Cancellation failed. Please try again.';
+          this.notify.error(typeof msg === 'string' ? msg : 'Cancellation failed. Please try again.');
+        },
+      });
     });
   }
 

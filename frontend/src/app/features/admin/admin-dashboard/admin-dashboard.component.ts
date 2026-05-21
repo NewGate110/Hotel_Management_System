@@ -10,6 +10,9 @@ import { AppButtonComponent } from '../../../shared/ui/app-button/app-button.com
   standalone: true,
   imports: [RouterLink, AppStatCardComponent, AppButtonComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styles: [`
+    @media (max-width: 640px) { .kpi-grid { grid-template-columns: 1fr !important; } }
+  `],
   template: `
     <div style="display: flex; flex-direction: column; gap: 32px;">
       <!-- Page heading -->
@@ -54,9 +57,6 @@ import { AppButtonComponent } from '../../../shared/ui/app-button/app-button.com
       </div>
     </div>
 
-    <style>
-      @media (max-width: 640px) { .kpi-grid { grid-template-columns: 1fr !important; } }
-    </style>
   `,
 })
 export class AdminDashboardComponent {
@@ -70,7 +70,7 @@ export class AdminDashboardComponent {
     this.adminApi.getHotels().subscribe((h) => this.hotels.set(h.length));
     this.adminApi.getStaff().subscribe((s) => this.staff.set(s.length));
     const cutoff = new Date(Date.now() - 86_400_000);
-    this.adminApi.getAuditLogs().subscribe((logs) =>
+    this.adminApi.getAuditLogs(1000).subscribe((logs) =>
       this.auditEvents24h.set(logs.filter((l) => new Date(l.timestamp) >= cutoff).length),
     );
   }

@@ -19,7 +19,7 @@ export function sidebarItemsForRole(role: UserRole): SidebarNavItem[] {
         { label: 'Check-out', icon: 'logout', link: ['/app/staff/checkout'] },
         { label: 'Walk-In', icon: 'hail', link: ['/app/staff/walk-in'] },
         { label: 'Rooms', icon: 'meeting_room', link: ['/app/staff/rooms'] },
-        { label: 'Bookings', icon: 'book_online', link: ['/app/bookings'] },
+        { label: 'Bookings', icon: 'book_online', link: ['/app/staff/bookings'] },
       ];
     case 'HotelManager':
       return [
@@ -29,7 +29,7 @@ export function sidebarItemsForRole(role: UserRole): SidebarNavItem[] {
         { label: 'Check-in', icon: 'login', link: ['/app/staff/checkin'] },
         { label: 'Check-out', icon: 'logout', link: ['/app/staff/checkout'] },
         { label: 'Walk-In', icon: 'hail', link: ['/app/staff/walk-in'] },
-        { label: 'Bookings', icon: 'book_online', link: ['/app/bookings'] },
+        { label: 'Bookings', icon: 'book_online', link: ['/app/staff/bookings'] },
         { label: 'Billing', icon: 'receipt_long', link: ['/app/billing'] },
       ];
     case 'Admin':
@@ -41,7 +41,7 @@ export function sidebarItemsForRole(role: UserRole): SidebarNavItem[] {
         { label: 'Check-in', icon: 'login', link: ['/app/staff/checkin'] },
         { label: 'Check-out', icon: 'logout', link: ['/app/staff/checkout'] },
         { label: 'Walk-In', icon: 'hail', link: ['/app/staff/walk-in'] },
-        { label: 'Bookings', icon: 'book_online', link: ['/app/bookings'] },
+        { label: 'Bookings', icon: 'book_online', link: ['/app/staff/bookings'] },
         { label: 'Billing', icon: 'receipt_long', link: ['/app/billing'] },
       ];
     default:

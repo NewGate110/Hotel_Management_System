@@ -28,4 +28,9 @@ export const STAFF_ROUTES: Routes = [
     loadComponent: () =>
       import('./walk-in-booking/walk-in-booking.component').then((m) => m.WalkInBookingComponent),
   },
+  {
+    path: 'bookings',
+    loadComponent: () =>
+      import('./staff-bookings-list/staff-bookings-list.component').then((m) => m.StaffBookingsListComponent),
+  },
 ];
